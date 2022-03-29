@@ -25,7 +25,7 @@ class EmployeeResource extends JsonResource
             'place_of_birth'    => $this->place_of_birth,
             'category'          => $this->category,
             'avatar_url'        => $this->avatar_url,
-            'id_or_passport'    => $this->id_or_passport,
+
             'commission'        => $this->commission,
             'kpi'               => $this->kpi,
 

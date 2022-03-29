@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     /**
      * The attributes that are mass assignable.
@@ -15,8 +16,33 @@ class Employee extends Model
      * @var array
      */
     protected $fillable = [
-        'name_kh', 'name_en', 'avatar_url', 'gender',
+        'name_kh',
+        'name_en',
+        'avatar_url',
+        'gender',
+        'identity_number',
+        'date_of_birth',
+        'primary_phone',
+        'address',
+        'place_of_birth',
+        'category',
+        'commission',
+        'kpi',
+        'municipality_id',
+        'district_id',
     ];
+
+    protected $casts = [
+        'municipality_id'   => 'integer',
+        'district_id'       => 'integer',
+    ];
+
+    protected $dates = [
+        'date_of_birth',
+        'created_at',
+        'updated_at',
+    ];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne

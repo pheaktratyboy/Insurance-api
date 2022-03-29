@@ -18,7 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_kh')->nullable();
             $table->string('name_en')->nullable();
-            $table->integer("identity_number");
+            $table->string("identity_number");
             $table->date('date_of_birth')->nullable();
             $table->string('primary_phone')->nullable();
             $table->string('address');
@@ -28,7 +28,7 @@ class CreateEmployeesTable extends Migration
             $table->enum('category', ['muslim', 'non_muslim'])->default("non_muslim");
 
             $table->string('avatar_url');
-            $table->json('id_or_passport');
+            $table->json('id_or_passport')->nullable();
 
             $table->decimal('commission')->default(10);;
             $table->decimal('kpi')->default(0);

@@ -18,6 +18,12 @@ class CreateEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
+            /** Account */
+            'username'              => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'email', 'unique:users', 'max:255'],
+            'password'              => ['required', 'string', 'min:6'],
+
+            /** Information */
             'name_kh'               => ['required', 'string', 'max:255'],
             'name_en'               => ['required', 'string', 'max:255'],
             'identity_number'       => ['required', 'string', 'max:255'],
