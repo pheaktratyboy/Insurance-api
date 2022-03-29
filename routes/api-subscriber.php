@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('subscribers', [SubscriberController::class,'store'])->name('subscribers.store');
 Route::put('subscribers/{subscriber}', [SubscriberController::class,'update'])->name('subscribers.update');
 Route::get('subscribers', [SubscriberController::class,'index'])->name('subscribers.index');
+Route::get('subscribers', [SubscriberController::class,'getAllByOwner'])->name('subscribers.getAllByOwner');
 Route::get('subscribers/{subscriber}', [SubscriberController::class,'show'])->name('subscribers.show');
 
 /** Subscriber Policies process */

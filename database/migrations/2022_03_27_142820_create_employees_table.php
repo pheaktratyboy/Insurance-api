@@ -31,10 +31,10 @@ class CreateEmployeesTable extends Migration
             $table->json('id_or_passport');
 
             $table->decimal('commission')->default(10);;
-            $table->decimal('kpi');
+            $table->decimal('kpi')->default(0);
 
-            $table->unsignedBigInteger('municipality_id');
-            $table->unsignedBigInteger('district_id');
+            $table->unsignedBigInteger('municipality_id')->nullable();
+            $table->unsignedBigInteger('district_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->blamable();

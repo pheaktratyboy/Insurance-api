@@ -24,6 +24,19 @@ class SubscriberController extends Controller
         return SubscriberResource::collection($subscriber);
     }
 
+    public function getAllByOwner() {
+
+        $user = auth()->user();
+        $subscriber = QueryBuilder::for(Subscriber::class)
+            ->where('user_id', $user->id)
+            ->allowedFilters(['name_kh', 'name_en'])
+            ->defaultSort('-created_at')
+            ->paginate()
+            ->appends(request()->query());
+
+        return SubscriberResource::collection($subscriber);
+    }
+
     /**
      * @param CreateSubscriberRequest $request
      * @return SubscriberResource

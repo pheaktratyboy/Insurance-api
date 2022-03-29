@@ -27,6 +27,7 @@ class SubscriberResource extends JsonResource
             'gender'                => $this->gender,
             'category'              => $this->category,
             'avatar_url'            => $this->avatar_url,
+            'status'                => $this->status,
             'created_at'            => $this->created_at,
 
             /** relationship */
