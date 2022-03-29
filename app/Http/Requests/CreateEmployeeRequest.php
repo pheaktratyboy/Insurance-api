@@ -16,7 +16,7 @@ class CreateEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'municipality_id' => ['required',Rule::exists('municipalities', 'id')],
+            'name_kh' => ['required',Rule::exists('municipalities', 'id')],
             'name'            => 'required|string|max:255',
         ];
     }

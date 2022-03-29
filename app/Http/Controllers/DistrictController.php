@@ -25,17 +25,9 @@ class DistrictController extends Controller
 
     /**
      * @param CreateDistrictRequest $request
+     * @return DistrictResource
      */
     public function store(CreateDistrictRequest $request) {
-        /** check duplication */
-        $oldDistrict = District::where('name', $request->name)
-            ->where('municipality_id', $request->municipality_id)
-            ->first();
-        if ($oldDistrict) {
-            throw DistrictException::exist();
-        }
-
-
         $district = District::create($request->validated());
         return new DistrictResource($district->load('municipality'));
     }
@@ -43,36 +35,17 @@ class DistrictController extends Controller
     /**
      * @param UpdateDistrictRequest $request
      * @param District $district
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     * @throws DistrictException
      */
     public function update(UpdateDistrictRequest $request, District $district) {
-
-        if ($request->has('name') && $request->has('municipality_id')) {
-
-            $oldDistrict = District::where('name', $request->name)
-                ->where('municipality_id', $request->municipality_id)
-                ->where('id', '<>', $district->id)
-                ->first();
-
-            if ($oldDistrict) {
-                throw DistrictException::exist();
-            }
-        }
-
-        if ($request->has('name')) {
-            $oldDistrict = District::where('name', $request->name)
-                ->where('municipality_id', $district->municipality_id)
-                ->where('id', '<>', $district->id)
-                ->first();
-            if ($oldDistrict) {
-                throw DistrictException::exist();
-            }
-        }
 
         if ($request->has('municipality_id')) {
             $oldDistrict = District::where('name', $district->name)
                 ->where('municipality_id', $request->municipality_id)
                 ->where('id', '<>', $district->id)
                 ->first();
+
             if ($oldDistrict) {
                 throw DistrictException::exist();
             }
@@ -84,6 +57,7 @@ class DistrictController extends Controller
 
     /**
      * @param District $district
+     * @return DistrictResource
      */
     public function show(District $district)
     {

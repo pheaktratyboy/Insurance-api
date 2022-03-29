@@ -9,17 +9,19 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Traits\PassportAuthenticationTrait;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
-use PassportAuthenticationTrait;
+
 
 class AuthenticationController extends AccessTokenController
 {
     use PassportAuthenticationTrait;
 
-    public function staffLogin(LoginRequest $request)
+    public function employeeLogin(LoginRequest $request)
     {
         /** @var User $user */
         $user = User::firstWhere('username', $request->username);
+
         if ($user) {
             if ($user->activated == false) {
                 throw AuthenticationFailedException::accountNotInActivated();

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\MunicipalityException;
+use App\Http\Requests\CreateMunicipalityRequest;
+use App\Http\Requests\UpdateMunicipalityRequest;
 use App\Http\Resources\MunicipalityResource;
 use App\Models\Municipality;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,6 +24,7 @@ class MunicipalityController extends Controller
 
     /**
      * @param Municipality $municipality
+     * @return MunicipalityResource
      */
     public function show(Municipality $municipality)
     {
@@ -31,40 +32,23 @@ class MunicipalityController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param CreateMunicipalityRequest $request
+     * @return MunicipalityResource
      */
-    public function store(Request $request)
+    public function store(CreateMunicipalityRequest $request)
     {
-        $request->validate(['name' => 'required|string|max:255']);
-
-        $oldMunicipality = Municipality::firstWhere('name', $request->name);
-        if ($oldMunicipality) {
-            throw MunicipalityException::exist();
-        }
-
         $municipality = Municipality::create(['name' => $request->name]);
-
         return new MunicipalityResource($municipality);
     }
 
     /**
-     * @param Request $request
+     * @param UpdateMunicipalityRequest $request
      * @param Municipality $municipality
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(Request $request, Municipality $municipality)
+    public function update(UpdateMunicipalityRequest $request, Municipality $municipality)
     {
-        $request->validate(['name' => 'string|max:255']);
-
-        $oldMunicipality = Municipality::where('name', $request->name)
-            ->where('id', '<>', $municipality->id)
-            ->first();
-
-        if ($oldMunicipality) {
-            throw MunicipalityException::exist();
-        }
-
         $municipality->update($request->input());
-
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

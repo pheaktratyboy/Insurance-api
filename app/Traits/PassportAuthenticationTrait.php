@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Traits;
 
 use App\Exceptions\AuthenticationFailedException;
 use Laravel\Passport\Exceptions\OAuthServerException;
@@ -8,6 +9,7 @@ use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;
 use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ServerRequestInterface;
+
 
 trait PassportAuthenticationTrait
 {
@@ -28,6 +30,7 @@ trait PassportAuthenticationTrait
 
     public function login($username, $password)
     {
+
         $payload = [
             'username'      => $username,
             'password'      => $password,
@@ -46,4 +49,3 @@ trait PassportAuthenticationTrait
         }
     }
 }
-

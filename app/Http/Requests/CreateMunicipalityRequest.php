@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateDistrictRequest extends FormRequest
+class CreateMunicipalityRequest extends FormRequest
 {
 
     /**
@@ -16,8 +15,7 @@ class CreateDistrictRequest extends FormRequest
     public function rules()
     {
         return [
-            'municipality_id' => ['required',Rule::exists('municipalities', 'id')],
-            'name'            => ['required', 'string', 'unique:districts', 'max:255'],
+            'name' => ['required', 'string', 'unique:municipalities', 'max:255'],
         ];
     }
 }

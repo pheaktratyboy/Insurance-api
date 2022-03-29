@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\BaseRole;
 use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
+use App\Models\Employee;
 use App\Models\Role;
 
 
@@ -13,7 +15,7 @@ class EmployeeController extends Controller
     /**
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function getAllStaff()
+    public function getAllEmployee()
     {
         $role = Role::where('name', BaseRole::Staff)->first();
         $user = $role->users()->with('profile')->get();
@@ -36,7 +38,7 @@ class EmployeeController extends Controller
 
     }
 
-    public function update() {
+    public function update(UpdateEmployeeRequest $request, Employee $employee) {
 
     }
 }

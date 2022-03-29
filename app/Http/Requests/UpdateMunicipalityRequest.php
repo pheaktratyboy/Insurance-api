@@ -5,9 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateDistrictRequest extends FormRequest
+class UpdateMunicipalityRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,8 +15,7 @@ class CreateDistrictRequest extends FormRequest
     public function rules()
     {
         return [
-            'municipality_id' => ['required',Rule::exists('municipalities', 'id')],
-            'name'            => ['required', 'string', 'unique:districts', 'max:255'],
+            'name' => ['required', 'max:255', Rule::unique('municipalities', 'name')->ignore($this->route('municipality')->id)],
         ];
     }
 }

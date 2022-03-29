@@ -11,7 +11,7 @@ class AuthenticationFailedException extends HttpException
 
     public static function accountNotInActivated(): AuthenticationFailedException
     {
-        return new static(401, 'The user is not yet activated, please contact to admin..', 'Account not activated');
+        return new static(401, 'The user is not yet activated. Please contact to admin.', 'Account not activated');
     }
 
     public static function invalidTenantProvide($message = null)

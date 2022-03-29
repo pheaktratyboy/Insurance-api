@@ -22,3 +22,6 @@ Route::middleware('auth:api')->group(function () {
     include 'api-municipalities.php';
     include 'api-districts.php';
 });
+
+/** login process */
+Route::post('/auth/login', [AuthenticationController::class,'employeeLogin'])->name('auth.login');

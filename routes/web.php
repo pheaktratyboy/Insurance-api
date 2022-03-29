@@ -24,3 +24,4 @@ Route::get('test-email', function () {
 
     dd("Email is Sent.");
 });
+

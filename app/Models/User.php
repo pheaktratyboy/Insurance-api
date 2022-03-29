@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'disabled', 'required_password_update', 'timezone',
+        'username', 'email' , 'password', 'disabled', 'activated', 'required_password_update', 'timezone',
     ];
 
     /**
@@ -47,7 +47,7 @@ class User extends Authenticatable
     public function findForPassport($username)
     {
         return $this
-            ->where('username', $username)
+            ->where('email', $username)
             ->where('disabled', false)
             ->first();
     }
@@ -62,6 +62,6 @@ class User extends Authenticatable
 
     public function scopeJoinProfile($query)
     {
-        return $query->join('staff', 'staff.id', '=', 'users.profilable_id');
+        return $query->join('employees', 'employees.id', '=', 'users.profilable_id');
     }
 }
