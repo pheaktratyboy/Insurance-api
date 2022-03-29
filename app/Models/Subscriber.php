@@ -51,9 +51,24 @@ class Subscriber extends Model
         $orderInfo['status'] = StatusType::approved();
         $orderInfo['user_id'] = $user->id;
 
-        $this->createNewSubscriber($request)->addSubscriberPolicy($request);
+        $newPolicies = $this->formatItemForPolicies($request);
+
+        $this->createNewSubscriber($request)->addSubscriberPolicy($newPolicies);
 
         return $this;
+    }
+
+    public function formatItemForPolicies($items)
+    {
+        $newItems = [];
+        foreach ($items as $item) {
+            $newItems[] = [
+                'policy_id'        => $item->policy_id,
+                'payment_method'   => $item->payment_method,
+            ];
+        }
+
+        return $newItems;
     }
 
     public function createNewSubscriber(array $orderInfo)

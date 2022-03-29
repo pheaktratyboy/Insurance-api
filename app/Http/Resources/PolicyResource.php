@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubscriberPolicyResource extends JsonResource
+class PolicyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,9 @@ class SubscriberPolicyResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                  => $this->id,
-            'subscriber_id'       => $this->policy_id,
-            'policy_id'           => $this->policy_id,
-            'payment_method'      => $this->payment_method,
-
-            /** relationship */
+            'id'      => $this->id,
+            'name'    => $this->name,
+            'price'   => $this->price,
         ];
     }
 }

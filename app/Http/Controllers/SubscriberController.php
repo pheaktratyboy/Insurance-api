@@ -18,7 +18,7 @@ class SubscriberController extends Controller
     public function store(CreateSubscriberRequest $request) {
 
         $result = DB::transaction(function () use ($request) {
-            $subscriber = new Subscriber($request->validate());
+            $subscriber = new Subscriber;
             $subscriber->createNewSubscriberWithPolicies($request);
 
             return $subscriber;

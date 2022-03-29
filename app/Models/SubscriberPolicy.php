@@ -11,11 +11,13 @@ class SubscriberPolicy extends Model
 
     protected $fillable = [
         'policy_id',
+        'subscriber_id',
         'payment_method',
     ];
 
     protected $casts = [
-        'policy_id'  => 'integer',
+        'policy_id'      => 'integer',
+        'subscriber_id'  => 'integer',
     ];
 
     protected $dates = [

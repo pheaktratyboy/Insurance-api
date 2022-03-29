@@ -14,7 +14,7 @@ class CreateSubscribersTable extends Migration
     public function up()
     {
         Schema::create('subscribers', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string("name_kh");
             $table->string("name_en");
             $table->string("identity_number");
@@ -35,13 +35,14 @@ class CreateSubscribersTable extends Migration
         });
 
         Schema::create('subscriber_policies', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('subscriber_id');
             $table->unsignedBigInteger('policy_id');
             $table->string('payment_method');
 
             $table->timestamps();
 
-            $table->foreign('policy_id')->references('id')->on('subscribers')->onDelete('cascade');
+            $table->foreign('subscriber_id')->references('id')->on('subscribers')->onDelete('cascade');
         });
     }
 
