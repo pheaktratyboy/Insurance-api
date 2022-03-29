@@ -14,6 +14,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class DistrictController extends Controller
 {
     public function index() {
+
         $districts = QueryBuilder::for(District::class)
             ->allowedFilters(['name'])
             ->with('municipality')

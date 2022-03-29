@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\BaseRole;
+use App\Enums\StatusType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use StatusType;
 
 class Subscriber extends Model
 {
@@ -21,7 +22,6 @@ class Subscriber extends Model
         'gender',
         'category',
         'avatar_url',
-        'id_or_passport',
         'user_id',
         'status',
     ];
@@ -39,29 +39,45 @@ class Subscriber extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function policies()
+    public function subscriber_policies()
     {
         return $this->hasMany(SubscriberPolicy::class);
     }
 
-    public function createNewSubscriberWithPolicies($request)
+    /**
+     * @param $request
+     * @return $this
+     */
+    public function createNewSubscriber($request)
     {
         $user = auth()->user();
+        $request['status'] = StatusType::Approved;
+        $request['user_id'] = $user->id;
 
-        $orderInfo['status'] = StatusType::approved();
-        $orderInfo['user_id'] = $user->id;
-
-        $newPolicies = $this->formatItemForPolicies($request);
-
-        $this->createNewSubscriber($request)->addSubscriberPolicy($newPolicies);
+        $this->fill($request->input());
+        $this->save();
 
         return $this;
     }
+
+    /**
+     * @param $request
+     * @return $this
+     */
+    public function addSubscriberPolicy($request)
+    {
+        $policy = new SubscriberPolicy($request->validated());
+        $this->subscriber_policies()->save($policy);
+
+        return $this;
+    }
+
 
     public function formatItemForPolicies($items)
     {
         $newItems = [];
         foreach ($items as $item) {
+
             $newItems[] = [
                 'policy_id'        => $item->policy_id,
                 'payment_method'   => $item->payment_method,
@@ -71,14 +87,8 @@ class Subscriber extends Model
         return $newItems;
     }
 
-    public function createNewSubscriber(array $orderInfo)
-    {
-        $this->fill($orderInfo);
-        $this->save();
-        return $this;
-    }
 
-    public function addSubscriberPolicy($items)
+    public function addSubscriberPolicies($items)
     {
         $newItems = collect($items)->map(function ($item)  {
             $policies = new SubscriberPolicy;
@@ -87,7 +97,7 @@ class Subscriber extends Model
             return $policies;
         });
 
-        $this->policies()->saveMany($newItems);
+        $this->subscriber_policies()->saveMany($newItems);
 
         return $this;
     }

@@ -26,7 +26,7 @@ class CreateSubscribersTable extends Migration
             $table->enum('category', ['muslim', 'non_muslim'])->nullable();
 
             $table->string('avatar_url');
-            $table->json('id_or_passport');
+            $table->json('id_or_passport')->nullable();
             $table->string('status');
 
             $table->unsignedBigInteger('user_id');

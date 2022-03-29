@@ -18,7 +18,7 @@ class CreateSubscriberRequest extends FormRequest
     {
         return [
             'name_kh'               => ['required', 'string', 'max:255'],
-            'name'                  => ['required', 'string', 'max:255'],
+            'name_en'               => ['required', 'string', 'max:255'],
             'identity_number'       => ['required', 'string', 'max:255'],
             'date_of_birth'         => ['required', 'date'],
             'primary_phone'         => ['required', 'string', 'max:255'],

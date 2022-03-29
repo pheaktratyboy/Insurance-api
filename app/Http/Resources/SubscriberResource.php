@@ -30,7 +30,7 @@ class SubscriberResource extends JsonResource
             'created_at'            => $this->created_at,
 
             /** relationship */
-            'policies'              => SubscriberPolicyResource::collection($this->whenLoaded('policies')),
+            'subscriber_policies'   => SubscriberPolicyResource::collection($this->whenLoaded('subscriber_policies')),
         ];
     }
 }
