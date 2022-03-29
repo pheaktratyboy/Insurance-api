@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateEmployeeRequest extends FormRequest
+class RegisterStaffRequest extends FormRequest
 {
 
     /**
@@ -16,8 +16,9 @@ class CreateEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_kh' => ['required', 'string', 'max:255'],
-            'name'    => ['required', 'string', 'max:255'],
+            'username'  => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'email', Rule::exists('users', 'email')],
+            'password'  => ['required', 'string', 'min:6']
         ];
     }
 }

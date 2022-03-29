@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,11 @@ Route::middleware('auth:api')->group(function () {
     include 'api-setting.php';
     include 'api-municipalities.php';
     include 'api-districts.php';
+    include 'api-subscriber.php';
 });
 
 /** login process */
 Route::post('/auth/login', [AuthenticationController::class,'employeeLogin'])->name('auth.login');
+
+/** register staff process */
+Route::post('/auths/registerStaff', [UserController::class, 'registerStaff'])->name('auths.register_staff');

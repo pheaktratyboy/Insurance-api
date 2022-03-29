@@ -12,9 +12,7 @@ use App\Models\Role;
 
 class EmployeeController extends Controller
 {
-    /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function getAllEmployee()
     {
         $role = Role::where('name', BaseRole::Staff)->first();
@@ -23,9 +21,6 @@ class EmployeeController extends Controller
         return EmployeeResource::collection($user);
     }
 
-    /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
     public function getAllAgency()
     {
         $role = Role::where('name', BaseRole::Agency)->first();

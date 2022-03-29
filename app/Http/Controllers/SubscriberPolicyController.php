@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
+use App\Http\Requests\CreateSubscriberPolicyReqeust;
+use App\Http\Requests\UpdateSubscriberPolicyReqeust;
+use App\Models\SubscriberPolicy;
 
 class SubscriberPolicyController extends Controller
 {
@@ -10,11 +13,11 @@ class SubscriberPolicyController extends Controller
 
     }
 
-    public function store() {
+    public function store(CreateSubscriberPolicyReqeust $request) {
 
     }
 
-    public function update() {
+    public function update(UpdateSubscriberPolicyReqeust $request, SubscriberPolicy $model) {
 
     }
 

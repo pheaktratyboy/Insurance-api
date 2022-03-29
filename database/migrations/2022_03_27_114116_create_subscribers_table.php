@@ -17,7 +17,7 @@ class CreateSubscribersTable extends Migration
             $table->id();
             $table->string("name_kh");
             $table->string("name_en");
-            $table->integer("identity_number");
+            $table->string("identity_number");
             $table->date('date_of_birth')->nullable();
             $table->string('primary_phone');
             $table->string('address');
@@ -27,26 +27,17 @@ class CreateSubscribersTable extends Migration
 
             $table->string('avatar_url');
             $table->json('id_or_passport');
+            $table->string('status');
+
+            $table->unsignedBigInteger('user_id');
 
             $table->timestamps();
         });
 
-//        Schema::create('payments', function (Blueprint $table) {
-//            $table->id();
-//            $table->unsignedBigInteger('policy_id');
-//            $table->decimal('amount', 10, 3);
-//            $table->string('method');
-//
-//            $table->timestamps();
-//
-//            $table->foreign('policy_id')->references('id')->on('subscribers')->onDelete('cascade');
-//        });
-
         Schema::create('subscriber_policies', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('policy_id');
-            $table->unsignedBigInteger('user_id');
-            $table->integer('type')->nullable();
+            $table->string('payment_method');
 
             $table->timestamps();
 
