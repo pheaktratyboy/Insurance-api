@@ -23,6 +23,7 @@ Route::middleware('auth:api')->group(function () {
     include 'api-municipalities.php';
     include 'api-districts.php';
     include 'api-subscriber.php';
+    include 'api-policy.php';
 });
 
 /** login process */

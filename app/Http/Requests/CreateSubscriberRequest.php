@@ -29,7 +29,7 @@ class CreateSubscriberRequest extends FormRequest
             'avatar_url'            => ['required', 'string'],
             'id_or_passport_front'  => ['required', 'string'],
             'id_or_passport_back'   => ['required', 'string'],
-            'policy_id'             => ['required', Rule::exists('policies', 'id')],
+            'policy_id'             => ['required', 'max:10', Rule::exists('policies', 'id')],
             'payment_method'        => ['required', 'string', 'max:255'],
         ];
     }

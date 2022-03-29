@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Traits\Blamable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Policy extends Model
 {
-    use Blamable;
+    use HasFactory;
 
     protected $fillable = [
-        'name', 'price', 'created_at', 'updated_at',
+        'name', 'price', 'duration', 'created_at', 'updated_at',
     ];
     protected $dates = [
         'created_at',

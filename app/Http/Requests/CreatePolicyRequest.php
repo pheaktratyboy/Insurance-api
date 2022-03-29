@@ -14,7 +14,9 @@ class CreatePolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'          => ['required', 'string', 'unique:policies', 'max:255'],
+            'price'         => ['required', 'numeric', 'between:0,99999999.999'],
+            'duration'      => ['required', 'max:10'],
         ];
     }
 }

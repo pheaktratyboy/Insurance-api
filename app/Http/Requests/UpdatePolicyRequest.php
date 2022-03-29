@@ -3,19 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePolicyRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +15,9 @@ class UpdatePolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'          => ['sometimes', 'max:255', Rule::unique('policies', 'name')->ignore($this->route('policy')->id)],
+            'price'         => ['sometimes', 'numeric', 'between:0,99999999.999'],
+            'duration'      => ['sometimes', 'max:10'],
         ];
     }
 }
