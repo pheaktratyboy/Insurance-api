@@ -32,4 +32,12 @@ class SubscriberPolicy extends Model
     {
         return $this->belongsTo(Subscriber::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function policy()
+    {
+        return $this->belongsTo(Policy::class);
+    }
 }

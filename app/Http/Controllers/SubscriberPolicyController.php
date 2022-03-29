@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\CreateSubscriberPolicyReqeust;
-use App\Http\Requests\UpdateSubscriberPolicyReqeust;
+use App\Http\Requests\CreateSubscriberPolicyRequest;
+use App\Http\Requests\UpdateSubscriberPolicyRequest;
 use App\Models\SubscriberPolicy;
 
 class SubscriberPolicyController extends Controller
@@ -13,11 +13,11 @@ class SubscriberPolicyController extends Controller
 
     }
 
-    public function store(CreateSubscriberPolicyReqeust $request) {
+    public function store(CreateSubscriberPolicyRequest $request) {
 
     }
 
-    public function update(UpdateSubscriberPolicyReqeust $request, SubscriberPolicy $model) {
+    public function update(UpdateSubscriberPolicyRequest $request, SubscriberPolicy $model) {
 
     }
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\CreatePolicyReqeust;
-use App\Http\Requests\UpdatePolicyReqeust;
+use App\Http\Requests\CreatePolicyRequest;
+use App\Http\Requests\UpdatePolicyRequest;
 use App\Models\Policy;
 
 class PolicyController extends Controller
@@ -13,11 +13,11 @@ class PolicyController extends Controller
 
     }
 
-    public function store(CreatePolicyReqeust $request) {
+    public function store(CreatePolicyRequest $request) {
 
     }
 
-    public function update(UpdatePolicyReqeust $request, Policy $policy) {
+    public function update(UpdatePolicyRequest $request, Policy $policy) {
 
     }
 

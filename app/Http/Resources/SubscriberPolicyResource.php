@@ -21,6 +21,7 @@ class SubscriberPolicyResource extends JsonResource
             'payment_method'      => $this->payment_method,
 
             /** relationship */
+            'policy'              => new PolicyResource($this->whenLoaded('policy')),
         ];
     }
 }
