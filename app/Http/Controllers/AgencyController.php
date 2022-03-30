@@ -30,6 +30,18 @@ class AgencyController extends Controller
         return UserResource::collection($queryBuilder);
     }
 
+    public function getAllAgency() {
+
+        $agency = User::role(BaseRole::Agency);
+        $queryBuilder = QueryBuilder::for($agency)
+            ->allowedFilters(['full_name'])
+            ->defaultSort('-created_at')
+            ->paginate()
+            ->appends(request()->query());
+
+        return UserResource::collection($queryBuilder);
+    }
+
     /**
      * @param CreateAgencyRequest $request
      * @return EmployeeResource
