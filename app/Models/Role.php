@@ -10,10 +10,15 @@ class Role extends Model
 {
     use HasFactory, Blamable;
 
-
     protected $guard_name = 'api';
 
-    protected $fillable = ['label','name','description','guard_name','base'];
+    protected $fillable = [
+        'label',
+        'name',
+        'description',
+        'guard_name',
+        'base'
+    ];
 
     protected $casts = [
         'base' => 'boolean',

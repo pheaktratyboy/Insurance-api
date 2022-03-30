@@ -25,6 +25,7 @@ Route::middleware('auth:api')->group(function () {
     include 'api-districts.php';
     include 'api-subscriber.php';
     include 'api-policy.php';
+    include 'api-roles.php';
 });
 
 /** login process */
