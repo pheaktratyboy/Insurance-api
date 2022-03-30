@@ -38,9 +38,7 @@ class AgencyController extends Controller
 
         $agency = DB::transaction(function () use ($request) {
 
-            $user = auth()->user();
             $employee = new Employee($request->input());
-            $employee->user_id = $user->id;
             $employee->save();
 
             if ($request->has('username') && $request->has('email')) {
@@ -51,14 +49,14 @@ class AgencyController extends Controller
                     'email'                 => $request->email,
                     'full_name'             => $request->username,
                     'password'              => bcrypt($request->password),
-                    'phone_number'          => $employee->primary_phone,
+                    'phone_number'          => $employee->phone_number,
                     'force_change_password' => $employee->force_change_password,
                     'activated'             => true,
                     'activated_at'          => now(),
                     'disabled'              => false,
                 ]);
 
-                /** Assign Staff Role */
+                /** Assign Agency Role */
                 $user->assignRole(BaseRole::Agency);
             }
 

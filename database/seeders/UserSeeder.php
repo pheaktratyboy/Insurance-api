@@ -23,7 +23,10 @@ class UserSeeder extends Seeder
     private function createAdmin()
     {
         /**@var Employee $staff*/
-        $staff = Employee::factory()->create();
+        $staff = Employee::factory()->create([
+            'name_kh'     => 'admin',
+            'name_en'     => 'admin',
+        ]);
 
         /**@var User $user*/
         $user = $staff->user()->create([

@@ -17,6 +17,11 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
+            /** Account */
+            'username'              => ['sometimes', 'required', 'string', 'max:255'],
+            'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
+
+            /** Information */
             'name_kh'               => ['sometimes', 'required', 'string', 'max:255'],
             'name_en'               => ['sometimes', 'required', 'string', 'max:255'],
             'identity_number'       => ['sometimes', 'required', 'string', 'max:255'],

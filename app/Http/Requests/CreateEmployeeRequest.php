@@ -22,6 +22,7 @@ class CreateEmployeeRequest extends FormRequest
             'username'              => ['required', 'string', 'max:255'],
             'email'                 => ['required', 'email', 'unique:users', 'max:255'],
             'password'              => ['required', 'string', 'min:6'],
+            'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
 
             /** Information */
             'name_kh'               => ['required', 'string', 'max:255'],

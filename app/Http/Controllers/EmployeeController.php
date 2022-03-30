@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
 use App\Models\Employee;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -58,8 +59,15 @@ class EmployeeController extends Controller
                     'disabled'              => false,
                 ]);
 
-                /** Assign Staff Role */
-                $user->assignRole(BaseRole::Staff);
+                /** Assign Role */
+                if ($request->has('role_id')) {
+                    $role = Role::firstWhere('id', $request->role_id);
+                    $user->assignRole($role->name);
+
+                } else {
+                    /** Assign Staff Role */
+                    $user->assignRole(BaseRole::Staff);
+                }
             }
 
             return $employee;
@@ -76,6 +84,13 @@ class EmployeeController extends Controller
     public function update(UpdateEmployeeRequest $request, Employee $employee) {
 
         DB::transaction(function () use ($request, $employee) {
+
+            if ($request->has('role_id')) {
+
+                $role = Role::firstWhere('id', $request->role_id);
+                $employee->user()->assignRole($role->name);
+            }
+
             $employee->update($request->input());
         });
 
