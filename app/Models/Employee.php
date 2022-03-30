@@ -22,7 +22,7 @@ class Employee extends Model
         'gender',
         'identity_number',
         'date_of_birth',
-        'primary_phone',
+        'phone_number',
         'address',
         'place_of_birth',
         'category',

@@ -44,7 +44,7 @@ class EmployeeFactory extends Factory
             'avatar_url'         => $this->faker->imageUrl(),
             'id_or_passport'     => json_encode(["passport_front" => $this->faker->imageUrl(), "passport_back" => $this->faker->imageUrl()]),
 
-            'primary_phone'      => $this->faker->phoneNumber,
+            'phone_number'       => $this->faker->phoneNumber,
         ];
     }
 }

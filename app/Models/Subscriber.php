@@ -16,7 +16,7 @@ class Subscriber extends Model
         'name_en',
         'identity_number',
         'date_of_birth',
-        'primary_phone',
+        'phone_number',
         'address',
         'place_of_birth',
         'gender',
