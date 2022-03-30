@@ -27,6 +27,7 @@ class UpdateAgencyRequest extends FormRequest
             'place_of_birth'        => ['sometimes', 'required', 'string', 'max:255'],
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],
             'religion'              => ['sometimes', 'required', Rule::in(Religion::getValues())],
+
             'avatar_url'            => ['sometimes', 'required', 'string'],
             'id_or_passport_front'  => ['sometimes', 'required', 'string'],
             'id_or_passport_back'   => ['sometimes', 'required', 'string'],

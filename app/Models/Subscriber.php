@@ -22,6 +22,8 @@ class Subscriber extends Model
         'gender',
         'religion',
         'avatar_url',
+        'id_or_passport_front',
+        'id_or_passport_back',
         'user_id',
         'status',
     ];

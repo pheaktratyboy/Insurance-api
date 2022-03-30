@@ -33,6 +33,7 @@ class CreateAgencyRequest extends FormRequest
             'place_of_birth'        => ['required', 'string', 'max:255'],
             'gender'                => ['required', Rule::in(Gender::getValues())],
             'religion'              => ['required', Rule::in(Religion::getValues())],
+
             'avatar_url'            => ['required', 'string'],
             'id_or_passport_front'  => ['required', 'string'],
             'id_or_passport_back'   => ['required', 'string'],

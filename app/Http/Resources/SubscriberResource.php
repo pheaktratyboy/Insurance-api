@@ -26,7 +26,11 @@ class SubscriberResource extends JsonResource
             'place_of_birth'        => $this->place_of_birth,
             'gender'                => $this->gender,
             'religion'              => $this->religion,
+
             'avatar_url'            => $this->avatar_url,
+            'id_or_passport_front'  => $this->id_or_passport_front,
+            'id_or_passport_back'   => $this->id_or_passport_back,
+
             'status'                => $this->status,
             'created_at'            => $this->created_at,
 

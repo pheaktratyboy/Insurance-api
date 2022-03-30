@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->group(function () {
-    include 'api-auth.php';
     include 'api-employees.php';
     include 'api-agencies.php';
     include 'api-medias.php';
@@ -26,3 +26,10 @@ Route::middleware('auth:api')->group(function () {
     include 'api-roles.php';
     include 'api-users.php';
 });
+
+
+/** login process */
+Route::post('/auth/login', [AuthenticationController::class,'employeeLogin'])->name('auth.login');
+
+/** change password process */
+Route::post('auth/change-password', [AuthenticationController::class,'changePassword'])->name('auth.change_password');

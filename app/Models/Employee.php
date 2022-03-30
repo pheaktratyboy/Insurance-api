@@ -30,6 +30,8 @@ class Employee extends Model
         'commission',
         'kpi',
         'municipality_id',
+        'id_or_passport_front',
+        'id_or_passport_back',
         'district_id',
         'user_id',
     ];

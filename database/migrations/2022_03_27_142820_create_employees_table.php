@@ -28,7 +28,8 @@ class CreateEmployeesTable extends Migration
             $table->enum('religion', ['muslim', 'non_muslim'])->default("non_muslim");
 
             $table->string('avatar_url');
-            $table->json('id_or_passport')->nullable();
+            $table->string('id_or_passport_front')->nullable();;
+            $table->string('id_or_passport_back')->nullable();
 
             $table->decimal('commission')->default(10);;
             $table->decimal('kpi')->default(0);

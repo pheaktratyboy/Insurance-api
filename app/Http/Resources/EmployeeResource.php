@@ -15,22 +15,25 @@ class EmployeeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => $this->id,
-            'name_kh'           => $this->name_kh,
-            'name_en'           => $this->name_en,
-            'identity_number'   => $this->identity_number,
-            'date_of_birth'     => $this->date_of_birth,
-            'phone_number'      => $this->phone_number,
-            'gender'            => $this->gender,
-            'place_of_birth'    => $this->place_of_birth,
-            'religion'          => $this->religion,
-            'avatar_url'        => $this->avatar_url,
+            'id'                    => $this->id,
+            'name_kh'               => $this->name_kh,
+            'name_en'               => $this->name_en,
+            'identity_number'       => $this->identity_number,
+            'date_of_birth'         => $this->date_of_birth,
+            'phone_number'          => $this->phone_number,
+            'gender'                => $this->gender,
+            'place_of_birth'        => $this->place_of_birth,
+            'religion'              => $this->religion,
+            'avatar_url'            => $this->avatar_url,
 
-            'commission'        => $this->commission,
-            'kpi'               => $this->kpi,
+            'id_or_passport_front'  => $this->id_or_passport_front,
+            'id_or_passport_back'   => $this->id_or_passport_back,
 
-            'municipality_id'   => $this->municipality_id,
-            'district_id'       => $this->district_id,
+            'commission'            => $this->commission,
+            'kpi'                   => $this->kpi,
+
+            'municipality_id'       => $this->municipality_id,
+            'district_id'           => $this->district_id,
 
             /** relationship */
             'user'              => new UserResource($this->whenLoaded('user')),
