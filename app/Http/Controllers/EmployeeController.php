@@ -12,12 +12,13 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\QueryBuilder;
 
 
 class EmployeeController extends Controller
 {
 
-    public function getAllEmployee()
+    public function getAllStaff()
     {
         $role = Role::where('name', BaseRole::Staff)->first();
         $user = $role->users()->with('profile')->get();
@@ -31,6 +32,17 @@ class EmployeeController extends Controller
         $user = $role->users()->with('profile')->get();
 
         return EmployeeResource::collection($user);
+    }
+
+    public function index() {
+
+        $districts = QueryBuilder::for(Employee::Class)
+            ->allowedFilters(['name'])
+            ->with('user')
+            ->paginate()
+            ->appends(request()->query());
+
+        return EmployeeResource::collection($districts);
     }
 
     /**
@@ -87,6 +99,6 @@ class EmployeeController extends Controller
      * @return EmployeeResource
      */
     public function show(Employee $employee) {
-        return new EmployeeResource($employee);
+        return new EmployeeResource($employee->load('user'));
     }
 }

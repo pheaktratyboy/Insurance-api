@@ -17,8 +17,11 @@ class AgencyController extends Controller
 
     public function index() {
 
-        $districts = QueryBuilder::for(Employee::class)
+        $user = auth()->user();
+        $districts = QueryBuilder::for(Employee::Class)
+            ->where('user_id', $user->id)
             ->allowedFilters(['name'])
+            ->with('user')
             ->paginate()
             ->appends(request()->query());
 
@@ -74,5 +77,13 @@ class AgencyController extends Controller
         });
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param Employee $employee
+     * @return EmployeeResource
+     */
+    public function show(Employee $employee) {
+        return new EmployeeResource($employee->load('user'));
     }
 }
