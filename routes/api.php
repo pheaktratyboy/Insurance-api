@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,19 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function () {
     include 'api-auth.php';
-    include 'api-employee.php';
-    include 'api-agency.php';
+    include 'api-employees.php';
+    include 'api-agencies.php';
     include 'api-medias.php';
     include 'api-setting.php';
     include 'api-municipalities.php';
     include 'api-districts.php';
     include 'api-subscriber.php';
-    include 'api-policy.php';
+    include 'api-policies.php';
     include 'api-roles.php';
+    include 'api-users.php';
 });
-
-/** login process */
-Route::post('/auth/login', [AuthenticationController::class,'employeeLogin'])->name('auth.login');
-
-/** register staff process */
-Route::post('/auths/registerStaff', [UserController::class, 'registerStaff'])->name('auths.register_staff');

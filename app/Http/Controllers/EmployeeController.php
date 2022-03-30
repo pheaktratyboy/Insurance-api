@@ -87,6 +87,6 @@ class EmployeeController extends Controller
      * @return EmployeeResource
      */
     public function show(Employee $employee) {
-        return new EmployeeResource($employee->load('user'));
+        return new EmployeeResource($employee->load('user', 'municipality', 'district'));
     }
 }

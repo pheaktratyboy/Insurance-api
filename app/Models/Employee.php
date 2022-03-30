@@ -55,16 +55,21 @@ class Employee extends Model
         return $this->morphOne(User::class, 'profileable');
     }
 
-    public function roles(): MorphMany
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function municipality()
     {
-        return $this->morphMany(Role::class, 'profileable');
+        return $this->belongsTo(Municipality::class);
     }
 
-    public function parent()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function district()
     {
-        return $this->belongsTo(Employee::class, 'parent_id');
+        return $this->belongsTo(District::class);
     }
-
 
     /**
      * @param $request
