@@ -20,10 +20,10 @@ class EmployeeResource extends JsonResource
             'name_en'           => $this->name_en,
             'identity_number'   => $this->identity_number,
             'date_of_birth'     => $this->date_of_birth,
-            'primary_phone'     => $this->primary_phone,
+            'phone_number'      => $this->phone_number,
             'gender'            => $this->gender,
             'place_of_birth'    => $this->place_of_birth,
-            'category'          => $this->category,
+            'religion'          => $this->religion,
             'avatar_url'        => $this->avatar_url,
 
             'commission'        => $this->commission,

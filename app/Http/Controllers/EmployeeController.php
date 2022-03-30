@@ -52,7 +52,7 @@ class EmployeeController extends Controller
                     'email'                 => $request->email,
                     'full_name'             => $request->username,
                     'password'              => bcrypt($request->password),
-                    'primary_phone'         => $employee->primary_phone,
+                    'phone_number'          => $employee->phone_number,
                     'force_change_password' => false,
                     'activated'             => false,
                     'disabled'              => false,
