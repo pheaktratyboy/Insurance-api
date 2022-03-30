@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Category;
+use App\Enums\Religion;
 use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,7 +32,7 @@ class CreateAgencyRequest extends FormRequest
             'address'               => ['required', 'string', 'max:255'],
             'place_of_birth'        => ['required', 'string', 'max:255'],
             'gender'                => ['required', Rule::in(Gender::getValues())],
-            'category'              => ['required', Rule::in(Category::getValues())],
+            'religion'              => ['required', Rule::in(Religion::getValues())],
             'avatar_url'            => ['required', 'string'],
             'id_or_passport_front'  => ['required', 'string'],
             'id_or_passport_back'   => ['required', 'string'],

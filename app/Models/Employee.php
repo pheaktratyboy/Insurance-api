@@ -25,7 +25,7 @@ class Employee extends Model
         'phone_number',
         'address',
         'place_of_birth',
-        'category',
+        'religion',
         'commission',
         'kpi',
         'municipality_id',

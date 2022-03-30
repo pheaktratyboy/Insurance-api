@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Gender;
-use App\Enums\Category;
+use App\Enums\Religion;
 use App\Models\District;
 use App\Models\Municipality;
 use App\Models\Employee;
@@ -30,7 +30,7 @@ class EmployeeFactory extends Factory
             'name_kh'            => "{$this->faker->firstName} {$this->faker->lastName}",
             'name_en'            => "{$this->faker->firstName} {$this->faker->lastName}",
             'gender'             => $this->faker->randomElement(Gender::getValues()),
-            'category'           => $this->faker->randomElement(Category::getValues()),
+            'religion'           => $this->faker->randomElement(Religion::getValues()),
             'identity_number'    => $this->faker->unique()->randomDigit,
             'date_of_birth'      => $this->faker->date,
 

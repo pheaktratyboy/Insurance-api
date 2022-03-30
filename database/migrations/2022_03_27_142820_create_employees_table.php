@@ -25,7 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('place_of_birth');
 
             $table->enum('gender', Gender::getValues())->nullable();
-            $table->enum('category', ['muslim', 'non_muslim'])->default("non_muslim");
+            $table->enum('religion', ['muslim', 'non_muslim'])->default("non_muslim");
 
             $table->string('avatar_url');
             $table->json('id_or_passport')->nullable();

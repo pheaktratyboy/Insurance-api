@@ -20,7 +20,7 @@ class Subscriber extends Model
         'address',
         'place_of_birth',
         'gender',
-        'category',
+        'religion',
         'avatar_url',
         'user_id',
         'status',
