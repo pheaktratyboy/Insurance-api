@@ -20,7 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('name_en')->nullable();
             $table->string("identity_number");
             $table->date('date_of_birth')->nullable();
-            $table->string('primary_phone')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('address');
             $table->string('place_of_birth');
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Category;
+use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateAgencyRequest extends FormRequest
 {
@@ -14,16 +17,31 @@ class CreateAgencyRequest extends FormRequest
     public function rules()
     {
         return [
-            /** account */
-            'username'     => ['required','string','unique:users'],
-            'email'        => ['required','email','unique:users'],
-            'password'     => 'required|min:6',
-            'force_update' => 'required|boolean',
+            /** Account */
+            'username'              => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'email', 'unique:users', 'max:255'],
+            'password'              => 'required|min:6',
+            'force_change_password' => 'required|boolean',
 
-            /** profile */
-            'name_kh'       => 'required|string',
-            'name_en'       => 'required|string',
-            'primary_phone' => 'sometimes|phone:KH',
+            /** Information */
+            'name_kh'               => ['required', 'string', 'max:255'],
+            'name_en'               => ['required', 'string', 'max:255'],
+            'identity_number'       => ['required', 'string', 'max:255'],
+            'date_of_birth'         => ['required', 'date'],
+            'phone_number'          => ['required', 'string', 'max:255'],
+            'address'               => ['required', 'string', 'max:255'],
+            'place_of_birth'        => ['required', 'string', 'max:255'],
+            'gender'                => ['required', Rule::in(Gender::getValues())],
+            'category'              => ['required', Rule::in(Category::getValues())],
+            'avatar_url'            => ['required', 'string'],
+            'id_or_passport_front'  => ['required', 'string'],
+            'id_or_passport_back'   => ['required', 'string'],
+
+            'kpi'                   => ['required', 'numeric'],
+            'commission'            => ['sometimes', 'required', 'numeric'],
+
+            'municipality_id'       => ['required', 'numeric', 'max:10', Rule::exists('municipalities', 'id')],
+            'district_id'           => ['required', 'numeric', 'max:10', Rule::exists('districts', 'id')],
         ];
     }
 }

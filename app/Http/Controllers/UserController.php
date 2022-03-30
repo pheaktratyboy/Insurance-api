@@ -37,33 +37,4 @@ class UserController extends Controller
     {
         return new UserResource($user);
     }
-
-    public function registerStaff(RegisterStaffRequest $request) {
-
-//        $user = DB::transaction(function () use ($request) {
-//            /**@var Employee $employee*/
-//
-//            /**@var User $user*/
-//            $user = $customer->user()->create([
-//                'username'          => $customer->primary_phone,
-//                'password'          => bcrypt(Str::random(6)),
-//                'phone_number'      => $customer->primary_phone,
-//                'email'             => $customer->primary_email,
-//                'email_verified_at' => now(),
-//            ]);
-//
-//            /** update password */
-//            if ($request->has('password')) {
-//                $user->update(['password' => $request->password]);
-//            }
-//
-//            /** assign role */
-//            $role = Role::firstWhere('id', $request->role_id);
-//            $user->assignRole($role->name);
-//
-//            return $user;
-//        });
-
-        return new UserResource($user);
-    }
 }

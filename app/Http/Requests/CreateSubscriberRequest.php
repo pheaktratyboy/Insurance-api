@@ -21,7 +21,7 @@ class CreateSubscriberRequest extends FormRequest
             'name_en'               => ['required', 'string', 'max:255'],
             'identity_number'       => ['required', 'string', 'max:255'],
             'date_of_birth'         => ['required', 'date'],
-            'primary_phone'         => ['required', 'string', 'max:255'],
+            'phone_number'          => ['required', 'string', 'max:255'],
             'address'               => ['required', 'string', 'max:255'],
             'place_of_birth'        => ['required', 'string', 'max:255'],
             'gender'                => ['required', Rule::in(Gender::getValues())],

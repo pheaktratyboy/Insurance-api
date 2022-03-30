@@ -21,7 +21,7 @@ class UpdateSubscriberRequest extends FormRequest
             'name_en'               => ['sometimes', 'required', 'string', 'max:255'],
             'identity_number'       => ['sometimes', 'required', 'string', 'max:255'],
             'date_of_birth'         => ['sometimes', 'required', 'date'],
-            'primary_phone'         => ['sometimes', 'required', 'string', 'max:255'],
+            'phone_number'          => ['sometimes', 'required', 'string', 'max:255'],
             'address'               => ['sometimes', 'required', 'string', 'max:255'],
             'place_of_birth'        => ['sometimes', 'required', 'string', 'max:255'],
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],

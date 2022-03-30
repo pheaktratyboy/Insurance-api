@@ -30,11 +30,13 @@ class Employee extends Model
         'kpi',
         'municipality_id',
         'district_id',
+        'user_id',
     ];
 
     protected $casts = [
         'municipality_id'   => 'integer',
         'district_id'       => 'integer',
+        'user_id'           => 'integer',
     ];
 
     protected $dates = [
