@@ -16,6 +16,7 @@ class MunicipalityController extends Controller
     {
         $municipalities = QueryBuilder::for(Municipality::class)
             ->allowedFilters(['name'])
+            ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 

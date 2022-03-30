@@ -16,6 +16,7 @@ class PolicyController extends Controller
     {
         $policies = QueryBuilder::for(Policy::class)
             ->allowedFilters(['name'])
+            ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 

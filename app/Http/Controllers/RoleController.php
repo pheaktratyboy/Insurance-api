@@ -22,6 +22,7 @@ class RoleController extends Controller
     {
         $roles = QueryBuilder::for(Role::class)
             ->allowedFilters(['name'])
+            ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 

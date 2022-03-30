@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Employee extends Model
 {
@@ -51,8 +52,19 @@ class Employee extends Model
      */
     public function user()
     {
-        return $this->morphOne(User::class, 'profilable');
+        return $this->morphOne(User::class, 'profileable');
     }
+
+    public function roles(): MorphMany
+    {
+        return $this->morphMany(Role::class, 'profileable');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Employee::class, 'parent_id');
+    }
+
 
     /**
      * @param $request

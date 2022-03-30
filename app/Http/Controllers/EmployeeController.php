@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BaseRole;
-use App\Exceptions\UserException;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\UserResource;
 use App\Models\Employee;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -17,32 +16,21 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class EmployeeController extends Controller
 {
-
     public function getAllStaff()
     {
-        $role = Role::where('name', BaseRole::Staff)->first();
-        $user = $role->users()->with('profile')->get();
-
-        return EmployeeResource::collection($user);
+        $users = User::with('profile')->role(BaseRole::Staff)->get();
+        return UserResource::collection($users);
     }
 
-    public function getAllAgency()
+    public function index()
     {
-        $role = Role::where('name', BaseRole::Agency)->first();
-        $user = $role->users()->with('profile')->get();
-
-        return EmployeeResource::collection($user);
-    }
-
-    public function index() {
-
-        $districts = QueryBuilder::for(Employee::Class)
-            ->allowedFilters(['name'])
-            ->with('user')
+        $queryBuilder = QueryBuilder::for( User::role(BaseRole::Staff))
+            ->allowedFilters(['full_name'])
+            ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 
-        return EmployeeResource::collection($districts);
+        return UserResource::collection($queryBuilder);
     }
 
     /**

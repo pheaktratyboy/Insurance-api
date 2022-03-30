@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterStaffRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
-use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,6 +13,7 @@ class UserController extends Controller
     public function index() {
         $users = QueryBuilder::for(User::class)
             ->allowedFilters(['username'])
+            ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 

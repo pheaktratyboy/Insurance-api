@@ -75,7 +75,7 @@ class SubscriberController extends Controller
      */
     public function show(Subscriber $subscriber)
     {
-        $subscriber->load('items.product');
+        $subscriber->load('subscriber_policies');
 
         return new SubscriberResource($subscriber);
     }

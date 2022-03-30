@@ -66,11 +66,11 @@ class User extends Authenticatable
      */
     public function profile()
     {
-        return $this->morphTo(null, 'profilable_type', 'profilable_id');
+        return $this->morphTo(null, 'profileable_type', 'profileable_id');
     }
 
     public function scopeJoinProfile($query)
     {
-        return $query->join('employees', 'employees.id', '=', 'users.profilable_id');
+        return $query->join('employees', 'employees.id', '=', 'users.profileable_id');
     }
 }
