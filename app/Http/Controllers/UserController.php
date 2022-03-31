@@ -38,7 +38,7 @@ class UserController extends Controller
     public function showProfile() {
 
         $user = Auth::user();
-        return new EmployeeResource($user->profile->load('user', 'user.roles'));
+        return new EmployeeResource($user->profile->load(['user.roles']));
     }
 
     /**

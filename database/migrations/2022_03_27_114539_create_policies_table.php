@@ -17,6 +17,7 @@ class CreatePoliciesTable extends Migration
             $table->bigIncrements('id');
             $table->string("name")->unique();
             $table->decimal('price', 10, 3);
+            $table->string('currency', 3)->default('USD');
             $table->unsignedInteger('duration');
 
             $table->timestamps();
