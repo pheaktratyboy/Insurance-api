@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Religion;
 use App\Enums\Gender;
+use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,9 +32,10 @@ class UpdateEmployeeRequest extends FormRequest
             'place_of_birth'        => ['sometimes', 'required', 'string', 'max:255'],
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],
             'religion'              => ['sometimes', 'required', Rule::in(Religion::getValues())],
-            'avatar_url'            => ['sometimes', 'required', 'string'],
-            'id_or_passport_front'  => ['sometimes', 'required', 'string'],
-            'id_or_passport_back'   => ['sometimes', 'required', 'string'],
+
+            'avatar'                => ['sometimes', new Media],
+            'id_or_passport_front'  => ['sometimes', new Media],
+            'id_or_passport_back'   => ['sometimes', new Media],
 
             'kpi'                   => ['sometimes', 'required', 'numeric'],
             'commission'            => ['sometimes', 'required', 'numeric'],

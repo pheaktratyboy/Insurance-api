@@ -22,7 +22,7 @@ class Subscriber extends Model
         'place_of_birth',
         'gender',
         'religion',
-        'avatar_url',
+        'avatar',
         'id_or_passport_front',
         'id_or_passport_back',
         'user_id',
@@ -31,7 +31,10 @@ class Subscriber extends Model
     ];
 
     protected $casts = [
-        'user_id'  => 'integer',
+        'user_id'               => 'integer',
+        'avatar'                => 'array',
+        'id_or_passport_front'  => 'array',
+        'id_or_passport_back'   => 'array',
     ];
 
     protected $dates = [

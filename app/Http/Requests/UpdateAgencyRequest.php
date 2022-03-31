@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Gender;
 use App\Enums\Religion;
+use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,9 +29,9 @@ class UpdateAgencyRequest extends FormRequest
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],
             'religion'              => ['sometimes', 'required', Rule::in(Religion::getValues())],
 
-            'avatar_url'            => ['sometimes', 'required', 'string'],
-            'id_or_passport_front'  => ['sometimes', 'required', 'string'],
-            'id_or_passport_back'   => ['sometimes', 'required', 'string'],
+            'avatar'                => ['sometimes', new Media],
+            'id_or_passport_front'  => ['sometimes', new Media],
+            'id_or_passport_back'   => ['sometimes', new Media],
 
             'kpi'                   => ['sometimes', 'required', 'numeric'],
             'commission'            => ['sometimes', 'sometimes', 'required', 'numeric'],

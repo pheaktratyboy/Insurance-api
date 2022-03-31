@@ -40,8 +40,6 @@ class EmployeeFactory extends Factory
             'district_id'         => District::factory(),
 
             'kpi'                 => "10",
-
-            'avatar_url'          => $this->faker->imageUrl(),
             'phone_number'        => $this->faker->phoneNumber,
         ];
     }

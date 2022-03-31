@@ -50,6 +50,7 @@ class User extends Authenticatable
         'disabled'                      => 'boolean',
         'activated'                     => 'boolean',
         'required_password_update'      => 'boolean',
+        'force_change_password'         => 'boolean',
     ];
 
 

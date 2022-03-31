@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group(function () {
     include 'api-employees.php';
     include 'api-agencies.php';
-    include 'api-medias.php';
     include 'api-setting.php';
     include 'api-municipalities.php';
     include 'api-districts.php';
@@ -25,6 +24,7 @@ Route::middleware('auth:api')->group(function () {
     include 'api-policies.php';
     include 'api-roles.php';
     include 'api-users.php';
+    include 'api-medias.php';
 });
 
 

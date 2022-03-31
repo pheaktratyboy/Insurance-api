@@ -19,7 +19,6 @@ class Employee extends Model
     protected $fillable = [
         'name_kh',
         'name_en',
-        'avatar_url',
         'gender',
         'identity_number',
         'date_of_birth',
@@ -30,6 +29,7 @@ class Employee extends Model
         'commission',
         'kpi',
         'municipality_id',
+        'avatar',
         'id_or_passport_front',
         'id_or_passport_back',
         'district_id',
@@ -37,9 +37,12 @@ class Employee extends Model
     ];
 
     protected $casts = [
-        'municipality_id'   => 'integer',
-        'district_id'       => 'integer',
-        'user_id'           => 'integer',
+        'municipality_id'       => 'integer',
+        'district_id'           => 'integer',
+        'user_id'               => 'integer',
+        'avatar'                => 'array',
+        'id_or_passport_front'  => 'array',
+        'id_or_passport_back'   => 'array',
     ];
 
     protected $dates = [
