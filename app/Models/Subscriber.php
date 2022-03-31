@@ -26,12 +26,14 @@ class Subscriber extends Model
         'id_or_passport_front',
         'id_or_passport_back',
         'user_id',
+        'company_id',
         'status',
         'expired_at',
     ];
 
     protected $casts = [
         'user_id'               => 'integer',
+        'company_id'            => 'integer',
         'avatar'                => 'array',
         'id_or_passport_front'  => 'array',
         'id_or_passport_back'   => 'array',
@@ -51,6 +53,23 @@ class Subscriber extends Model
     {
         return $this->hasMany(SubscriberPolicy::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
     /**
      * @param $request

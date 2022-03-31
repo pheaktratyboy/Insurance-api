@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Company;
 use App\Models\SubscriberPolicy;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,10 +32,15 @@ class SubscriberResource extends JsonResource
             'id_or_passport_front'  => $this->id_or_passport_front,
             'id_or_passport_back'   => $this->id_or_passport_back,
 
+            'user_id'               => $this->user_id,
+            'company_id'            => $this->company_id,
+
             'status'                => $this->status,
             'created_at'            => $this->created_at,
 
             /** relationship */
+            'company'               => new CompanyResource($this->whenLoaded('company')),
+            'user'                  => new CompanyResource($this->whenLoaded('user')),
             'subscriber_policies'   => SubscriberPolicyResource::collection($this->whenLoaded('subscriber_policies')),
         ];
     }

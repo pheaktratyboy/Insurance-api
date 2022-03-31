@@ -32,6 +32,7 @@ class CreateSubscribersTable extends Migration
             $table->string('status');
 
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('company_id')->nullable();
 
             $table->timestamps();
         });
