@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Enums\BaseRole;
 use App\Enums\StatusType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Subscriber extends Model
 {
@@ -26,6 +27,7 @@ class Subscriber extends Model
         'id_or_passport_back',
         'user_id',
         'status',
+        'expired_at',
     ];
 
     protected $casts = [
@@ -34,6 +36,7 @@ class Subscriber extends Model
 
     protected $dates = [
         'date_of_birth',
+        'expired_at',
         'created_at',
         'updated_at',
     ];
@@ -50,7 +53,7 @@ class Subscriber extends Model
      * @param $request
      * @return $this
      */
-    public function createNewSubscriber($request)
+    public function createNewSubscriber(Request $request)
     {
         $user = auth()->user();
         $request['status'] = StatusType::Approved;
@@ -66,11 +69,22 @@ class Subscriber extends Model
      * @param $request
      * @return $this
      */
-    public function addSubscriberPolicy($request)
+    public function addSubscriberPolicy(Request $request)
     {
-        $policy = new SubscriberPolicy($request->input());
+        $sub_policy = new SubscriberPolicy($request->input());
 
-        $this->subscriber_policies()->save($policy);
+        if ($request->has('policy_id')) {
+
+            $policy = Policy::firstWhere('id', $request->policy_id);
+            if ($policy) {
+
+                $duration = $policy->duration;
+                $newDateTime = Carbon::now()->addMonths($duration);
+                $sub_policy->expired_at = $newDateTime;
+            }
+        }
+
+        $this->subscriber_policies()->save($sub_policy);
 
         return $this;
     }

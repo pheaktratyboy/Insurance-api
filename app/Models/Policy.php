@@ -10,7 +10,11 @@ class Policy extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'price', 'duration', 'created_at', 'updated_at',
+        'name',
+        'price',
+        'duration',
+        'created_at',
+        'updated_at',
     ];
     protected $dates = [
         'created_at',

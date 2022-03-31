@@ -19,6 +19,7 @@ class SubscriberPolicyResource extends JsonResource
             'subscriber_id'       => $this->subscriber_id,
             'policy_id'           => $this->policy_id,
             'payment_method'      => $this->payment_method,
+            'expired_at'          => $this->expired_at,
 
             /** relationship */
             'policy'              => new PolicyResource($this->whenLoaded('policy')),

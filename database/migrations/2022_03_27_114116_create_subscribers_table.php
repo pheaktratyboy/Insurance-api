@@ -41,6 +41,7 @@ class CreateSubscribersTable extends Migration
             $table->unsignedBigInteger('subscriber_id');
             $table->unsignedBigInteger('policy_id');
             $table->string('payment_method');
+            $table->dateTime('expired_at');
 
             $table->timestamps();
 
