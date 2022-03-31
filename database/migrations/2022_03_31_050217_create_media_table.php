@@ -1,16 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateMediaTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('media', function (Blueprint $table) {
@@ -29,17 +24,9 @@ class CreateMediaTable extends Migration
             $table->json('custom_properties');
             $table->json('generated_conversions');
             $table->json('responsive_images');
-            $table->unsignedInteger('order_column')->nullable();
-        });
-    }
+            $table->unsignedInteger('order_column')->nullable()->index();
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('media');
+            $table->nullableTimestamps();
+        });
     }
 }

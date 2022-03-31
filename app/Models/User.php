@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Blamable, Notifiable, HasApiTokens, HasRoles;
+    use HasFactory, Blamable, Notifiable, HasApiTokens, InteractsWithMedia;
 
     protected $guard_name = 'api';
 
@@ -53,15 +54,6 @@ class User extends Authenticatable
         'force_change_password'         => 'boolean',
     ];
 
-
-    public function findForPassport($username)
-    {
-        return $this
-            ->where('email', $username)
-            ->where('disabled', false)
-            ->first();
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
@@ -69,9 +61,5 @@ class User extends Authenticatable
     {
         return $this->morphTo(null, 'profileable_type', 'profileable_id');
     }
-
-    public function scopeJoinProfile($query)
-    {
-        return $query->join('employees', 'employees.id', '=', 'users.profileable_id');
-    }
+    
 }
