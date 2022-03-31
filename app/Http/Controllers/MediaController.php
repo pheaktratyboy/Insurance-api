@@ -9,6 +9,11 @@ use Illuminate\Http\Response;
 class MediaController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @param string $collection
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request, $collection = 'upload')
     {
         $file  = $request->file('file');
@@ -20,6 +25,10 @@ class MediaController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function uploadMultipleFiles(Request $request)
     {
         $medias = [];
@@ -37,6 +46,10 @@ class MediaController extends Controller
         return response()->json($transformMedias);
     }
 
+    /**
+     * @param Request $request
+     * @return int
+     */
     public function destroy(Request $request)
     {
         $payload = json_decode($request->getContent(), true);

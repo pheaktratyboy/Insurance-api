@@ -25,6 +25,8 @@ Route::middleware('auth:api')->group(function () {
     include 'api-roles.php';
     include 'api-users.php';
     include 'api-medias.php';
+    include 'api-reports.php';
+    include 'api-company.php';
 });
 
 

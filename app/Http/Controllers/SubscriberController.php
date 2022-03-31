@@ -12,7 +12,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SubscriberController extends Controller
 {
-
     public function index() {
 
         $subscriber = QueryBuilder::for(Subscriber::class)
