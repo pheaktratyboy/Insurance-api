@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Blamable, Notifiable, HasApiTokens, InteractsWithMedia;
+    use HasFactory, Blamable, Notifiable, HasApiTokens, HasRoles, InteractsWithMedia;
 
     protected $guard_name = 'api';
 
@@ -61,5 +62,5 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->morphTo(null, 'profileable_type', 'profileable_id');
     }
-    
+
 }

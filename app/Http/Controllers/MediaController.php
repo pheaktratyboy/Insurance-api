@@ -22,10 +22,9 @@ class MediaController extends Controller
 
     public function uploadMultipleFiles(Request $request)
     {
-        /** body : file[] = array of file*/
         $medias = [];
         foreach ($request->file('files') as $file) {
-            $media = app('request')->user()->addMedia($file)->toMediaCollection('local');
+            $media = app('request')->user()->addMedia($file)->toMediaCollection('upload');
             array_push($medias, $media);
         }
         $transformMedias = collect($medias)->transform(function ($media) {
@@ -36,12 +35,6 @@ class MediaController extends Controller
         });
 
         return response()->json($transformMedias);
-    }
-
-    public function listAllCollections()
-    {
-        $media = Media::select('collection_name')->distinct()->get();
-        return response(['data' => $media]);
     }
 
     public function destroy(Request $request)
