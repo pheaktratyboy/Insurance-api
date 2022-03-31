@@ -16,7 +16,7 @@ class SubscriberPolicyResource extends JsonResource
     {
         return [
             'id'                  => $this->id,
-            'subscriber_id'       => $this->policy_id,
+            'subscriber_id'       => $this->subscriber_id,
             'policy_id'           => $this->policy_id,
             'payment_method'      => $this->payment_method,
 

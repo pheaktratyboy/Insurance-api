@@ -68,38 +68,9 @@ class Subscriber extends Model
      */
     public function addSubscriberPolicy($request)
     {
-        $policy = new SubscriberPolicy($request->validated());
+        $policy = new SubscriberPolicy($request->input());
+
         $this->subscriber_policies()->save($policy);
-
-        return $this;
-    }
-
-
-    public function formatItemForPolicies($items)
-    {
-        $newItems = [];
-        foreach ($items as $item) {
-
-            $newItems[] = [
-                'policy_id'        => $item->policy_id,
-                'payment_method'   => $item->payment_method,
-            ];
-        }
-
-        return $newItems;
-    }
-
-
-    public function addSubscriberPolicies($items)
-    {
-        $newItems = collect($items)->map(function ($item)  {
-            $policies = new SubscriberPolicy;
-            $policies->fill($item);
-
-            return $policies;
-        });
-
-        $this->subscriber_policies()->saveMany($newItems);
 
         return $this;
     }

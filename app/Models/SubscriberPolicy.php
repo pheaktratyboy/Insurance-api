@@ -25,6 +25,16 @@ class SubscriberPolicy extends Model
         'updated_at',
     ];
 
+    public function updatePolicy($request)
+    {
+        $this->fill($request);
+        $this->save();
+
+        $this->sale_order->cacheCalculationTotalPrice();
+
+        return $this;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
