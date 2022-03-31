@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -28,6 +30,15 @@ class UserController extends Controller
     public function show(User $user)
     {
         return new UserResource($user->load(['profile', 'profile.municipality', 'profile.district', 'roles']));
+    }
+
+    /**
+     * @return EmployeeResource
+     */
+    public function showProfile() {
+
+        $user = Auth::user();
+        return new EmployeeResource($user->profile->load('user', 'user.roles'));
     }
 
     /**
