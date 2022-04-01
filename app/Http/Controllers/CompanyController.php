@@ -14,14 +14,27 @@ class CompanyController extends Controller
 
     public function index()
     {
-        $municipalities = QueryBuilder::for(Company::class)
+        $company = QueryBuilder::for(Company::class)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 
-        return CompanyResource::collection($municipalities);
+        return CompanyResource::collection($company);
     }
+
+    public function listAllSubscriber()
+    {
+//        $municipalities = QueryBuilder::for()
+//            ->allowedFilters(['name'])
+//            ->defaultSort('-created_at')
+//            ->paginate()
+//            ->appends(request()->query());
+//
+//        return CompanyResource::collection($municipalities);
+    }
+
+
     /**
      * @param Company $company
      * @return CompanyResource

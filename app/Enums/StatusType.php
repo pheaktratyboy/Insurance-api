@@ -10,4 +10,5 @@ final class StatusType extends Enum
     const Cancel = 'cancel';
     const Approved  = 'approved';
     const Rejected  = 'rejected';
+    const Claim  = 'claim';
 }

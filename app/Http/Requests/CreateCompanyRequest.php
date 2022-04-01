@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateCompanyRequest extends FormRequest
 {
@@ -15,9 +16,12 @@ class CreateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => ['required', 'string', 'unique:companies', 'max:255'],
-            'logo'          => ['sometimes', new Media],
-            'staff_count'   => ['max:10'],
+            /** Company */
+            'name'              => ['required', 'string', 'unique:companies', 'max:255'],
+            'logo'              => ['sometimes', new Media],
+
+            /** Information */
+            'users.*.user_id'   => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('users', 'id')],
         ];
     }
 }

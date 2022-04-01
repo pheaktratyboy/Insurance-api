@@ -18,8 +18,19 @@ class CreateCompaniesTable extends Migration
             $table->string('name')->nullable();
             $table->integer('staff_count')->default(0);
             $table->json('logo')->nullable();
+            $table->boolean('disabled')->default(false);
 
             $table->timestamps();
+        });
+
+        Schema::create('company_users', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
+
+            $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
@@ -30,6 +41,7 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('company_users');
         Schema::dropIfExists('companies');
     }
 }

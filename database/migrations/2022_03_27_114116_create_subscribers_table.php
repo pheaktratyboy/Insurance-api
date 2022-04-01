@@ -30,6 +30,7 @@ class CreateSubscribersTable extends Migration
             $table->json('id_or_passport_back')->nullable();
 
             $table->string('status');
+            $table->boolean('disabled')->default(false);
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id')->nullable();

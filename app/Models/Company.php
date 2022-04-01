@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,4 +26,11 @@ class Company extends Model
         'updated_at',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function company_employees()
+    {
+        return $this->hasMany(CompanyUsers::class);
+    }
 }

@@ -19,6 +19,9 @@ class CompanyResource extends JsonResource
             'name'          => $this->name,
             'staff_count'   => $this->staff_count,
             'logo'          => $this->logo,
+
+            /** relationship */
+            'users'         => new UserResource($this->whenLoaded('users')),
         ];
     }
 }
