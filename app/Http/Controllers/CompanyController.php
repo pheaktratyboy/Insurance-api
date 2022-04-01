@@ -6,7 +6,6 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
-use App\Models\Subscriber;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -16,24 +15,13 @@ class CompanyController extends Controller
 
     public function index()
     {
-        $company = QueryBuilder::for(Company::class)
+        $result = QueryBuilder::for(Company::class)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
 
-        return CompanyResource::collection($company);
-    }
-
-    public function listAllSubscriber()
-    {
-//        $municipalities = QueryBuilder::for()
-//            ->allowedFilters(['name'])
-//            ->defaultSort('-created_at')
-//            ->paginate()
-//            ->appends(request()->query());
-//
-//        return CompanyResource::collection($municipalities);
+        return CompanyResource::collection($result);
     }
 
 

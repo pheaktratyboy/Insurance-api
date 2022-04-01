@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCompanyUsersRequest;
+use App\Http\Requests\UpdateCompanyUsersRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -17,10 +19,11 @@ class CompanyUserController extends Controller
         $company = QueryBuilder::for(CompanyUser::class)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
+            ->with(['user', 'company'])
             ->paginate()
             ->appends(request()->query());
 
-        return CompanyResource::collection($company);
+        return CompanyUserResource::collection($company);
     }
 
     /**
@@ -39,8 +42,13 @@ class CompanyUserController extends Controller
     }
 
 
-    public function update() {
+    public function update(UpdateCompanyUsersRequest $request, CompanyUser $user) {
 
+        DB::transaction(function () use ($request, $user) {
+            $user->update($request->validated());
+        });
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

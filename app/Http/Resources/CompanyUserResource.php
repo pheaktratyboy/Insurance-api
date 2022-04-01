@@ -21,6 +21,7 @@ class CompanyUserResource extends JsonResource
 
             /** relationship */
             'user'             => new UserResource($this->whenLoaded('user')),
+            'company'          => new CompanyResource($this->whenLoaded('company')),
         ];
     }
 }

@@ -16,7 +16,7 @@ class CreatePoliciesTable extends Migration
         Schema::create('policies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string("name")->unique();
-            $table->decimal('price', 10, 3);
+            $table->decimal('price', 10, 2);
             $table->string('currency', 3)->default('USD');
             $table->unsignedInteger('duration');
 
