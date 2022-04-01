@@ -35,7 +35,9 @@ class CompanyUserController extends Controller
 
         $result = DB::transaction(function () use ($request, $company) {
 
-            return $company->addUserUnderCompany($request->input('users'))->load('employees');
+            return $company->addUserUnderCompany($request->input('users'))
+                ->cacheSumTotalStaffs()
+                ->load('employees');
         });
 
         return new CompanyResource($result);
