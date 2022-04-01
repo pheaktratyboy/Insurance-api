@@ -6,7 +6,9 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
+use App\Models\Subscriber;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
@@ -41,6 +43,8 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $company->load('company_employees.user');
+
         return new CompanyResource($company);
     }
 
@@ -50,8 +54,18 @@ class CompanyController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-        $company = Company::create($request->input());
-        return new CompanyResource($company);
+        $result = DB::transaction(function () use ($request) {
+
+            $company = new Company;
+            $company->createNewCompany($request);
+
+            if ($request->has('users')) {
+                $company->addUserUnderCompany($request->input('users'));
+            }
+            return $company;
+        });
+
+        return new CompanyResource($result);
     }
 
     /**
