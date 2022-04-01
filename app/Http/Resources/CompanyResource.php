@@ -21,7 +21,7 @@ class CompanyResource extends JsonResource
             'logo'                  => $this->logo,
 
             /** relationship */
-            'company_employees'     => CompanyUserResource::collection($this->whenLoaded('company_employees')),
+            'employees'             => CompanyUserResource::collection($this->whenLoaded('employees')),
         ];
     }
 }

@@ -43,7 +43,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $company->load('company_employees.user');
+        $company->load('employees.user');
 
         return new CompanyResource($company);
     }
@@ -75,7 +75,9 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $company->update($request->input());
+        DB::transaction(function () use ($request, $company) {
+            $company->update($request->input());
+        });
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -29,9 +29,9 @@ class Company extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function company_employees()
+    public function employees()
     {
-        return $this->hasMany(CompanyUsers::class);
+        return $this->hasMany(CompanyUser::class);
     }
 
     /**
@@ -48,13 +48,16 @@ class Company extends Model
 
     /**
      * @param $items
+     * @return $this
      */
     public function addUserUnderCompany($items)
     {
         $newItems = collect($items)->map(function ($item)  {
-            return new CompanyUsers($item);
+            return new CompanyUser($item);
         });
 
-        $this->company_employees()->saveMany($newItems);
+        $this->employees()->saveMany($newItems);
+
+        return $this;
     }
 }

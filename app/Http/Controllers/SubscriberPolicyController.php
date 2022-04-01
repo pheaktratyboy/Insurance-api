@@ -29,6 +29,11 @@ class SubscriberPolicyController extends Controller
         return new SubscriberResource($result);
     }
 
+    /**
+     * @param UpdateSubscriberPolicyRequest $request
+     * @param SubscriberPolicy $subscriber_policy
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     */
     public function update(UpdateSubscriberPolicyRequest $request, SubscriberPolicy $subscriber_policy) {
 
         DB::transaction(function () use ($request, $subscriber_policy) {
