@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Religion;
 use App\Enums\Gender;
+use App\Enums\StatusType;
 use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -25,12 +26,17 @@ class UpdateSubscriberRequest extends FormRequest
             'phone_number'          => ['sometimes', 'required', 'string', 'max:255'],
             'address'               => ['sometimes', 'required', 'string', 'max:255'],
             'place_of_birth'        => ['sometimes', 'required', 'string', 'max:255'],
+
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],
             'religion'              => ['sometimes', 'required', Rule::in(Religion::getValues())],
+            'status'                => ['sometimes', 'required', Rule::in(StatusType::getValues())],
 
             'avatar'                => ['sometimes', new Media],
             'id_or_passport_front'  => ['sometimes', new Media],
             'id_or_passport_back'   => ['sometimes', new Media],
+            'attachments'           => 'sometimes',
+
+            'note'                  => ['sometimes', 'required'],
 
             'policy_id'             => ['sometimes', 'required', 'max:10', Rule::exists('policies', 'id')],
             'payment_method'        => ['sometimes', 'required', 'string', 'max:255'],

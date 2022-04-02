@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscriber;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Service\ReportService;
 
 class ReportController extends Controller
 {
@@ -21,5 +20,17 @@ class ReportController extends Controller
             ->get();
 
         echo json_encode($subscriber);
+    }
+
+    public function reportSubscriber()
+    {
+        $report         = new ReportService();
+        $subscribers    = $report->getSubscribers();
+
+        return response()->json([
+            'data' => [
+                'subscribers' => $subscribers,
+            ],
+        ]);
     }
 }

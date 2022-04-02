@@ -89,8 +89,6 @@ class Kernel extends HttpKernel
         'verified'         => EnsureEmailIsVerified::class,
 
         /** custom middleware */
-        'phone.string'           => ConvertValidPhoneNumberToE164Format::class,
-        'group.landlord'         => GroupLandlord::class,
-        'allow.role'             => EnsureUserHasRole::class,
+        'allow.role'       => EnsureUserHasRole::class,
     ];
 }
