@@ -36,7 +36,7 @@ class CompanyUserController extends Controller
         $result = DB::transaction(function () use ($request, $company) {
 
             return $company->addUserUnderCompany($request->input('users'))
-                ->cacheSumTotalStaffs()
+                ->cacheSumTotalStaff()
                 ->load('employees');
         });
 
@@ -60,5 +60,18 @@ class CompanyUserController extends Controller
     public function show(CompanyUser $companyUsers) {
 
         return new CompanyUserResource($companyUsers->load('user'));
+    }
+
+    /**
+     * @param CompanyUser $companyUser
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     */
+    public function destroy(CompanyUser $companyUser) {
+
+        $company = $companyUser;
+        $companyUser->delete();
+        $company->company->cacheSumTotalStaff();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

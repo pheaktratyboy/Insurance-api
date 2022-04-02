@@ -50,7 +50,7 @@ class CompanyController extends Controller
             if ($request->has('users')) {
 
                 $company->addUserUnderCompany($request->input('users'))
-                    ->cacheSumTotalStaffs();
+                    ->cacheSumTotalStaff();
             }
             return $company;
         });

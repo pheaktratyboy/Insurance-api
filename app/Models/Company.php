@@ -64,7 +64,7 @@ class Company extends Model
     /**
      * @return $this
      */
-    public function cacheSumTotalStaffs() {
+    public function cacheSumTotalStaff() {
         $this->staff_count = $this->employees()->count();
         $this->save();
         $this->refresh();
