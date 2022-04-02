@@ -24,6 +24,7 @@ class CreateSubscribersTable extends Migration
             $table->string('place_of_birth');
             $table->enum('gender', ['female', 'male', 'other'])->nullable();
             $table->enum('religion', ['muslim', 'non_muslim'])->nullable();
+            $table->text('note')->nullable();
 
             $table->json('avatar')->nullable();
             $table->json('id_or_passport_front')->nullable();;

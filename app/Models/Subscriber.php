@@ -28,6 +28,7 @@ class Subscriber extends Model
         'user_id',
         'company_id',
         'status',
+        'note',
         'expired_at',
     ];
 
