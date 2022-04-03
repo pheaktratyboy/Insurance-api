@@ -53,6 +53,7 @@ class SubscriberPolicyController extends Controller
      */
     public function show(SubscriberPolicy $subscriberPolicy)
     {
+        dd($subscriberPolicy);
         return new SubscriberPolicyResource($subscriberPolicy->load('policy'));
     }
 }

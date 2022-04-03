@@ -123,6 +123,9 @@ class Subscriber extends Model
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function cacheCalculationTotalPrice()
     {
         $query = $this->subscriber_policies()->with('policy')->get();
