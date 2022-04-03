@@ -46,6 +46,7 @@ class SubscriberController extends Controller
             $subscriber = new Subscriber;
             $subscriber->createNewSubscriber($request)
                 ->addSubscriberPolicy($request)
+                ->cacheCalculationTotalPrice()
                 ->load("subscriber_policies");
 
             return $subscriber;

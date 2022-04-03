@@ -72,4 +72,9 @@ class AuthenticationController extends AccessTokenController
             return $this->login($user->username, $request->password);
         });
     }
+
+    public function logout()
+    {
+        return response(null, 204);
+    }
 }

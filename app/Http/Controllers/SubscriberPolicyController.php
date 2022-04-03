@@ -25,7 +25,9 @@ class SubscriberPolicyController extends Controller
         $subscriber->validateForStatusClaimed();
 
         $result = DB::transaction(function () use ($request, $subscriber) {
-            return $subscriber->addSubscriberPolicy($request)->load('subscriber_policies');
+            return $subscriber->addSubscriberPolicy($request)
+                ->cacheCalculationTotalPrice()
+                ->load('subscriber_policies');
         });
 
         return new SubscriberResource($result);
@@ -39,7 +41,7 @@ class SubscriberPolicyController extends Controller
     public function update(UpdateSubscriberPolicyRequest $request, SubscriberPolicy $subscriber_policy) {
 
         DB::transaction(function () use ($request, $subscriber_policy) {
-            $subscriber_policy->update($request->validated());
+            $subscriber_policy->updatePolicy($request->validated());
         });
 
         return response(null, Response::HTTP_NO_CONTENT);

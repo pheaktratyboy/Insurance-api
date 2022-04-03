@@ -36,6 +36,7 @@ class SubscriberResource extends JsonResource
             'company_id'            => $this->company_id,
 
             'status'                => $this->status,
+            'total'                 => $this->total,
             'created_at'            => $this->created_at,
 
             /** relationship */

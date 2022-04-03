@@ -25,12 +25,16 @@ class SubscriberPolicy extends Model
         'updated_at',
     ];
 
+    /**
+     * @param $request
+     * @return $this
+     */
     public function updatePolicy($request)
     {
         $this->fill($request);
         $this->save();
 
-        $this->sale_order->cacheCalculationTotalPrice();
+        $this->subscriber->cacheCalculationTotalPrice();
 
         return $this;
     }
