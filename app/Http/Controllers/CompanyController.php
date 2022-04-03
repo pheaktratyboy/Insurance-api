@@ -65,9 +65,22 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
+        $company->notAllowIfItemAlreadyUsed();
+
         DB::transaction(function () use ($request, $company) {
             $company->update($request->input());
         });
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param Company $company
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     */
+    public function destroy(Company $company)
+    {
+        $company->notAllowIfItemAlreadyUsed();
+        $company->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

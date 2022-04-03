@@ -71,4 +71,13 @@ class Company extends Model
 
         return $this;
     }
+
+    public function notAllowIfItemAlreadyUsed()
+    {
+        $exist = Subscriber::firstWhere('company_id', $this->id);
+        if ($exist) {
+            abort('422', 'Sorry, we can not allow doing the action because this item has already been used.');
+        }
+        return $this;
+    }
 }

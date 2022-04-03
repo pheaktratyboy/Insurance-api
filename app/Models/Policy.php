@@ -26,7 +26,7 @@ class Policy extends Model
     {
         $exist = SubscriberPolicy::firstWhere('policy_id', $this->id);
         if ($exist) {
-            abort('422', 'Sorry, we can not allow it because this item has already been used.');
+            abort('422', 'Sorry, we can not allow doing the action because this item has already been used.');
         }
         return $this;
     }

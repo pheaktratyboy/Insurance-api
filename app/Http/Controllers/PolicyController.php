@@ -53,7 +53,6 @@ class PolicyController extends Controller
         return new PolicyResource($policy);
     }
 
-
     /**
      * @param Policy $policy
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
