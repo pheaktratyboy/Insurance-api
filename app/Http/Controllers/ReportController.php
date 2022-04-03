@@ -25,7 +25,8 @@ class ReportController extends Controller
     public function reportSubscriber()
     {
         $report         = new ReportService();
-        $subscribers    = $report->getSubscribers();
+//        $subscribers    = $report->getSubscribers();
+        $subscribers    = Subscriber::with('subscriber_policies')->get();
 
         return response()->json([
             'data' => [

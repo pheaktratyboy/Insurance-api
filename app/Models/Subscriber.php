@@ -7,12 +7,12 @@ use App\Exceptions\HttpException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Subscriber extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'name_kh',
@@ -122,10 +122,56 @@ class Subscriber extends Model
      */
     public function scopeJoinCompany($query)
     {
-        return $query->join('companies', 'companies.id', '=', 'subscribers.company_id');
+        return $query->leftJoin('companies', 'companies.id', '=', 'subscribers.company_id');
     }
 
-    public function scopeAllowFilterReport($query, $filters)
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeJoinSubPolicies($query)
+    {
+        return $query->join('subscriber_policies', 'subscriber_policies.id', '=', 'subscriber_policies.subscriber_id');
+    }
+
+    public function scopeJoinConsigneeLocation($query)
+    {
+        return $query->join(DB::raw("
+        (select
+            subscribers.name_kh,
+            subscribers.name_en,
+            subscriber_policies.subscriber_id,
+            subscriber_policies.policy_id,
+            subscriber_policies.payment_method,
+            subscribers.date_of_birth,
+            subscribers.identity_number,
+            subscribers.religion,
+            subscribers.gender,
+            subscribers.place_of_birth,
+            subscribers.address,
+            subscribers.phone_number
+            )
+        from
+            subscribers
+            INNER JOIN
+            subscriber_policies
+            on
+            subscribers.id = subscriber_policies.subscriber_id
+        where
+	    subscribers.`status` = 'approved'
+	    "), function ($join) {
+            $join->on('consigneeLocation.id', '=', 'orders.consignee_location_id');
+        });
+    }
+
+    /**
+     * @param $query
+     * @param $filters
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function scopeAllowFilterReportSubscriber($query, $filters)
     {
         $request = request();
 
