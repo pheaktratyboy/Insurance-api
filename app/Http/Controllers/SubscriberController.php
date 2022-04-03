@@ -61,6 +61,8 @@ class SubscriberController extends Controller
      */
     public function update(UpdateSubscriberRequest $request, Subscriber $subscriber) {
 
+        $subscriber->validateForStatusClaimed();
+
         DB::transaction(function () use ($request, $subscriber) {
             $subscriber->update($request->validated());
         });

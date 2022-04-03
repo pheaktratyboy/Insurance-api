@@ -22,6 +22,8 @@ class SubscriberPolicyController extends Controller
      */
     public function store(CreateSubscriberPolicyRequest $request, Subscriber $subscriber) {
 
+        $subscriber->validateForStatusClaimed();
+
         $result = DB::transaction(function () use ($request, $subscriber) {
             return $subscriber->addSubscriberPolicy($request)->load('subscriber_policies');
         });
