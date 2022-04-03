@@ -20,4 +20,14 @@ class Policy extends Model
         'created_at',
         'updated_at',
     ];
+
+
+    public function notAllowIfItemAlreadyUsed()
+    {
+        $exist = SubscriberPolicy::firstWhere('policy_id', $this->id);
+        if ($exist) {
+            abort('422', 'Sorry, we can not allow it because this item has already been used.');
+        }
+        return $this;
+    }
 }

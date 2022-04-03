@@ -39,6 +39,7 @@ class PolicyController extends Controller
      */
     public function update(UpdatePolicyRequest $request, Policy $policy) {
 
+        $policy->notAllowIfItemAlreadyUsed();
 
         $policy->update($request->input());
         return response(null, Response::HTTP_NO_CONTENT);
@@ -50,5 +51,17 @@ class PolicyController extends Controller
      */
     public function show(Policy $policy) {
         return new PolicyResource($policy);
+    }
+
+
+    /**
+     * @param Policy $policy
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     */
+    public function destroy(Policy $policy)
+    {
+        $policy->notAllowIfItemAlreadyUsed();
+        $policy->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
