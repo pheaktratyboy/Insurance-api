@@ -16,7 +16,9 @@ class CompanyUserController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $company = QueryBuilder::for(CompanyUser::class)
+            ->where('user_id', $user->id)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->with(['user', 'company'])

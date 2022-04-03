@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\AuthenticationFailedException;
-use App\Exceptions\ClientError;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
