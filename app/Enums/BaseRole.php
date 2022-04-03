@@ -4,6 +4,10 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
+/**
+ * Class BaseRole
+ * @package App\Enum
+ */
 final class BaseRole extends Enum
 {
     const Master   = 'master';

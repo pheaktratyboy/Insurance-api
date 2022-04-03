@@ -5,9 +5,8 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static Male()
- * @method static static Female()
- * @method static static Other()
+ * Class Gender
+ * @package App\Enum
  */
 final class Gender extends Enum
 {

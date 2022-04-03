@@ -39,6 +39,7 @@ class PolicyController extends Controller
      */
     public function update(UpdatePolicyRequest $request, Policy $policy) {
 
+
         $policy->update($request->input());
         return response(null, Response::HTTP_NO_CONTENT);
     }

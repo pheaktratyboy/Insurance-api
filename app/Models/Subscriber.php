@@ -77,10 +77,9 @@ class Subscriber extends Model
 
     public function validateForStatusClaimed()
     {
-        if (!is_a($this->status, StatusType::Claimed)) {
+        if (StatusType::fromValue(StatusType::Claimed)->is($this->status)) {
             abort('422', 'Sorry, we can not allow for this status because already been claimed.');
         }
-
         return $this;
     }
 

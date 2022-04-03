@@ -5,8 +5,8 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static Muslim()
- * @method static static Non_Muslim()
+ * Class Religion
+ * @package App\Enum
  */
 final class Religion extends Enum
 {
