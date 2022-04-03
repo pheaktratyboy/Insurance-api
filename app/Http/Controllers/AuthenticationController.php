@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\AuthenticationFailedException;
+use App\Exceptions\ClientError;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
@@ -21,12 +22,12 @@ class AuthenticationController extends AccessTokenController
     {
         /** @var User $user */
         $user = User::firstWhere('username', $request->username);
-
         if ($user) {
             if ($user->activated == false) {
                 throw AuthenticationFailedException::accountNotInActivated();
             }
         }
+
         return $this->login($request->username, $request->password);
     }
 

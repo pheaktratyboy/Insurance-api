@@ -58,7 +58,7 @@ class CompanyUserController extends Controller
      * @return CompanyUserResource
      */
     public function show(CompanyUser $companyUsers) {
-        
+
         return new CompanyUserResource($companyUsers->load(['user', 'company']));
     }
 

@@ -7,9 +7,10 @@ class HttpException extends \Symfony\Component\HttpKernel\Exception\HttpExceptio
 {
     private $title;
 
-    public function __construct()
+    public function __construct(int $statusCode, string $message = null, $title = '', \Throwable $previous = null, array $headers = [], ?int $code = 0)
     {
-        //parent::__construct($statusCode, $message, $previous, $headers, $code);
+        parent::__construct($statusCode, $message, $previous, $headers, $code);
+        $this->title = $title;
     }
 
     public function getTitle()
