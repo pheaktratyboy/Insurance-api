@@ -3,22 +3,25 @@
 namespace App\Models;
 
 use App\Enums\TrackingType;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TrackingHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $fillable = [
         'name_kh',
         'data',
         'model',
         'type',
+        'subscriber_id',
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'data'          => 'array',
+        'subscriber_id' => 'integer',
     ];
 
     protected $dates = [
@@ -35,9 +38,10 @@ class TrackingHistory extends Model
     public function createSubscriberTracking($data, $type) {
 
         $tracking = new TrackingHistory;
-        $tracking->type = $type;
-        $tracking->data = $data;
-        $tracking->model = Subscriber::class;
+        $tracking->type             = $type;
+        $tracking->data             = $data;
+        $tracking->reference_id     = $data->id;
+        $tracking->model            = Subscriber::class;
         $tracking->save();
     }
 }

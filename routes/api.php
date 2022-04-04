@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function () {
     include 'api-company.php';
     include 'api-data-exports.php';
     include 'api-notification.php';
+    include 'api-tracking-history.php';
 });
 
 
