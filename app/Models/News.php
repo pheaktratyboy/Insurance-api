@@ -9,4 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
     use HasFactory, Blamable;
+
+
+    protected $fillable = [
+        'name',
+        'message',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
 }

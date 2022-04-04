@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NotificationResource extends JsonResource
+class NewsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,6 @@ class NotificationResource extends JsonResource
             'id'         => $this->id,
             'name'       => $this->name,
             'message'    => $this->message,
-            'is_read'    => $this->is_read,
         ];
     }
 }
