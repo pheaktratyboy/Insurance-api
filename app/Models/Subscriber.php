@@ -33,6 +33,7 @@ class Subscriber extends Model
         'status',
         'note',
         'expired_at',
+        'total',
     ];
 
     protected $casts = [
@@ -42,6 +43,7 @@ class Subscriber extends Model
         'id_or_passport_front'  => 'array',
         'id_or_passport_back'   => 'array',
         'attachments'           => 'array',
+        'total'                 => 'decimal:2',
     ];
 
     protected $dates = [
@@ -64,7 +66,7 @@ class Subscriber extends Model
      */
     public function company()
     {
-        return $this->belongsTo(Company::class, 'id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     /**
@@ -137,15 +139,6 @@ class Subscriber extends Model
         }
 
         return $this;
-    }
-
-    /**
-     * @param $query
-     * @return mixed
-     */
-    public function scopeJoinCompany($query)
-    {
-        return $query->leftJoin('companies', 'companies.id', '=', 'subscribers.company_id');
     }
 
     /**

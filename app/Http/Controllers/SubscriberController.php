@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TrackingType;
 use App\Http\Requests\CreateSubscriberRequest;
 use App\Http\Requests\UpdateSubscriberRequest;
 use App\Http\Resources\SubscriberResource;
 use App\Models\Subscriber;
+use App\Models\TrackingHistory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -47,7 +49,12 @@ class SubscriberController extends Controller
             $subscriber->createNewSubscriber($request)
                 ->addSubscriberPolicy($request)
                 ->cacheCalculationTotalPrice()
-                ->load("subscriber_policies");
+                ->load(['company','subscriber_policies.policy']);
+
+            /**
+             * Tracking History
+             */
+            TrackingHistory::createSubscriberTracking($subscriber, TrackingType::Created);
 
             return $subscriber;
         });
@@ -66,6 +73,12 @@ class SubscriberController extends Controller
 
         DB::transaction(function () use ($request, $subscriber) {
             $subscriber->update($request->validated());
+            $subscriber->load(['company','subscriber_policies.policy']);
+
+            /**
+             * Tracking History
+             */
+            TrackingHistory::createSubscriberTracking($subscriber, TrackingType::Updated);
         });
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -77,7 +90,7 @@ class SubscriberController extends Controller
      */
     public function show(Subscriber $subscriber)
     {
-        $subscriber->load('subscriber_policies.policy');
+        $subscriber->load(['company','subscriber_policies.policy']);
 
         return new SubscriberResource($subscriber);
     }

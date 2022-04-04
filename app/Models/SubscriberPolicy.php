@@ -54,4 +54,14 @@ class SubscriberPolicy extends Model
     {
         return $this->belongsTo(Policy::class);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeJoinCompany($query)
+    {
+        return $query->leftJoin('companies', 'companies.id', '=', 'subscribers.company_id');
+    }
+
 }

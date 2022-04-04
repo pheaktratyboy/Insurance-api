@@ -16,9 +16,9 @@ class CreateTrackingHistoriesTable extends Migration
     {
         Schema::create('tracking_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Subscriber::class)->constrained();
-            $table->string('status')->nullable();
-            $table->string('description')->nullable();
+            $table->string('type');
+            $table->string('model');
+            $table->json('data')->nullable();
 
             $table->blamable();
             $table->timestamps();
