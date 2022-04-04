@@ -13,7 +13,7 @@ class TrackingHistory extends Model
     protected $fillable = [
         'name_kh',
         'data',
-        'model',
+        'model_type',
         'type',
         'subscriber_id',
         'user_id',
@@ -42,7 +42,15 @@ class TrackingHistory extends Model
         $tracking->data             = $data;
         $tracking->reference_id     = $data->id;
         $tracking->user_id          = $user->id;
-        $tracking->model            = Subscriber::class;
+        $tracking->model_type       = "Subscriber";
         $tracking->save();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

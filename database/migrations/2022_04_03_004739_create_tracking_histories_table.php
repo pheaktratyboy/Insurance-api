@@ -17,7 +17,7 @@ class CreateTrackingHistoriesTable extends Migration
         Schema::create('tracking_histories', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('model');
+            $table->string('model_type');
             $table->json('data')->nullable();
 
             $table->unsignedBigInteger('reference_id');
