@@ -21,8 +21,8 @@ class CreateTrackingHistoriesTable extends Migration
             $table->json('data')->nullable();
 
             $table->unsignedBigInteger('reference_id');
+            $table->unsignedBigInteger('user_id');
 
-            $table->blamable();
             $table->timestamps();
         });
     }

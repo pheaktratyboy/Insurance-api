@@ -20,9 +20,8 @@ class TrackingHistoryResource extends JsonResource
             'model'        => $this->model,
             'data'         => $this->data,
             'reference_id' => $this->reference_id,
+            'user_id'      => $this->user_id,
 
-            'created_by'   => $this->created_by,
-            'updated_by'   => $this->updated_by,
             'created_at'   => $this->created_at,
             'updated_at'   => $this->updated_at,
         ];
