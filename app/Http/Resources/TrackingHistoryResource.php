@@ -17,13 +17,16 @@ class TrackingHistoryResource extends JsonResource
         return [
             'id'           => $this->id,
             'type'         => $this->type,
-            'model'        => $this->model,
+            'model'        => $this->model_type,
             'data'         => $this->data,
             'reference_id' => $this->reference_id,
             'user_id'      => $this->user_id,
 
             'created_at'   => $this->created_at,
             'updated_at'   => $this->updated_at,
+
+            /** relationship */
+            'user'         => new UserResource($this->whenLoaded('user')),
         ];
     }
 }
