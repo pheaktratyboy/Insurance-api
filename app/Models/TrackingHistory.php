@@ -30,9 +30,10 @@ class TrackingHistory extends Model
         'updated_at',
     ];
 
+
     /**
      * @param $data
-     * @param TrackingType $type
+     * @param $type
      */
     public function createSubscriberTracking($data, $type) {
 
@@ -45,6 +46,23 @@ class TrackingHistory extends Model
         $tracking->model_type       = "Subscriber";
         $tracking->save();
     }
+
+    /**
+     * @param $data
+     * @param $type
+     */
+    public function updateSubscriberPolicyTracking($data, $type) {
+
+        $user = auth()->user();
+        $tracking = new TrackingHistory;
+        $tracking->type             = $type;
+        $tracking->data             = $data;
+        $tracking->reference_id     = $data->subscriber_id;
+        $tracking->user_id          = $user->id;
+        $tracking->model_type       = "Subscriber";
+        $tracking->save();
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

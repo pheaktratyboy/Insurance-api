@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Enums\TrackingType;
 use App\Http\Requests\CreateSubscriberPolicyRequest;
 use App\Http\Requests\UpdateSubscriberPolicyRequest;
 use App\Http\Resources\SubscriberPolicyResource;
 use App\Http\Resources\SubscriberResource;
 use App\Models\Subscriber;
 use App\Models\SubscriberPolicy;
+use App\Models\TrackingHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 
@@ -27,7 +29,12 @@ class SubscriberPolicyController extends Controller
         $result = DB::transaction(function () use ($request, $subscriber) {
             return $subscriber->addSubscriberPolicy($request)
                 ->cacheCalculationTotalPrice()
-                ->load('subscriber_policies');
+                ->load(['company','subscriber_policies.policy']);
+
+            /**
+             * Tracking History
+             */
+            TrackingHistory::createSubscriberTracking($subscriber, TrackingType::Updated);
         });
 
         return new SubscriberResource($result);
@@ -42,6 +49,12 @@ class SubscriberPolicyController extends Controller
 
         DB::transaction(function () use ($request, $subscriber_policy) {
             $subscriber_policy->updatePolicy($request->validated());
+            $subscriber_policy->load(['subscriber.company', 'policy']);
+
+            /**
+             * Tracking History
+             */
+            TrackingHistory::updateSubscriberPolicyTracking($subscriber_policy, TrackingType::Updated);
         });
 
         return response(null, Response::HTTP_NO_CONTENT);
