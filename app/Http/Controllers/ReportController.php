@@ -41,30 +41,31 @@ class ReportController extends Controller
 
         $user = auth()->user();
 
-       if ($user->hasRole(BaseRole::Staff)) {
+        if ($user->hasRole(BaseRole::Staff)) {
 
-           $totalAgency = User::with('profile')->role(BaseRole::Agency)->where('created_by', $user->id)->get();
-           $userId = collect($totalAgency)->pluck('id');
+            $totalAgency = User::with('profile')->role(BaseRole::Agency)->where('created_by', $user->id)->get();
+            $userId = collect($totalAgency)->pluck('id');
 
-           $countExpired = 0;
-           $totalSell = 0;
-           $totalSubscriber = 0;
+            $countExpired = 0;
+            $totalSell = 0;
+            $totalSubscriber = 0;
 
-           if (!empty($userId)) {
-               $report       = new ReportService();
-               $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
+            if (!empty($userId)) {
+                $report       = new ReportService();
+                $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
+                $collection   = collect($subscribers);
 
-               //Count Total Subscriber
-               $totalSubscriber = collect($subscribers)->groupBy('subscriber_id')->count();
+                //Count Total Subscriber
+                $totalSubscriber = $collection->groupBy('subscriber_id')->count();
 
-               //Sub Total Sell
-               $totalSell = floatval($subscribers->sum('policy_price'));
+                //Sub Total Sell
+                $totalSell = floatval($subscribers->sum('policy_price'));
 
-               //Count User Expired
-               $countExpired = collect($subscribers)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
-           }
+                //Count User Expired
+                $countExpired = $collection->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+            }
 
-           return response()->json([
+            return response()->json([
                 'data' => [
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
@@ -76,25 +77,26 @@ class ReportController extends Controller
 
         } else if ($user->hasRole(BaseRole::Agency)) {
 
-           $user = auth()->user();
-           $countExpired = 0;
-           $totalSell = 0;
-           $totalSubscriber = 0;
+            $user = auth()->user();
+            $countExpired = 0;
+            $totalSell = 0;
+            $totalSubscriber = 0;
 
-           if (!empty($user->id)) {
+            if (!empty($user->id)) {
 
-               $report       = new ReportService();
-               $subscribers  = $report->querySubscriberPoliciesByUserId([$user->id]);
+                $report       = new ReportService();
+                $subscribers  = $report->querySubscriberPoliciesByUserId([$user->id]);
+                $collection   = collect($subscribers);
 
-               //Count Total Subscriber
-               $totalSubscriber = collect($subscribers)->groupBy('subscriber_id')->count();
+                //Count Total Subscriber
+                $totalSubscriber = $collection->groupBy('subscriber_id')->count();
 
-               //Sub Total Sell
-               $totalSell = floatval($subscribers->sum('policy_price'));
+                //Sub Total Sell
+                $totalSell = floatval($subscribers->sum('policy_price'));
 
-               //Count User Expired
-               $countExpired = collect($subscribers)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
-           }
+                //Count User Expired
+                $countExpired = $collection->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+            }
 
             return response()->json([
                 'data' => [
@@ -107,47 +109,51 @@ class ReportController extends Controller
 
         } else {
 
-           $employee = User::with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
-           $userId = collect($employee)->pluck('id');
+            $employee = User::with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
+            $userId = collect($employee)->pluck('id');
 
-           $countExpired = 0;
-           $totalSell = 0;
-           $totalSubscriber = 0;
+            $countExpired = 0;
+            $totalSell = 0;
+            $totalSubscriber = 0;
 
-           if (!empty($userId)) {
+            if (!empty($userId)) {
 
-               $report       = new ReportService();
-               $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
+                $report       = new ReportService();
+                $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
+                $collection   = collect($subscribers);
 
-               echo json_encode($subscribers);
 
+                //echo json_encode($subscribers);
+                echo json_encode(Carbon::today()->toDateTimeString());
+                echo json_encode(Carbon::today()->addMonths(1)->toDateTimeString());
 
-               //Count Total Subscriber
-               $totalSubscriber = collect($subscribers)->groupBy('subscriber_id')->count();
+                $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths(1)->toDateTimeString()]);
 
-               //Sub Total Sell
+                //Carbon::today()->toDateTimeString()
+                echo json_encode($countBeforeExpired);
+                dd();
+
+                //Count Total Subscriber
+                $totalSubscriber = $collection->groupBy('subscriber_id')->count();
+
+                //Sub Total Sell
                 $totalSell = floatval($subscribers->sum('policy_price'));
 
-               //Count User Expired
-               $countExpired = collect($subscribers)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+                //Count User Expired
+                $countExpired = $collection->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+            }
 
-               //Count User Before Expired
-//                $countBeforeExpired = collect($subscribers)->whereBetween('expired_at', [100, 200])->groupBy('subscriber_id')->count();
-//                echo json_encode($countBeforeExpired);
-
-           }
-
-           return response()->json([
-               'data' => [
-                   'total_subscriber'              => $totalSubscriber,
-                   'total_sell'                    => $totalSell,
-                   'total_staff'                   => 0,
-                   'total_agency'                  => 0,
-                   'total expired'                 => $countExpired,
-                   'total_before_expiring'         => 0,
-               ],
-           ]);
-       }
+            return response()->json([
+                'data' => [
+                    'total_subscriber'              => $totalSubscriber,
+                    'total_sell'                    => $totalSell,
+                    'total_staff'                   => 0,
+                    'total_agency'                  => 0,
+                    'total expired'                 => $countExpired,
+                    'total_before_expiring'         => 0,
+                ],
+            ]);
+        }
     }
 
     public function reportSubscriber()

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         Artisan::call('passport:install');
         $this->call(BaseRoleSeeder::class);
         $this->call(MasterUserSeeder::class);
+        $this->call(SettingSeeder::class);
         //$this->call(AddressSeeder::class);
 
         if (!app()->environment('production')) {
