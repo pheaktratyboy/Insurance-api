@@ -8,6 +8,21 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
+
+    public function index()
+    {
+        $company  = Setting::where('name', SettingEnum::Company)->orderBy('id', 'desc')->first();
+        $reminder = Setting::where('name', SettingEnum::Reminder)->orderBy('id', 'desc')->first();
+
+        return response()->json([
+            'data' => [
+                SettingEnum::Company    => $company,
+                SettingEnum::Reminder   => $reminder,
+            ],
+        ]);
+    }
+
+
     public function getReminder()
     {
         $reminder = Setting::where('name', SettingEnum::Reminder)->orderBy('id', 'desc')->first();

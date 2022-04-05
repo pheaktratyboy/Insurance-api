@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BaseRole;
+use App\Models\Setting;
 use App\Models\Subscriber;
 use App\Models\SubscriberPolicy;
 use App\Models\User;
@@ -40,6 +41,8 @@ class ReportController extends Controller
     public function reportDashboard() {
 
         $user = auth()->user();
+        $getReminder = 1;// Setting::Reminder();
+
 
         if ($user->hasRole(BaseRole::Staff)) {
 
@@ -127,7 +130,7 @@ class ReportController extends Controller
                 echo json_encode(Carbon::today()->toDateTimeString());
                 echo json_encode(Carbon::today()->addMonths(1)->toDateTimeString());
 
-                $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths(1)->toDateTimeString()]);
+                $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths($getReminder)->toDateTimeString()])->count();
 
                 //Carbon::today()->toDateTimeString()
                 echo json_encode($countBeforeExpired);
