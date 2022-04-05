@@ -65,7 +65,7 @@ class Employee extends Model
      */
     public function municipality()
     {
-        return $this->belongsTo(Municipality::class);
+        return $this->belongsTo(Municipality::class, 'municipality_id');
     }
 
     /**
@@ -73,7 +73,7 @@ class Employee extends Model
      */
     public function district()
     {
-        return $this->belongsTo(District::class);
+        return $this->belongsTo(District::class, 'district_id');
     }
 
     /**

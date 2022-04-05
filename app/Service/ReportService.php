@@ -3,11 +3,33 @@
 
 namespace App\Service;
 
-use App\Models\Order;
 use App\Models\SubscriberPolicy;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
+
+    public function querySubscriberPoliciesByUserId($userId) {
+
+        return DB::table('subscriber_policies')
+            ->join('subscribers', function ($join) use ($userId) {
+                $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id')
+                    ->whereIn('user_id', $userId);
+            })
+            ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+            ->select(
+                'subscribers.user_id',
+
+                'subscriber_policies.expired_at',
+                'subscriber_policies.subscriber_id',
+
+                'policies.price as policy_price',
+            )
+            //->where('subscriber_policies.expired_at', '<=' ,Carbon::now()->toDateTimeString())
+            ->get();
+    }
+
 
     public function getCommission()
     {
