@@ -21,7 +21,7 @@ class UpdateAgencyRequest extends FormRequest
             /** Information */
             'name_kh'               => ['sometimes', 'required', 'string', 'max:255'],
             'name_en'               => ['sometimes', 'required', 'string', 'max:255'],
-            'identity_number'       => ['sometimes', 'required', 'string', 'max:255'],
+            'identity_number'       => ['sometimes', 'required', 'string', 'max:255', 'unique:employees'],
             'date_of_birth'         => ['sometimes', 'required', 'date'],
             'phone_number'          => ['sometimes', 'required', 'string', 'max:255'],
             'address'               => ['sometimes', 'required', 'string', 'max:255'],
