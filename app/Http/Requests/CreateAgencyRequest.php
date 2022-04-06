@@ -19,7 +19,6 @@ class CreateAgencyRequest extends FormRequest
     {
         return [
             /** Account */
-            'username'              => ['required', 'string', 'max:255'],
             'email'                 => ['required', 'email', 'unique:users', 'max:255'],
             'password'              => 'required|min:6',
             'force_change_password' => 'required|boolean',

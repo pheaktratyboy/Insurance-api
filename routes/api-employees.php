@@ -7,5 +7,5 @@ Route::get('employees', [EmployeeController::class,'index'])->name('employees.in
 Route::get('employees/getAllStaff', [EmployeeController::class,'getAllStaff'])->name('employees.getAllStaff');
 Route::get('employees/{employee}', [EmployeeController::class,'show'])->name('employees.show');
 
-Route::post('employees', [EmployeeController::class,'store'])->name('employees.store');
+
 Route::put('employees/{employee}', [EmployeeController::class,'update'])->name('employees.update');

@@ -45,15 +45,16 @@ class EmployeeController extends Controller
             $employee = new Employee($request->input());
             $employee->save();
 
-            if ($request->has('username') && $request->has('email')) {
+            if ($request->has('email')) {
+
 
                 /**@var User $user*/
                 $user = $employee->user()->create([
                     'username'              => $request->email,
                     'email'                 => $request->email,
-                    'full_name'             => $request->username,
-                    'password'              => bcrypt($request->password),
+                    'full_name'             => $employee->name_en,
                     'phone_number'          => $employee->phone_number,
+                    'password'              => bcrypt($request->password),
                     'force_change_password' => false,
                     'activated'             => false,
                     'disabled'              => false,

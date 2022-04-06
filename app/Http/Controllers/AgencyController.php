@@ -59,10 +59,10 @@ class AgencyController extends Controller
                 $user = $employee->user()->create([
                     'username'              => $request->email,
                     'email'                 => $request->email,
-                    'full_name'             => $request->username,
-                    'password'              => bcrypt($request->password),
+                    'full_name'             => $request->name_en,
                     'phone_number'          => $employee->phone_number,
-                    'force_change_password' => $employee->force_change_password,
+                    'force_change_password' => $request->force_change_password,
+                    'password'              => bcrypt($request->password),
                     'activated'             => true,
                     'activated_at'          => now(),
                     'disabled'              => false,

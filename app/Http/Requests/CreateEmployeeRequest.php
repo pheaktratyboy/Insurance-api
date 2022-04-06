@@ -20,7 +20,6 @@ class CreateEmployeeRequest extends FormRequest
     {
         return [
             /** Account */
-            'username'              => ['required', 'string', 'max:255'],
             'email'                 => ['required', 'email', 'unique:users', 'max:255'],
             'password'              => ['required', 'string', 'min:6'],
             'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
