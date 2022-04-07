@@ -47,7 +47,6 @@ class EmployeeController extends Controller
 
             if ($request->has('email')) {
 
-
                 /**@var User $user*/
                 $user = $employee->user()->create([
                     'username'              => $request->email,
@@ -90,6 +89,10 @@ class EmployeeController extends Controller
 
                 $role = Role::firstWhere('id', $request->role_id);
                 $employee->user()->assignRole($role->name);
+            }
+
+            if ($request->has('name_en')) {
+                $employee->user()->update(['full_name' => $request->input('name_en')]);
             }
 
             $employee->update($request->input());

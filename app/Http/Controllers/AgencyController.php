@@ -85,6 +85,10 @@ class AgencyController extends Controller
      */
     public function update(UpdateAgencyRequest $request, Employee $agency) {
         DB::transaction(function () use ($request, $agency) {
+
+            if ($request->has('name_en')) {
+                $agency->user()->update(['full_name' => $request->input('name_en')]);
+            }
             $agency->update($request->input());
         });
 

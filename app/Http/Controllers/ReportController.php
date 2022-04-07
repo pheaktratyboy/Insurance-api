@@ -51,10 +51,8 @@ class ReportController extends Controller
         if ($user->hasRole(BaseRole::Staff)) {
 
             $query = User::where('disabled', 0)->with('profile')->where('created_by', $user->id);
-
-            $countAgency = $query->where('created_by', $user->id)->count();
+            $countAgency = $query->count();
             $userId = collect($query->get())->pluck('id');
-
 
 
             if (!empty($userId)) {
@@ -118,12 +116,11 @@ class ReportController extends Controller
 
         } else {
 
-            $query = User::where('disabled', 0)->with('profile');
-            $employee = $query->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
-            $countStaff = $query->role([BaseRole::Staff])->count();
-            $countAgency = $query->role([BaseRole::Agency])->count();
-            $userId = collect($employee)->pluck('id');
+            $employee = User::where('disabled', 0)->with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
+            $countStaff = User::where('disabled', 0)->with('profile')->role(BaseRole::Staff)->count();
+            $countAgency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->count();
 
+            $userId = collect($employee)->pluck('id');
 
             if (!empty($userId)) {
 
