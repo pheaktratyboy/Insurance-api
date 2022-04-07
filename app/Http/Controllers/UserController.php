@@ -49,6 +49,10 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user) {
 
         DB::transaction(function () use ($request, $user) {
+
+            if ($request->has('email')) {
+                $user->username = $request->input('email');
+            }
             $user->update($request->validated());
         });
         return response(null, Response::HTTP_NO_CONTENT);
