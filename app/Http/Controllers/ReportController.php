@@ -41,22 +41,29 @@ class ReportController extends Controller
     public function reportDashboard() {
 
         $user = auth()->user();
-        $getReminder = 1;// Setting::Reminder();
+        $getReminder = Setting::Reminder()->option;
 
+        $countExpired = 0;
+        $countBeforeExpired = 0;
+        $totalSell = 0;
+        $totalSubscriber = 0;
 
         if ($user->hasRole(BaseRole::Staff)) {
 
-            $totalAgency = User::with('profile')->role(BaseRole::Agency)->where('created_by', $user->id)->get();
-            $userId = collect($totalAgency)->pluck('id');
+            $query = User::where('disabled', 0)->with('profile')->where('created_by', $user->id);
 
-            $countExpired = 0;
-            $totalSell = 0;
-            $totalSubscriber = 0;
+            $countAgency = $query->where('created_by', $user->id)->count();
+            $userId = collect($query->get())->pluck('id');
+
+
 
             if (!empty($userId)) {
                 $report       = new ReportService();
                 $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
                 $collection   = collect($subscribers);
+
+                //Count Before Total Expired
+                $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths($getReminder)->toDateTimeString()])->count();
 
                 //Count Total Subscriber
                 $totalSubscriber = $collection->groupBy('subscriber_id')->count();
@@ -72,18 +79,14 @@ class ReportController extends Controller
                 'data' => [
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
-                    'total_agency'                  => 0,
+                    'total_agency'                  => $countAgency,
                     'total expired'                 => $countExpired,
-                    'total_before_expiring'         => 0,
+                    'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
 
         } else if ($user->hasRole(BaseRole::Agency)) {
 
-            $user = auth()->user();
-            $countExpired = 0;
-            $totalSell = 0;
-            $totalSubscriber = 0;
 
             if (!empty($user->id)) {
 
@@ -91,6 +94,9 @@ class ReportController extends Controller
                 $subscribers  = $report->querySubscriberPoliciesByUserId([$user->id]);
                 $collection   = collect($subscribers);
 
+                //Count Before Total Expired
+                $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths($getReminder)->toDateTimeString()])->count();
+
                 //Count Total Subscriber
                 $totalSubscriber = $collection->groupBy('subscriber_id')->count();
 
@@ -106,18 +112,18 @@ class ReportController extends Controller
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
                     'total expired'                 => $countExpired,
-                    'total_before_expiring'         => 0,
+                    'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
 
         } else {
 
-            $employee = User::with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
+            $query = User::where('disabled', 0)->with('profile');
+            $employee = $query->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
+            $countStaff = $query->role([BaseRole::Staff])->count();
+            $countAgency = $query->role([BaseRole::Agency])->count();
             $userId = collect($employee)->pluck('id');
 
-            $countExpired = 0;
-            $totalSell = 0;
-            $totalSubscriber = 0;
 
             if (!empty($userId)) {
 
@@ -125,16 +131,8 @@ class ReportController extends Controller
                 $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
                 $collection   = collect($subscribers);
 
-
-                //echo json_encode($subscribers);
-                echo json_encode(Carbon::today()->toDateTimeString());
-                echo json_encode(Carbon::today()->addMonths(1)->toDateTimeString());
-
+                //Count Before Total Expired
                 $countBeforeExpired = $collection->whereBetween('expired_at', [Carbon::today()->toDateTimeString(), Carbon::today()->addMonths($getReminder)->toDateTimeString()])->count();
-
-                //Carbon::today()->toDateTimeString()
-                echo json_encode($countBeforeExpired);
-                dd();
 
                 //Count Total Subscriber
                 $totalSubscriber = $collection->groupBy('subscriber_id')->count();
@@ -150,10 +148,10 @@ class ReportController extends Controller
                 'data' => [
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
-                    'total_staff'                   => 0,
-                    'total_agency'                  => 0,
+                    'total_staff'                   => $countStaff,
+                    'total_agency'                  => $countAgency,
                     'total expired'                 => $countExpired,
-                    'total_before_expiring'         => 0,
+                    'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
         }

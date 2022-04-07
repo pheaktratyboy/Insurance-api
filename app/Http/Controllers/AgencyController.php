@@ -53,7 +53,7 @@ class AgencyController extends Controller
             $employee = new Employee($request->input());
             $employee->save();
 
-            if ($request->has('username') && $request->has('email')) {
+            if ($request->has('email')) {
 
                 /**@var User $user*/
                 $user = $employee->user()->create([
