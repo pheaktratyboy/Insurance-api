@@ -67,7 +67,7 @@ class User extends Authenticatable implements HasMedia
      * @param $role_id
      * @return $this
      */
-    public function updateRule($role_id) {
+    public function updateHasRule($role_id) {
         $role = Role::firstWhere('id', $role_id);
         $this->assignRole($role->name);
 
@@ -78,7 +78,7 @@ class User extends Authenticatable implements HasMedia
      * @param $array
      * @return $this
      */
-    public function updateFullName($array) {
+    public function isUpdateIfHasName($array) {
 
         if (count($array)) {
             $this->update(['full_name' => $array['name_en']]);
@@ -91,7 +91,7 @@ class User extends Authenticatable implements HasMedia
      * @param $disabled
      * @return $this
      */
-    public function updateEnableOrDisabled($disabled) {
+    public function isUpdateEnableOrDisabled($disabled) {
 
         if (count($disabled)) {
             $this->update($disabled);
@@ -104,7 +104,7 @@ class User extends Authenticatable implements HasMedia
      * @param $array
      * @return $this
      */
-    public function activateUser($array) {
+    public function updateIsNotActivate($array) {
 
         if (!$this->activated && count($array)) {
 

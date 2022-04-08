@@ -92,9 +92,9 @@ class EmployeeController extends Controller
             }
 
             $employee->user()->first()
-                ->updateFullName($request->only('name_en'))
-                ->activateUser($request->only('activated'))
-                ->updateEnableOrDisabled($request->only('disabled'));
+                ->isUpdateIfHasName($request->only('name_en'))
+                ->updateIsNotActivate($request->only('activated'))
+                ->isUpdateEnableOrDisabled($request->only('disabled'));
 
             $employee->update($request->input());
         });

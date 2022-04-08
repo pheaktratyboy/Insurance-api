@@ -88,8 +88,8 @@ class AgencyController extends Controller
         DB::transaction(function () use ($request, $agency) {
 
             $agency->user()->first()
-                ->updateFullName($request->only('name_en'))
-                ->updateEnableOrDisabled($request->only('disabled'));
+                ->isUpdateIfHasName($request->only('name_en'))
+                ->isUpdateEnableOrDisabled($request->only('disabled'));
 
             $agency->update($request->input());
         });
