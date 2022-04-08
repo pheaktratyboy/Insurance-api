@@ -45,7 +45,6 @@ class AuthenticationController extends AccessTokenController
             /** @var User $user */
             $user = Auth::user();
             $user->password = bcrypt(request('new_password'));
-            $user->force_change_password = false;
             $user->save();
             $user->tokens->each->revoke();
 

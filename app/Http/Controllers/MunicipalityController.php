@@ -29,7 +29,8 @@ class MunicipalityController extends Controller
      */
     public function show(Municipality $municipality)
     {
-        return new MunicipalityResource($municipality);
+        $data = $municipality->load('district');
+        return new MunicipalityResource($data);
     }
 
     /**
