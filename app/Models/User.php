@@ -75,11 +75,14 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * @param $fullName
+     * @param $array
      * @return $this
      */
-    public function updateFullName($fullName) {
-        $this->update(['full_name' => $fullName]);
+    public function updateFullName($array) {
+
+        if (count($array)) {
+            $this->update(['full_name' => $array['name_en']]);
+        }
 
         return $this;
     }
@@ -89,20 +92,24 @@ class User extends Authenticatable implements HasMedia
      * @return $this
      */
     public function updateEnableOrDisabled($disabled) {
-        $this->update($disabled);
+
+        if (count($disabled)) {
+            $this->update($disabled);
+        }
 
         return $this;
     }
 
     /**
-     * @param $activated
+     * @param $array
      * @return $this
      */
-    public function activateUser($activated) {
+    public function activateUser($array) {
 
-        if (!$this->activated) {
+        if (!$this->activated && count($array)) {
+
             $this->update([
-                'activated'     => $activated,
+                'activated'     => $array['activated'],
                 'activated_at'  => now(),
             ]);
         }
