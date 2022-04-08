@@ -63,4 +63,50 @@ class User extends Authenticatable implements HasMedia
         return $this->morphTo(null, 'profileable_type', 'profileable_id');
     }
 
+    /**
+     * @param $role_id
+     * @return $this
+     */
+    public function updateRule($role_id) {
+        $role = Role::firstWhere('id', $role_id);
+        $this->assignRole($role->name);
+
+        return $this;
+    }
+
+    /**
+     * @param $fullName
+     * @return $this
+     */
+    public function updateFullName($fullName) {
+        $this->update(['full_name' => $fullName]);
+
+        return $this;
+    }
+
+    /**
+     * @param $disabled
+     * @return $this
+     */
+    public function updateEnableOrDisabled($disabled) {
+        $this->update($disabled);
+
+        return $this;
+    }
+
+    /**
+     * @param $activated
+     * @return $this
+     */
+    public function activateUser($activated) {
+
+        if (!$this->activated) {
+            $this->update([
+                'activated'     => $activated,
+                'activated_at'  => now(),
+            ]);
+        }
+
+        return $this;
+    }
 }

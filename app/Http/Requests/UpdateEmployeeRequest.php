@@ -20,6 +20,8 @@ class UpdateEmployeeRequest extends FormRequest
         return [
             /** Account */
             'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
+            'disabled'              => 'sometimes|required|boolean',
+            'activated'             => 'sometimes|required|boolean',
 
             /** Information */
             'name_kh'               => ['sometimes', 'required', 'string', 'max:255'],

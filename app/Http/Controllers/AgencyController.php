@@ -87,9 +87,10 @@ class AgencyController extends Controller
 
         DB::transaction(function () use ($request, $agency) {
 
-            if ($request->has('name_en')) {
-                $agency->user()->update(['full_name' => $request->input('name_en')]);
-            }
+            $agency->user()->first()
+                ->updateFullName($request->only('name_en'))
+                ->updateEnableOrDisabled($request->only('disabled'));
+
             $agency->update($request->input());
         });
 

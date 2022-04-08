@@ -91,9 +91,10 @@ class EmployeeController extends Controller
                 $employee->user()->assignRole($role->name);
             }
 
-            if ($request->has('name_en')) {
-                $employee->user()->update(['full_name' => $request->input('name_en')]);
-            }
+            $employee->user()->first()
+                ->updateFullName($request->only('name_en'))
+                ->activateUser($request->only('activated'))
+                ->updateEnableOrDisabled($request->only('disabled'));
 
             $employee->update($request->input());
         });

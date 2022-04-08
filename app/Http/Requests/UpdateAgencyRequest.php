@@ -18,6 +18,9 @@ class UpdateAgencyRequest extends FormRequest
     public function rules()
     {
         return [
+            /** Account */
+            'disabled'              => 'sometimes|required|boolean',
+
             /** Information */
             'name_kh'               => ['sometimes', 'required', 'string', 'max:255'],
             'name_en'               => ['sometimes', 'required', 'string', 'max:255'],
