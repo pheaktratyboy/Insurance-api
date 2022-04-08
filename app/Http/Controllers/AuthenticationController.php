@@ -22,8 +22,11 @@ class AuthenticationController extends AccessTokenController
         /** @var User $user */
         $user = User::firstWhere('username', $request->username);
         if ($user) {
-            if ($user->activated == false) {
+            if (!$user->activated) {
                 throw AuthenticationFailedException::accountNotInActivated();
+            }
+            if ($user->disabled) {
+                throw AuthenticationFailedException::accountDisabled();
             }
         }
 

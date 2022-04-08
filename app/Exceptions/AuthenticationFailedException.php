@@ -15,4 +15,9 @@ class AuthenticationFailedException extends HttpException
     {
         return new static(401, 'The user is not yet activated. Please contact to admin.', 'Account not activated');
     }
+
+    public static function accountDisabled(): AuthenticationFailedException
+    {
+        return new static(401, 'The user is disabled. Please contact to admin.', 'Account disabled');
+    }
 }
