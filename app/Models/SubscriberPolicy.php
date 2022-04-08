@@ -105,12 +105,24 @@ class SubscriberPolicy extends Model
             throw new HttpException('400', " This fields {$strNotAllowFilter} are not allow for filtering ", '');
         }
 
-        /** filter by courier_id */
+        /** filter by Company Id */
         if ($filter->has('company_id')) {
             $query->where('subscribers.company_id', $filter->get('company_id'));
         }
 
-        /** filter from date and to date*/
+        /** filter by Status */
+        if ($filter->has('status')) {
+            $query->where('subscribers.status', $filter->get('status'));
+        }
+
+        /** filter by Expired At */
+        if ($filter->has('expired_at')) {
+
+            $date = Carbon::parse($filter->get('expired_at'));
+            $query->where('subscriber_policies.expired_at', $date);
+        }
+
+        /** filter From Date and To Date*/
         if ($filter->has('from_date') && $filter->has('to_date')) {
             $fromDate = Carbon::parse($filter->get('from_date'));
             $toDate   = Carbon::parse($filter->get('to_date'));
@@ -142,13 +154,6 @@ class SubscriberPolicy extends Model
             $convertedFromDate = $fromDate->format('Y-m-d');
             $convertedToDate   = $toDate->format('Y-m-d');
             $query->whereBetween('subscribers.created_at', [$convertedFromDate,$convertedToDate]);
-        }
-
-        /** check for mobile */
-        if ($filter->has('date')) {
-            $date = Carbon::parse($filter->get('date'));
-            $query->whereMonth('subscribers.created_at', $date->format('m'))
-                ->whereYear('subscribers.created_at', $date->format('Y'));
         }
 
         return $query;

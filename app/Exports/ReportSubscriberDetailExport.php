@@ -25,6 +25,10 @@ class ReportSubscriberDetailExport implements FromCollection, WithHeadings, Shou
             'Place Of Birth',
             'Gender',
             'Religion',
+            'Company Name',
+            'Policy Name',
+            'Payment Method',
+            'Expired At',
             'Status',
         ];
     }
@@ -32,6 +36,6 @@ class ReportSubscriberDetailExport implements FromCollection, WithHeadings, Shou
     public function collection()
     {
         $report = new ReportService();
-        return new ExportSubscriberReportResource($report->getOrders());
+        return new ExportSubscriberReportResource($report->getSubscriberDetails());
     }
 }

@@ -13,31 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
-    public function countExpired() {
-
-        //$user = auth()->user();
-        //$subsciber = Subscriber::where('user_id', $user->id)->load;
-
-
-//                $subscriber = Subscriber::whereIn('user_id', $userId)->with(['subscriber_policies' => function($q) {
-//                    $q->where('expired_at', '>=' , Carbon::now()->toDateTimeString());
-//                }]);
-
-//                $subPolicies = SubscriberPolicy::with(['subscriber' => function($q) use ($userId) {
-//                    $q->whereIn('user_id', [3]);
-//                }])->get();
-//
-//                echo  json_encode($subPolicies);
-//                echo  json_encode($subscriber);
-//                echo json_encode(collect($subscriber->get()));
-
-
-//        $sub = $subscriber->join('subscriber_policies', 'subscriber_policies.id', 'subscriber_policies.subscriber_id');
-        //$totalSell = floatval($subscriber->sum('total'));
-        //$sub = $subscriber->with('subscriber_policies')->where('subscriber_policies.expired_at', '2024-04-04 07:03:22');
-    }
-
-
     public function reportDashboard() {
 
         $user = auth()->user();
@@ -157,7 +132,15 @@ class ReportController extends Controller
     public function reportSubscriber()
     {
         $report         = new ReportService();
-        $subscribers    = $report->getSubscribers();
+        $collection     = collect($report->getSubscribers());
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
+            $subscribers = $collection->where('user_id', $user->id)->all();
+
+        } else {
+            $subscribers = $collection->all();
+        }
 
         return response()->json([
             'data' => [
@@ -165,4 +148,30 @@ class ReportController extends Controller
             ],
         ]);
     }
+
+
+    public function countExpired() {
+
+        //$user = auth()->user();
+        //$subsciber = Subscriber::where('user_id', $user->id)->load;
+
+
+//                $subscriber = Subscriber::whereIn('user_id', $userId)->with(['subscriber_policies' => function($q) {
+//                    $q->where('expired_at', '>=' , Carbon::now()->toDateTimeString());
+//                }]);
+
+//                $subPolicies = SubscriberPolicy::with(['subscriber' => function($q) use ($userId) {
+//                    $q->whereIn('user_id', [3]);
+//                }])->get();
+//
+//                echo  json_encode($subPolicies);
+//                echo  json_encode($subscriber);
+//                echo json_encode(collect($subscriber->get()));
+
+
+//        $sub = $subscriber->join('subscriber_policies', 'subscriber_policies.id', 'subscriber_policies.subscriber_id');
+        //$totalSell = floatval($subscriber->sum('total'));
+        //$sub = $subscriber->with('subscriber_policies')->where('subscriber_policies.expired_at', '2024-04-04 07:03:22');
+    }
+
 }

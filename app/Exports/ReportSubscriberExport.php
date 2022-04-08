@@ -25,6 +25,10 @@ class ReportSubscriberExport implements FromCollection, WithHeadings, ShouldAuto
             'Place Of Birth',
             'Gender',
             'Religion',
+            'Company Name',
+            'Policy Name',
+            'Payment Method',
+            'Expired At',
             'Status',
         ];
     }
@@ -32,6 +36,6 @@ class ReportSubscriberExport implements FromCollection, WithHeadings, ShouldAuto
     public function collection()
     {
         $report = new ReportService();
-        return ExportSubscriberReportResource::collection($report->getSubscribers());
+        return ExportSubscriberReportResource::collection($report->exportSubscribers());
     }
 }

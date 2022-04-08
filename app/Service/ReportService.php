@@ -3,6 +3,7 @@
 
 namespace App\Service;
 
+use App\Enums\BaseRole;
 use App\Models\SubscriberPolicy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -26,15 +27,14 @@ class ReportService
 
                 'policies.price as policy_price',
             )
-            //->where('subscriber_policies.expired_at', '<=' ,Carbon::now()->toDateTimeString())
             ->get();
     }
 
     public function getSubscribers()
     {
-        $user = auth()->user();
-
-        return SubscriberPolicy::join('subscribers', 'subscribers.id', 'subscribers.id')
+        return SubscriberPolicy::join('subscribers', function ($join) {
+                $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
+            })
             ->JoinPolicy()
             ->JoinCompany()
             ->select(
@@ -48,8 +48,8 @@ class ReportService
                 'subscribers.gender',
                 'subscribers.religion',
                 'subscribers.created_at as subscriber_date',
-                'subscribers.company_id',
                 'subscribers.status',
+                'subscribers.user_id',
 
                 'companies.name as company_name',
 
@@ -59,8 +59,33 @@ class ReportService
 
                 'policies.name as policy_name',
             )
-            ->where('subscribers.user_id', $user->id)
-            ->allowFilterReport(['date','from_date','to_date','company_id', 'status'])
+            ->allowFilterReport([
+                'date',
+                'from_date',
+                'to_date',
+                'expired_at',
+                'company_id',
+                'status'
+            ])
             ->get();
     }
+
+    public function exportSubscribers()
+    {
+        $result = collect($this->getSubscribers());
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
+            return $result->where('user_id', $user->id)->all();
+
+        } else {
+            return $result->all();
+        }
+    }
+
+    public function exportSubscriberDetails()
+    {
+        return;
+    }
 }
+

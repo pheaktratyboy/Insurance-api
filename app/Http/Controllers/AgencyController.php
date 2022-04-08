@@ -84,7 +84,7 @@ class AgencyController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
     public function update(UpdateAgencyRequest $request, Employee $agency) {
-        
+
         DB::transaction(function () use ($request, $agency) {
 
             if ($request->has('name_en')) {

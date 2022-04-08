@@ -24,6 +24,7 @@ class EmployeeResource extends JsonResource
             'gender'                => $this->gender,
             'place_of_birth'        => $this->place_of_birth,
             'religion'              => $this->religion,
+            'address'               => $this->address,
 
             'avatar'                => $this->avatar,
             'id_or_passport_front'  => $this->id_or_passport_front,
