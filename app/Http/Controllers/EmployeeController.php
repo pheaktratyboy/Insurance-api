@@ -47,17 +47,23 @@ class EmployeeController extends Controller
 
             if ($request->has('email')) {
 
-                /**@var User $user*/
-                $user = $employee->user()->create([
+                $param = [
                     'username'              => $request->email,
                     'email'                 => $request->email,
                     'full_name'             => $employee->name_en,
                     'phone_number'          => $employee->phone_number,
                     'password'              => bcrypt($request->password),
                     'force_change_password' => false,
-                    'activated'             => false,
-                    'disabled'              => false,
-                ]);
+                    'activated'             => $request->activated ?: false,
+                    'disabled'              => $request->disabled ?: false,
+                ];
+
+                if ($request->has('activated') && $request->activated == true) {
+                    $param["activated_at"] = now();
+                }
+
+                /**@var User $user*/
+                $user = $employee->user()->create($param);
 
                 /** Assign Role */
                 if ($request->has('role_id')) {
