@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseRole;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
@@ -15,7 +16,7 @@ class UserController extends Controller
 {
     public function index() {
 
-        $users = QueryBuilder::for(User::class)
+        $users = QueryBuilder::for(User::role(BaseRole::Admin))
             ->allowedFilters(['username'])
             ->where('disabled', 0)
             ->defaultSort('-created_at')
