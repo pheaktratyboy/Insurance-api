@@ -14,8 +14,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 class UserController extends Controller
 {
     public function index() {
+
         $users = QueryBuilder::for(User::class)
             ->allowedFilters(['username'])
+            ->where('disabled', 0)
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());

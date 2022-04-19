@@ -16,6 +16,7 @@ class CreateMunicipalitiesTable extends Migration
         Schema::create('municipalities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('disabled')->default(false);
 
             $table->timestamps();
         });

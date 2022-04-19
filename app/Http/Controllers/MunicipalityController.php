@@ -12,6 +12,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 class MunicipalityController extends Controller
 {
 
+    public function getAll()
+    {
+        return MunicipalityResource::collection(Municipality::where('disabled', 0)->get());
+    }
+
     public function index()
     {
         $municipalities = QueryBuilder::for(Municipality::class)

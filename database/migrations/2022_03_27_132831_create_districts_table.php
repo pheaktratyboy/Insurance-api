@@ -18,6 +18,8 @@ class CreateDistrictsTable extends Migration
             $table->id();
             $table->foreignIdFor(Municipality::class)->constrained();
             $table->string('name');
+            $table->boolean('disabled')->default(false);
+
             $table->timestamps();
         });
     }

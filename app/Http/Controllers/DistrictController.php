@@ -13,10 +13,12 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class DistrictController extends Controller
 {
+
     public function index() {
 
         $districts = QueryBuilder::for(District::class)
             ->allowedFilters(['name'])
+            ->where('disabled', 0)
             ->with('municipality')
             ->paginate()
             ->appends(request()->query());
