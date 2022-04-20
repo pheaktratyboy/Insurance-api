@@ -31,6 +31,7 @@ class SubscriberResource extends JsonResource
             'avatar'                => $this->avatar,
             'id_or_passport_front'  => $this->id_or_passport_front,
             'id_or_passport_back'   => $this->id_or_passport_back,
+            'attachments'           => $this->attachments,
 
             'user_id'               => $this->user_id,
             'company_id'            => $this->company_id,
