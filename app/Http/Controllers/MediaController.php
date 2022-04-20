@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Media;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -18,6 +19,24 @@ class MediaController extends Controller
     {
         $file  = $request->file('file');
         $media = app('request')->user()->addMedia($file)->toMediaCollection($collection);
+
+        return response()->json([
+            'id'  => $media->id,
+            'url' => $media->getFullUrl(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $collection
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadFileNoUser(Request $request, $collection = 'upload')
+    {
+        $file  = $request->file('file');
+
+        $user = User::first();
+        $media = $user->addMedia($file)->toMediaCollection($collection);
 
         return response()->json([
             'id'  => $media->id,

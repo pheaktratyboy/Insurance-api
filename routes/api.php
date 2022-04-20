@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,3 +44,5 @@ Route::post('auth/change-password', [AuthenticationController::class,'changePass
 
 /** employee process */
 Route::post('employees', [EmployeeController::class,'store'])->name('employees.store');
+
+Route::post('upload-file/{collection?}', [MediaController::class, 'uploadFileNoUser'])->name('medias.upload_file_no_user');
