@@ -30,6 +30,7 @@ class CreateEmployeesTable extends Migration
             $table->json('avatar')->nullable();
             $table->json('id_or_passport_front')->nullable();;
             $table->json('id_or_passport_back')->nullable();
+            $table->json('attachments')->nullable();
 
             $table->decimal('commission')->default(10);;
             $table->decimal('kpi')->default(0);

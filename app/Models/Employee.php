@@ -32,6 +32,7 @@ class Employee extends Model
         'avatar',
         'id_or_passport_front',
         'id_or_passport_back',
+        'attachments',
         'district_id',
         'user_id',
     ];
@@ -43,6 +44,7 @@ class Employee extends Model
         'avatar'                => 'array',
         'id_or_passport_front'  => 'array',
         'id_or_passport_back'   => 'array',
+        'attachments'           => 'array',
     ];
 
     protected $dates = [

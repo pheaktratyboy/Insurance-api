@@ -37,6 +37,7 @@ class UpdateEmployeeRequest extends FormRequest
             'avatar'                => ['sometimes', new Media],
             'id_or_passport_front'  => ['sometimes', new Media],
             'id_or_passport_back'   => ['sometimes', new Media],
+            'attachments'           => 'sometimes',
 
             'kpi'                   => ['sometimes', 'required', 'numeric'],
             'commission'            => ['sometimes', 'required', 'numeric'],
