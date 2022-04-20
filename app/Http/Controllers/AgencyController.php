@@ -19,25 +19,27 @@ class AgencyController extends Controller
     public function index() {
 
         $user = auth()->user();
-        $agency = User::role(BaseRole::Agency);
-        $queryBuilder = QueryBuilder::for($agency)
-            ->where('created_by', $user->id)
-            ->allowedFilters(['full_name'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
 
-        return UserResource::collection($queryBuilder);
-    }
+        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
 
-    public function getAllAgency() {
+            $agency = User::role(BaseRole::Agency);
+            $queryBuilder = QueryBuilder::for($agency)
+                ->where('created_by', $user->id)
+                ->allowedFilters(['full_name'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
 
-        $agency = User::role(BaseRole::Agency);
-        $queryBuilder = QueryBuilder::for($agency)
-            ->allowedFilters(['full_name'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
+        } else {
+
+            $agency = User::role(BaseRole::Agency);
+            $queryBuilder = QueryBuilder::for($agency)
+                ->allowedFilters(['full_name'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+        }
 
         return UserResource::collection($queryBuilder);
     }
