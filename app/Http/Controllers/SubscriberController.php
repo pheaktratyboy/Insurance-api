@@ -18,13 +18,7 @@ class SubscriberController extends Controller
     public function index() {
 
         $user = auth()->user();
-
-        $subscriber = QueryBuilder::for(Subscriber::class)
-            ->allowedFilters(['name_kh', 'name_en'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
-
+        
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
 
             $subscriber = QueryBuilder::for(Subscriber::class)
@@ -33,6 +27,14 @@ class SubscriberController extends Controller
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
+        } else {
+
+            $subscriber = QueryBuilder::for(Subscriber::class)
+                ->allowedFilters(['name_kh', 'name_en'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
         }
 
         return SubscriberResource::collection($subscriber);
