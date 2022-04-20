@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseRole;
 use App\Enums\TrackingType;
 use App\Http\Requests\CreateSubscriberRequest;
 use App\Http\Requests\UpdateSubscriberRequest;
@@ -16,24 +17,23 @@ class SubscriberController extends Controller
 {
     public function index() {
 
-        $subscriber = QueryBuilder::for(Subscriber::class)
-            ->allowedFilters(['name_kh', 'name_en'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
-
-        return SubscriberResource::collection($subscriber);
-    }
-
-    public function getAllByOwner() {
-
         $user = auth()->user();
+
         $subscriber = QueryBuilder::for(Subscriber::class)
-            ->where('user_id', $user->id)
             ->allowedFilters(['name_kh', 'name_en'])
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
+
+        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
+
+            $subscriber = QueryBuilder::for(Subscriber::class)
+                ->where('user_id', $user->id)
+                ->allowedFilters(['name_kh', 'name_en'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+        }
 
         return SubscriberResource::collection($subscriber);
     }
