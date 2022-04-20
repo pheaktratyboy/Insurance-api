@@ -31,8 +31,8 @@ class CreateSubscriberRequest extends FormRequest
             'avatar'                => ['sometimes', new Media],
             'id_or_passport_front'  => ['sometimes', new Media],
             'id_or_passport_back'   => ['sometimes', new Media],
-            'attachments'           => 'sometimes',
-
+            'attachments.*'         => ['sometimes', 'array', new Media],
+            
             'note'                  => ['sometimes', 'required'],
 
             'policy_id'             => ['required', 'max:10', Rule::exists('policies', 'id')],

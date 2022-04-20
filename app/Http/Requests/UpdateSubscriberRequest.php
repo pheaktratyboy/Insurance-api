@@ -34,7 +34,7 @@ class UpdateSubscriberRequest extends FormRequest
             'avatar'                => ['sometimes', new Media],
             'id_or_passport_front'  => ['sometimes', new Media],
             'id_or_passport_back'   => ['sometimes', new Media],
-            'attachments'           => 'sometimes',
+            'attachments.*'         => ['sometimes', 'array', new Media],
 
             'note'                  => ['sometimes', 'required'],
 
