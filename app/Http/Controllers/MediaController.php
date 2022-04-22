@@ -51,6 +51,7 @@ class MediaController extends Controller
     public function uploadMultipleFiles(Request $request)
     {
         $medias = [];
+
         foreach ($request->file('files') as $file) {
             $media = app('request')->user()->addMedia($file)->toMediaCollection('upload');
             array_push($medias, $media);

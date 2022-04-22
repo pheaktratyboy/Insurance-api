@@ -20,7 +20,7 @@ class CreateSubscriberRequest extends FormRequest
         return [
             'name_kh'               => ['required', 'string', 'max:255'],
             'name_en'               => ['required', 'string', 'max:255'],
-            'identity_number'       => ['required', 'string', 'max:255', 'unique:subscribers'],
+            'identity_number'       => ['required', 'string', 'min:9', 'max:10', 'unique:subscribers'],
             'date_of_birth'         => ['required', 'date'],
             'phone_number'          => ['required', 'string', 'max:255'],
             'address'               => ['required', 'string', 'max:255'],
@@ -32,7 +32,7 @@ class CreateSubscriberRequest extends FormRequest
             'id_or_passport_front'  => ['sometimes', new Media],
             'id_or_passport_back'   => ['sometimes', new Media],
             'attachments.*'         => ['sometimes', 'array', new Media],
-            
+
             'note'                  => ['sometimes', 'required'],
 
             'policy_id'             => ['required', 'max:10', Rule::exists('policies', 'id')],

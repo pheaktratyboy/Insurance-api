@@ -29,7 +29,7 @@ class CreateEmployeeRequest extends FormRequest
             /** Information */
             'name_kh'               => ['required', 'string', 'max:255'],
             'name_en'               => ['required', 'string', 'max:255'],
-            'identity_number'       => ['required', 'string', 'max:255', 'unique:employees'],
+            'identity_number'       => ['required', 'string', 'min:9', 'max:10', 'unique:employees'],
             'date_of_birth'         => ['required', 'date'],
             'phone_number'          => ['required', 'string', 'max:255'],
             'address'               => ['required', 'string', 'max:255'],
