@@ -39,9 +39,6 @@ Route::middleware('auth:api')->group(function () {
 /** login process */
 Route::post('/auth/login', [AuthenticationController::class,'employeeLogin'])->name('auth.login');
 
-/** change password process */
-Route::post('auth/change-password', [AuthenticationController::class,'changePassword'])->name('auth.change_password');
-
 /** employee process */
 Route::post('employees', [EmployeeController::class,'store'])->name('employees.store');
 
