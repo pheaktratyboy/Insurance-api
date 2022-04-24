@@ -16,7 +16,6 @@ class CompanyController extends Controller
     public function index()
     {
         $result = QueryBuilder::for(Company::class)
-            ->where('disabled', 0)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->paginate()

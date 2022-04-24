@@ -15,7 +15,6 @@ class PolicyController extends Controller
     public function index()
     {
         $policies = QueryBuilder::for(Policy::class)
-            ->where('disabled', 0)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->paginate()
