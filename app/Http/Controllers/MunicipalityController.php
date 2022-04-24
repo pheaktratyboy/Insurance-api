@@ -20,6 +20,7 @@ class MunicipalityController extends Controller
     public function index()
     {
         $municipalities = QueryBuilder::for(Municipality::class)
+            ->where('disabled', 0)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->paginate()

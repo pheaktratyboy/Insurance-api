@@ -19,6 +19,7 @@ class CreatePoliciesTable extends Migration
             $table->decimal('price', 10, 2);
             $table->string('currency', 3)->default('USD');
             $table->unsignedInteger('duration');
+            $table->boolean('disabled')->default(false);
 
             $table->timestamps();
         });
