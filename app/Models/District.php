@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class District extends Model
 {
     use HasFactory;
-    protected $fillable = ['municipality_id','name'];
-    protected $casts    = ['municipality_id' => 'integer'];
+    protected $fillable = ['municipality_id','name', 'disabled'];
+
+    protected $casts    = [
+        'municipality_id'   => 'integer',
+        'disabled'          => 'boolean'
+    ];
 
 
     /**

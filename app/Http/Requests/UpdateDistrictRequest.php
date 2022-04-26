@@ -17,6 +17,8 @@ class UpdateDistrictRequest extends FormRequest
         return [
             'municipality_id' => [Rule::exists('municipalities', 'id'), 'max:10'],
             'name'            => ['required', 'string', 'unique:districts', 'max:255'],
+
+            'disabled'        => 'sometimes|required|boolean',
         ];
     }
 }

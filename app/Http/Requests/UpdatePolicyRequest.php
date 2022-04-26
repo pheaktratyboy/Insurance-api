@@ -21,6 +21,7 @@ class UpdatePolicyRequest extends FormRequest
             'duration'      => ['sometimes', 'max:10'],
 
             'logo'          => ['sometimes', new Media],
+            'disabled'      => 'sometimes|required|boolean',
         ];
     }
 }

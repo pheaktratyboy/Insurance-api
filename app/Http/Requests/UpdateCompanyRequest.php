@@ -18,6 +18,8 @@ class UpdateCompanyRequest extends FormRequest
         return [
             'name'          => ['sometimes', 'required', 'string', 'unique:companies', 'max:255'],
             'logo'          => ['sometimes', new Media],
+
+            'disabled'      => 'sometimes|required|boolean',
         ];
     }
 }

@@ -19,6 +19,7 @@ class CreatePolicyRequest extends FormRequest
             'price'         => ['required', 'numeric', 'between:0,99999999.999'],
             'duration'      => ['required', 'max:10'],
             'logo'          => ['sometimes', new Media],
+            'disabled'      => 'sometimes|required|boolean',
         ];
     }
 }

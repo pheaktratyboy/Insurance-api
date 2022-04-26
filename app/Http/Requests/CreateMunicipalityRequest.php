@@ -15,7 +15,8 @@ class CreateMunicipalityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'unique:municipalities', 'max:255'],
+            'name'      => ['required', 'string', 'unique:municipalities', 'max:255'],
+            'disabled'  => 'sometimes|required|boolean',
         ];
     }
 }

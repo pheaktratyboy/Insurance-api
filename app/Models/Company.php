@@ -14,11 +14,13 @@ class Company extends Model
         'name',
         'staff_count',
         'logo',
+        'disabled',
     ];
 
     protected $casts = [
         'staff_count'   => 'integer',
         'logo'          => 'array',
+        'disabled'      => 'boolean',
     ];
 
     protected $dates = [

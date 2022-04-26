@@ -16,10 +16,12 @@ class Policy extends Model
         'created_at',
         'updated_at',
         'logo',
+        'disabled',
     ];
 
     protected $casts = [
-        'logo'  => 'array',
+        'logo'      => 'array',
+        'disabled'  => 'boolean',
     ];
 
     protected $dates = [
