@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,6 +19,8 @@ class UpdatePolicyRequest extends FormRequest
             'name'          => ['sometimes', 'required', 'max:255', Rule::unique('policies', 'name')->ignore($this->route('policy')->id)],
             'price'         => ['sometimes', 'required', 'numeric', 'between:0,99999999.999'],
             'duration'      => ['sometimes', 'max:10'],
+
+            'logo'          => ['sometimes', new Media],
         ];
     }
 }

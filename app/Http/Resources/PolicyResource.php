@@ -19,6 +19,7 @@ class PolicyResource extends JsonResource
             'name'       => $this->name,
             'price'      => $this->price,
             'duration'   => $this->duration,
+            'logo'        => $this->logo,
         ];
     }
 }

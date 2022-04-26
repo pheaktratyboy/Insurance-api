@@ -15,12 +15,17 @@ class Policy extends Model
         'duration',
         'created_at',
         'updated_at',
+        'logo',
     ];
+
+    protected $casts = [
+        'logo'  => 'array',
+    ];
+
     protected $dates = [
         'created_at',
         'updated_at',
     ];
-
 
     public function notAllowIfItemAlreadyUsed()
     {

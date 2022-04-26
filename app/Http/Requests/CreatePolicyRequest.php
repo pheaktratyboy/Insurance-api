@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePolicyRequest extends FormRequest
@@ -17,6 +18,7 @@ class CreatePolicyRequest extends FormRequest
             'name'          => ['required', 'string', 'unique:policies', 'max:255'],
             'price'         => ['required', 'numeric', 'between:0,99999999.999'],
             'duration'      => ['required', 'max:10'],
+            'logo'          => ['sometimes', new Media],
         ];
     }
 }

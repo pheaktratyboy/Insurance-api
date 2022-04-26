@@ -18,6 +18,7 @@ class CreatePoliciesTable extends Migration
             $table->string("name")->unique();
             $table->decimal('price', 10, 2);
             $table->string('currency', 3)->default('USD');
+            $table->json('logo')->nullable();
             $table->unsignedInteger('duration');
             $table->boolean('disabled')->default(false);
 
