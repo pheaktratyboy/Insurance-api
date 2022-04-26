@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class UpdateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => ['sometimes', 'required', 'string', 'unique:companies', 'max:255'],
+            'name'          => ['sometimes', 'required', 'string', 'max:255', Rule::unique('companies', 'name')->ignore($this->route('company')->id)],
             'logo'          => ['sometimes', new Media],
 
             'disabled'      => 'sometimes|required|boolean',

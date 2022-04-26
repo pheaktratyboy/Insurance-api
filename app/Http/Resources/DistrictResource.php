@@ -18,6 +18,7 @@ class DistrictResource extends JsonResource
             'id'              => $this->id,
             'municipality_id' => $this->municipality_id,
             'name'            => $this->name,
+            'disabled'        => $this->disabled,
 
             /** relationship */
             'municipality' => new MunicipalityResource($this->whenLoaded('municipality')),
