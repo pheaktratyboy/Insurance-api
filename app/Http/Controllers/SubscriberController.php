@@ -63,8 +63,9 @@ class SubscriberController extends Controller
                 'phone_number'          => $request->phone_number,
                 'password'              => bcrypt('123456'),
                 'force_change_password' => true,
-                'activated'             => false,
                 'disabled'              => false,
+                'activated'             => true,
+                'activated_at'          => now(),
                 'remember_token'        => Str::random(10),
             ];
 

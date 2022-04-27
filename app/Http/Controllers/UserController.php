@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\BaseRole;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\UserAllResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Response;
@@ -14,6 +15,14 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
+
+    public function getAllUser() {
+
+        $user = auth()->user();
+        $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
+        return UserAllResource::collection($users);
+    }
+
     public function index() {
 
         $users = QueryBuilder::for(User::role(BaseRole::Admin))
