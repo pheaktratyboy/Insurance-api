@@ -85,7 +85,7 @@ class SubscriberController extends Controller
                 $company = Company::find($request->company_id);
 
                 if ($company) {
-                    $company->setUsersUnderCompany([['user_id' => 1]])
+                    $company->setUsersUnderCompany([['user_id' => $user->id]])
                         ->cacheSumTotalStaff()
                         ->load('employees');
                 }
