@@ -22,7 +22,7 @@ class CreateCompanyRequest extends FormRequest
             'disabled'          => 'sometimes|required|boolean',
 
             /** Information */
-            'users.*.user_id'   => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('users', 'id')],
+            //'users.*.user_id'   => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('users', 'id')],
         ];
     }
 }
