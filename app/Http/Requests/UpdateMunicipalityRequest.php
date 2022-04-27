@@ -15,7 +15,7 @@ class UpdateMunicipalityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => ['required', 'max:255', Rule::unique('municipalities', 'name')->ignore($this->route('municipality')->id)],
+            'name'          => ['sometimes', 'required', 'max:255', Rule::unique('municipalities', 'name')->ignore($this->route('municipality')->id)],
             'disabled'      => 'sometimes|required|boolean',
         ];
     }
