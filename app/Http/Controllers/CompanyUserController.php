@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseRole;
 use App\Http\Requests\CreateCompanyUsersRequest;
 use App\Http\Requests\UpdateCompanyUsersRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -35,9 +37,20 @@ class CompanyUserController extends Controller
      */
     public function store(CreateCompanyUsersRequest $request, Company $company) {
 
-        $result = DB::transaction(function () use ($request, $company) {
+        $users = $request->input('users');
+        $userQuery = User::whereIn('id', $users)->get();
 
-            return $company->addUserUnderCompany($request->input('users'))
+        foreach ($userQuery as $param) {
+
+            if (!$param->hasRole(BaseRole::Subscriber)) {
+                abort('422', 'the user with is not exists');
+                break;
+            }
+        }
+
+        $result = DB::transaction(function () use ($users, $company) {
+
+            return $company->addUserUnderCompany($users)
                 ->cacheSumTotalStaff()
                 ->load('employees');
         });

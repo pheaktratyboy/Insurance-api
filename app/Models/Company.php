@@ -54,7 +54,14 @@ class Company extends Model
      */
     public function addUserUnderCompany($items)
     {
+
         $newItems = collect($items)->map(function ($item)  {
+
+            $user = CompanyUser::where('user_id', $item)->first();
+            if ($user) {
+                abort('422', 'the user exists with name (' . $user->user_id . '), please try with other user id.');
+            }
+
             return new CompanyUser($item);
         });
 
