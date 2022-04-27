@@ -47,11 +47,6 @@ class CompanyController extends Controller
             $company = new Company;
             $company->createNewCompany($request);
 
-//            if ($request->has('users')) {
-//
-//                $company->addUserUnderCompany($request->input('users'))
-//                    ->cacheSumTotalStaff();
-//            }
             return $company;
         });
 

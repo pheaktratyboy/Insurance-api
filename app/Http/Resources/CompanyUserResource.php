@@ -20,7 +20,7 @@ class CompanyUserResource extends JsonResource
             'user_id'          => $this->user_id,
 
             /** relationship */
-            'user'             => new UserResource($this->whenLoaded('user')),
+            'user'             => new UserAllResource($this->whenLoaded('user')),
             'company'          => new CompanyResource($this->whenLoaded('company')),
         ];
     }
