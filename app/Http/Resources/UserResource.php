@@ -17,6 +17,7 @@ class UserResource extends JsonResource
         return [
             'id'                    => $this->id,
             'full_name'             => $this->full_name,
+            'username'              => $this->username,
             'email'                 => $this->email,
             'force_change_password' => $this->force_change_password,
             'activated'             => $this->activated,

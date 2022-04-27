@@ -30,7 +30,6 @@ trait PassportAuthenticationTrait
 
     public function login($username, $password)
     {
-
         $payload = [
             'username'      => $username,
             'password'      => $password,

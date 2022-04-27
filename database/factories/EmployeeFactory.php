@@ -36,8 +36,6 @@ class EmployeeFactory extends Factory
 
             'address'             => $this->faker->address,
             'place_of_birth'      => $this->faker->address,
-            'municipality_id'     => Municipality::factory(),
-            'district_id'         => District::factory(),
 
             'kpi'                 => "10",
             'phone_number'        => $this->faker->phoneNumber,

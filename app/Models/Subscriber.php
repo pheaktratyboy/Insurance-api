@@ -54,6 +54,14 @@ class Subscriber extends Model
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function user_profile()
+    {
+        return $this->morphOne(User::class, 'profileable');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscriber_policies()

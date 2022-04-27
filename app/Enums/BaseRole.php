@@ -14,4 +14,5 @@ final class BaseRole extends Enum
     const Admin    = 'admin';
     const Staff  = 'staff';
     const Agency  = 'agency';
+    const Subscriber  = 'subscriber';
 }

@@ -9,8 +9,10 @@ use App\Http\Requests\UpdateSubscriberRequest;
 use App\Http\Resources\SubscriberResource;
 use App\Models\Subscriber;
 use App\Models\TrackingHistory;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SubscriberController extends Controller
@@ -18,7 +20,7 @@ class SubscriberController extends Controller
     public function index() {
 
         $user = auth()->user();
-        
+
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
 
             $subscriber = QueryBuilder::for(Subscriber::class)
@@ -52,6 +54,23 @@ class SubscriberController extends Controller
                 ->addSubscriberPolicy($request)
                 ->cacheCalculationTotalPrice()
                 ->load(['company','subscriber_policies.policy']);
+
+            $fullName = $request->input('name_en');
+            $param = [
+                'username'              => $fullName,
+                'full_name'             => $fullName,
+                'email'                 => $fullName,
+                'phone_number'          => $request->phone_number,
+                'password'              => bcrypt('123456'),
+                'force_change_password' => true,
+                'activated'             => false,
+                'disabled'              => false,
+                'remember_token'        => Str::random(10),
+            ];
+
+            /**@var User $user*/
+            $user = $subscriber->user_profile()->create($param);
+            $user->assignRole(BaseRole::Subscriber);
 
             /**
              * Tracking History

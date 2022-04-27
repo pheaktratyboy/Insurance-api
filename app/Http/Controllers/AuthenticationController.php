@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseRole;
 use App\Exceptions\AuthenticationFailedException;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
@@ -27,6 +28,9 @@ class AuthenticationController extends AccessTokenController
             }
             if ($user->disabled) {
                 throw AuthenticationFailedException::accountDisabled();
+            }
+            if ($user->hasRole(BaseRole::Subscriber)) {
+                throw AuthenticationFailedException::invalidCredential();
             }
         }
 

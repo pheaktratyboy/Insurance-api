@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 
@@ -56,6 +57,7 @@ class EmployeeController extends Controller
                     'force_change_password' => false,
                     'activated'             => $request->activated ?: false,
                     'disabled'              => $request->disabled ?: false,
+                    'remember_token'        => Str::random(10),
                 ];
 
                 if ($request->has('activated') && $request->activated == true) {
