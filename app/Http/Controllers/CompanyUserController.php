@@ -50,7 +50,7 @@ class CompanyUserController extends Controller
 
         $result = DB::transaction(function () use ($users, $company) {
 
-            return $company->addUserUnderCompany($users)
+            return $company->setUsersUnderCompany($users)
                 ->cacheSumTotalStaff()
                 ->load('employees');
         });

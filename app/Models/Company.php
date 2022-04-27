@@ -52,9 +52,8 @@ class Company extends Model
      * @param $items
      * @return $this
      */
-    public function addUserUnderCompany($items)
+    public function setUsersUnderCompany($items)
     {
-
         $newItems = collect($items)->map(function ($item)  {
 
             $user = CompanyUser::where('user_id', $item)->first();
@@ -66,7 +65,6 @@ class Company extends Model
         });
 
         $this->employees()->saveMany($newItems);
-
         return $this;
     }
 

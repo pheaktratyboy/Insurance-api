@@ -7,6 +7,7 @@ use App\Enums\TrackingType;
 use App\Http\Requests\CreateSubscriberRequest;
 use App\Http\Requests\UpdateSubscriberRequest;
 use App\Http\Resources\SubscriberResource;
+use App\Models\Company;
 use App\Models\Subscriber;
 use App\Models\TrackingHistory;
 use App\Models\User;
@@ -55,6 +56,9 @@ class SubscriberController extends Controller
                 ->cacheCalculationTotalPrice()
                 ->load(['company','subscriber_policies.policy']);
 
+            /**
+             * User
+             */
             $fullName = $request->input('name_en');
             $param = [
                 'username'              => $fullName,
@@ -72,6 +76,20 @@ class SubscriberController extends Controller
             /**@var User $user*/
             $user = $subscriber->user_profile()->create($param);
             $user->assignRole(BaseRole::Subscriber);
+
+            /**
+             * Company User
+             */
+            if ($request->has('company_id')) {
+
+                $company = Company::find($request->company_id);
+
+                if ($company) {
+                    $company->setUsersUnderCompany([['user_id' => 1]])
+                        ->cacheSumTotalStaff()
+                        ->load('employees');
+                }
+            }
 
             /**
              * Tracking History
