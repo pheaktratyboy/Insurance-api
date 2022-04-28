@@ -8,6 +8,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserAllResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,27 @@ class UserController extends Controller
             ->appends(request()->query());
 
         return UserResource::collection($users);
+    }
+
+    public function forceChangePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password'         => 'required|min:6',
+            'confirm_password' => 'required|same:password',
+        ]);
+
+        if ($user->hasRole(BaseRole::Admin) || $user->hasRole(BaseRole::Master)) {
+            abort('422', 'this user can not update.');
+        }
+
+        return DB::transaction(function () use ($request, $user) {
+
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            /** revoke all old token of current user */
+            $user->tokens->each->revoke();
+        });
     }
 
     /**

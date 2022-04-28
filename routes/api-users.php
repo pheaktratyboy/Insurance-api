@@ -7,3 +7,4 @@ Route::get('users/all', [UserController::class,'getAllUser'])->name('users.get_a
 Route::get('users', [UserController::class,'index'])->name('users.index');
 Route::get('users/{user}', [UserController::class,'show'])->name('users.show');
 Route::put('users/{user}', [UserController::class,'update'])->name('users.update');
+Route::put('users/force-change-password/{user}', [UserController::class,'forceChangePassword'])->name('users.force_change_password');
