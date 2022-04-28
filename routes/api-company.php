@@ -21,4 +21,4 @@ Route::get('company-users/{company_users}', [CompanyUserController::class,'show'
 
 Route::post('company-users/{company}', [CompanyUserController::class,'store'])->name('company_users.store');
 Route::put('company-users/{company}', [CompanyUserController::class,'update'])->name('company_users.update');
-Route::delete('company-users/{company_users}', [CompanyUserController::class,'destroy'])->name('company_users.destroy');
+Route::delete('company-users/{company_user}', [CompanyUserController::class,'destroy'])->name('company_users.destroy');

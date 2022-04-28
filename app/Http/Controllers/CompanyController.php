@@ -60,8 +60,6 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $company->notAllowIfItemAlreadyUsed();
-
         DB::transaction(function () use ($request, $company) {
             $company->update($request->input());
         });
