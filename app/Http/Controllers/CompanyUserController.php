@@ -39,7 +39,6 @@ class CompanyUserController extends Controller
         $userQuery = User::whereIn('id', $users)->get();
 
         foreach ($userQuery as $param) {
-
             if (!$param->hasRole(BaseRole::Subscriber)) {
                 abort('422', 'the user with is not exists');
                 break;
@@ -81,21 +80,14 @@ class CompanyUserController extends Controller
      */
     public function destroy(CompanyUser $companyUser) {
 
-       $user = User::find($companyUser->user_id);
+        $userByCompany = $companyUser;
 
-        if ($user) {
-            $profile = $user->profile;
-            if ($profile) {
-                $profile->update([
-                    "company_id" => null
-                ]);
-            }
-        }
+        /** update customer id in subscriber */
+        $userByCompany->company->updateCompanyIdWithSubscriber($userByCompany->user_id, null);
 
         /** delete user by company */
-        $company = $companyUser;
         $companyUser->delete();
-        $company->company->cacheSumTotalStaff();
+        $userByCompany->company->cacheSumTotalStaff();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

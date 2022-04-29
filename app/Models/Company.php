@@ -52,19 +52,40 @@ class Company extends Model
      * @param $items
      * @return $this
      */
-    public function setUsersUnderCompany($items)
-    {
+    public function setUsersUnderCompany($items) {
+
         $newItems = collect($items)->map(function ($item)  {
 
-            $user = CompanyUser::where('user_id', $item)->first();
+            $user = CompanyUser::where('user_id', $item['user_id'])->first();
             if ($user) {
-                abort('422', 'the user exists with name (' . $user->user_id . '), please try with other user id.');
+                abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');
             }
+
+            /** update field customer id in subscriber */
+            $this->updateCompanyIdWithSubscriber($item['user_id'], $this->id);
 
             return new CompanyUser($item);
         });
 
         $this->employees()->saveMany($newItems);
+
+        return $this;
+    }
+
+    public function updateCompanyIdWithSubscriber($userId, $companyId) {
+
+        $user = User::find($userId);
+
+        /** update customer id in subscriber */
+        if ($user) {
+            $profile = $user->profile;
+            if ($profile) {
+                $profile->update([
+                    "company_id" => $companyId
+                ]);
+            }
+        }
+
         return $this;
     }
 
