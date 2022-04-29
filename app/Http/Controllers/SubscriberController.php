@@ -133,4 +133,14 @@ class SubscriberController extends Controller
 
         return new SubscriberResource($subscriber);
     }
+
+    /**
+     * @param User $user
+     * @return SubscriberResource
+     */
+    public function showSubscribeByUser(User $user)
+    {
+        $profile = $user->profile->load(['company','subscriber_policies.policy']);
+        return new SubscriberResource($profile);
+    }
 }
