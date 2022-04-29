@@ -12,11 +12,13 @@ class CompanyUser extends Model
     protected $fillable = [
         'company_id',
         'user_id',
+        'disabled'
     ];
 
     protected $casts = [
         'company_id'  => 'integer',
         'user_id'     => 'integer',
+        'disabled'    => 'boolean',
     ];
 
     protected $dates = [
