@@ -32,6 +32,7 @@ class User extends Authenticatable implements HasMedia
         'activated_at',
         'required_password_update',
         'timezone',
+        'remember_token'
     ];
 
     /**
