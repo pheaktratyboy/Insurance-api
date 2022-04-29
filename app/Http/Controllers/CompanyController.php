@@ -24,7 +24,6 @@ class CompanyController extends Controller
         return CompanyResource::collection($result);
     }
 
-
     /**
      * @param Company $company
      * @return CompanyResource

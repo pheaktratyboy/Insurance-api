@@ -16,18 +16,16 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyUserController extends Controller
 {
-    public function index()
+    public function index(Company $company)
     {
-        $user = auth()->user();
-        $company = QueryBuilder::for(CompanyUser::class)
-            ->where('user_id', $user->id)
+        $query = QueryBuilder::for(CompanyUser::where('company_id', $company->id))
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->with(['user', 'company'])
             ->paginate()
             ->appends(request()->query());
 
-        return CompanyUserResource::collection($company);
+        return CompanyUserResource::collection($query);
     }
 
     /**
@@ -83,7 +81,18 @@ class CompanyUserController extends Controller
      */
     public function destroy(CompanyUser $companyUser) {
 
+       $user = User::find($companyUser->user_id);
+
+       if ($user) {
+           $profile = $user->profile;
+
+       }
+        echo json_encode($user->profile);
+       dd();
+
         $company = $companyUser;
+
+        dd();
         $companyUser->delete();
         $company->company->cacheSumTotalStaff();
 

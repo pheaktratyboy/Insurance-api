@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 /** Company **/
 Route::get('companies', [CompanyController::class,'index'])->name('companies.index');
+
 Route::get('companies/{company}', [CompanyController::class,'show'])->name('companies.show');
-Route::get('companies/listSubscriber', [CompanyController::class,'listAllSubscriber'])->name('companies.list_all_subscriber');
 
 
 Route::post('companies', [CompanyController::class,'store'])->name('companies.store');
@@ -16,7 +16,7 @@ Route::delete('companies/{company}', [CompanyController::class,'destroy'])->name
 
 
 /** Company Users **/
-Route::get('company-users', [CompanyUserController::class,'index'])->name('company_users.index');
+Route::get('company-users/{company}', [CompanyUserController::class,'index'])->name('company_users.index');
 Route::get('company-users/{company_users}', [CompanyUserController::class,'show'])->name('company_users.show');
 
 Route::post('company-users/{company}', [CompanyUserController::class,'store'])->name('company_users.store');
