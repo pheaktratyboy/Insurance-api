@@ -83,16 +83,17 @@ class CompanyUserController extends Controller
 
        $user = User::find($companyUser->user_id);
 
-       if ($user) {
-           $profile = $user->profile;
+        if ($user) {
+            $profile = $user->profile;
+            if ($profile) {
+                $profile->update([
+                    "company_id" => null
+                ]);
+            }
+        }
 
-       }
-        echo json_encode($user->profile);
-       dd();
-
+        /** delete user by company */
         $company = $companyUser;
-
-        dd();
         $companyUser->delete();
         $company->company->cacheSumTotalStaff();
 
