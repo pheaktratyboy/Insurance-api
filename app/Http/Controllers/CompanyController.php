@@ -30,8 +30,6 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $company->load('employees.user');
-
         return new CompanyResource($company);
     }
 
