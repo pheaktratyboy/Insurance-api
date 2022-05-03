@@ -66,8 +66,17 @@ class UserController extends Controller
         if ($user->hasRole([BaseRole::Agency, BaseRole::Subscriber, BaseRole::Staff])) {
             abort('422', 'Sorry, you can not view this data.');
         }
+        
+        return new EmployeeResource($user->profile->load(['user', 'municipality', 'district']));
+    }
 
-        return new EmployeeResource($user->profile->load(['municipality', 'district']));
+    /**
+     * @return EmployeeResource
+     */
+    public function showMyProfile() {
+
+        $user = Auth::user();
+        return new EmployeeResource($user->profile->load(['user', 'municipality', 'district']));
     }
 
     /**
