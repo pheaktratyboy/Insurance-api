@@ -111,11 +111,15 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @param User $employee
+     * @param User $user
      * @return EmployeeResource
      */
-    public function show(User $employee) {
+    public function show(User $user) {
 
-        return new EmployeeResource($employee->profile->load('municipality', 'district'));
+        if ($user->hasRole([BaseRole::Master, BaseRole::Admin, BaseRole::Subscriber])) {
+            abort('422', 'Sorry, you can not view this data.');
+        }
+
+        return new EmployeeResource($user->profile->load('municipality', 'district'));
     }
 }
