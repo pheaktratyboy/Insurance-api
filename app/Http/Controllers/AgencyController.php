@@ -46,7 +46,7 @@ class AgencyController extends Controller
 
     /**
      * @param CreateAgencyRequest $request
-     * @return EmployeeResource
+     * @return UserResource
      */
     public function store(CreateAgencyRequest $request) {
 
@@ -55,29 +55,26 @@ class AgencyController extends Controller
             $employee = new Employee($request->input());
             $employee->save();
 
-            if ($request->has('email')) {
+            /**@var User $user*/
+            $user = $employee->user()->create([
+                'username'              => $request->email,
+                'email'                 => $request->email,
+                'full_name'             => $request->name_en,
+                'phone_number'          => $employee->phone_number,
+                'force_change_password' => $request->force_change_password,
+                'password'              => bcrypt($request->password),
+                'activated'             => true,
+                'activated_at'          => now(),
+                'disabled'              => false,
+            ]);
 
-                /**@var User $user*/
-                $user = $employee->user()->create([
-                    'username'              => $request->email,
-                    'email'                 => $request->email,
-                    'full_name'             => $request->name_en,
-                    'phone_number'          => $employee->phone_number,
-                    'force_change_password' => $request->force_change_password,
-                    'password'              => bcrypt($request->password),
-                    'activated'             => true,
-                    'activated_at'          => now(),
-                    'disabled'              => false,
-                ]);
+            /** Assign Agency Role */
+            $user->assignRole(BaseRole::Agency);
 
-                /** Assign Agency Role */
-                $user->assignRole(BaseRole::Agency);
-            }
-
-            return $employee;
+            return $user;
         });
 
-        return new EmployeeResource($agency);
+        return new UserResource($agency);
     }
 
     /**

@@ -37,7 +37,7 @@ class EmployeeController extends Controller
 
     /**
      * @param CreateEmployeeRequest $request
-     * @return EmployeeResource
+     * @return UserResource
      */
     public function store(CreateEmployeeRequest $request) {
 
@@ -46,42 +46,39 @@ class EmployeeController extends Controller
             $employee = new Employee($request->input());
             $employee->save();
 
-            if ($request->has('email')) {
+            $param = [
+                'username'              => $request->email,
+                'email'                 => $request->email,
+                'full_name'             => $employee->name_en,
+                'phone_number'          => $employee->phone_number,
+                'password'              => bcrypt($request->password),
+                'force_change_password' => false,
+                'activated'             => $request->activated ?: false,
+                'disabled'              => $request->disabled ?: false,
+                'remember_token'        => Str::random(10),
+            ];
 
-                $param = [
-                    'username'              => $request->email,
-                    'email'                 => $request->email,
-                    'full_name'             => $employee->name_en,
-                    'phone_number'          => $employee->phone_number,
-                    'password'              => bcrypt($request->password),
-                    'force_change_password' => false,
-                    'activated'             => $request->activated ?: false,
-                    'disabled'              => $request->disabled ?: false,
-                    'remember_token'        => Str::random(10),
-                ];
-
-                if ($request->has('activated') && $request->activated == true) {
-                    $param["activated_at"] = now();
-                }
-
-                /**@var User $user*/
-                $user = $employee->user()->create($param);
-
-                /** Assign Role */
-                if ($request->has('role_id')) {
-                    $role = Role::firstWhere('id', $request->role_id);
-                    $user->assignRole($role->name);
-
-                } else {
-                    /** Assign Staff Role */
-                    $user->assignRole(BaseRole::Staff);
-                }
+            if ($request->has('activated') && $request->activated == true) {
+                $param["activated_at"] = now();
             }
 
-            return $employee;
+            /**@var User $user*/
+            $user = $employee->user()->create($param);
+
+            /** Assign Role */
+            if ($request->has('role_id')) {
+                $role = Role::firstWhere('id', $request->role_id);
+                $user->assignRole($role->name);
+
+            } else {
+                /** Assign Staff Role */
+                $user->assignRole(BaseRole::Staff);
+            }
+
+            return $user;
         });
 
-        return new EmployeeResource($employee);
+        return new UserResource($employee);
     }
 
     /**
