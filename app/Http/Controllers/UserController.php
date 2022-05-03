@@ -59,7 +59,7 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @return UserResource
+     * @return EmployeeResource
      */
     public function show(User $user)
     {
@@ -67,7 +67,7 @@ class UserController extends Controller
             abort('422', 'Sorry, you can not view this data.');
         }
 
-        return new UserResource($user->load(['profile', 'profile.municipality', 'profile.district', 'roles']));
+        return new EmployeeResource($user->profile->load(['municipality', 'district']));
     }
 
     /**
