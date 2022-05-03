@@ -120,6 +120,6 @@ class EmployeeController extends Controller
             abort('422', 'Sorry, you can not view this data.');
         }
 
-        return new EmployeeResource($user->profile->load('municipality', 'district'));
+        return new EmployeeResource($user->profile->load('user', 'municipality', 'district'));
     }
 }
