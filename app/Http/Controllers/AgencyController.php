@@ -100,10 +100,15 @@ class AgencyController extends Controller
     }
 
     /**
-     * @param Employee $employee
+     * @param User $employee
      * @return EmployeeResource
      */
-    public function show(Employee $employee) {
-        return new EmployeeResource($employee->load('user'));
+    public function show(User $employee) {
+
+        if (!$employee->hasRole(BaseRole::Agency)) {
+            abort('422', 'Sorry, you can not view this data.');
+        }
+
+        return new EmployeeResource($employee->profile->load('municipality', 'district'));
     }
 }

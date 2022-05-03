@@ -26,7 +26,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $queryBuilder = QueryBuilder::for( User::role(BaseRole::Staff))
+        $queryBuilder = QueryBuilder::for(User::role(BaseRole::Staff))
             ->allowedFilters(['full_name'])
             ->defaultSort('-created_at')
             ->paginate()
@@ -111,10 +111,14 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @param Employee $employee
+     * @param User $employee
      * @return EmployeeResource
      */
-    public function show(Employee $employee) {
-        return new EmployeeResource($employee->load('user', 'municipality', 'district'));
+    public function show(User $employee) {
+        if (!$employee->hasRole(BaseRole::Staff)) {
+            abort('422', 'Sorry, you can not view this data.');
+        }
+
+        return new EmployeeResource($employee->profile->load('municipality', 'district'));
     }
 }
