@@ -63,9 +63,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if (!$user->hasRole(BaseRole::Master) || !$user->hasRole(BaseRole::Admin)) {
-            abort('422', 'Sorry, you can not view this data.');
-        }
         return new UserResource($user->load(['profile', 'profile.municipality', 'profile.district', 'roles']));
     }
 

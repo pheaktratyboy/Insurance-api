@@ -115,9 +115,6 @@ class EmployeeController extends Controller
      * @return EmployeeResource
      */
     public function show(User $employee) {
-        if (!$employee->hasRole(BaseRole::Staff)) {
-            abort('422', 'Sorry, you can not view this data.');
-        }
 
         return new EmployeeResource($employee->profile->load('municipality', 'district'));
     }
