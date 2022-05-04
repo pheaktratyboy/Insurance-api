@@ -44,6 +44,7 @@ class EmployeeController extends Controller
         $employee = DB::transaction(function () use ($request) {
 
             $employee = new Employee($request->input());
+            $employee["user_id"] = 1;
             $employee->save();
 
             $param = [
