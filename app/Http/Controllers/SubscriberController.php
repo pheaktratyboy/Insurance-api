@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
+use function Sodium\add;
 
 class SubscriberController extends Controller
 {
@@ -22,7 +23,19 @@ class SubscriberController extends Controller
 
         $user = auth()->user();
 
-        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
+        if ($user->hasRole(BaseRole::Staff)) {
+
+            $agencyId = User::where('created_by', $user->id)->get();
+            $all = collect($agencyId)->pluck('id')->push($user->id);
+
+            $subscriber = QueryBuilder::for(Subscriber::class)
+                ->whereIn('user_id', $all)
+                ->allowedFilters(['name_kh', 'name_en'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+        } else if ($user->hasRole(BaseRole::Agency)) {
 
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->where('user_id', $user->id)
@@ -30,6 +43,7 @@ class SubscriberController extends Controller
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
+
         } else {
 
             $subscriber = QueryBuilder::for(Subscriber::class)

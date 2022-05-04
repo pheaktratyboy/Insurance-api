@@ -11,6 +11,7 @@ use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class AgencyController extends Controller
@@ -66,6 +67,7 @@ class AgencyController extends Controller
                 'activated'             => true,
                 'activated_at'          => now(),
                 'disabled'              => false,
+                'remember_token'        => Str::random(10),
             ]);
 
             /** Assign Agency Role */
