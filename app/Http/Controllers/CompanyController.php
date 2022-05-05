@@ -54,9 +54,16 @@ class CompanyController extends Controller
         $employees = collect($query->get('employees'));
         $newCompany = $query->except('employees');
 
-        list($staff, $subscriber) = $employees->partition(function ($item) {
-            return ($item['type'] === BaseRole::Staff);
-        });
+        $staff = [];
+        $subscriber = [];
+        foreach ($employees as $param) {
+
+            if ($param['type'] === BaseRole::Staff) {
+                $staff[] = $param;
+            } else {
+                $subscriber[] = $param;
+            }
+        }
 
         return response()->json([
             'data' => [
