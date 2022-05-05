@@ -48,11 +48,15 @@ class Company extends Model
         return $this;
     }
 
+    public function addUserUnderCompany() {
+
+    }
+
     /**
      * @param $items
      * @return $this
      */
-    public function setUsersUnderCompany($items) {
+    public function setSubscriberUnderCompany($items) {
 
         $newItems = collect($items)->map(function ($item)  {
 

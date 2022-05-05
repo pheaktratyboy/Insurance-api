@@ -20,8 +20,19 @@ class UserController extends Controller
     public function getAllUser() {
 
         $user = auth()->user();
-        $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
-        return UserAllResource::collection($users);
+
+        if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+
+            $user = auth()->user();
+            $users = User::where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
+            return UserAllResource::collection($users);
+
+        } else {
+
+            $user = auth()->user();
+            $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
+            return UserAllResource::collection($users);
+        }
     }
 
     public function index() {
@@ -66,7 +77,7 @@ class UserController extends Controller
         if ($user->hasRole([BaseRole::Agency, BaseRole::Subscriber, BaseRole::Staff])) {
             abort('422', 'Sorry, you can not view this data.');
         }
-        
+
         return new EmployeeResource($user->profile->load(['user', 'municipality', 'district']));
     }
 

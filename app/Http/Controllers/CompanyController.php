@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseRole;
 use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
+use App\Models\CompanyUser;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,13 +17,28 @@ class CompanyController extends Controller
 
     public function index()
     {
-        $result = QueryBuilder::for(Company::class)
-            ->allowedFilters(['name'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
+        $user = auth()->user();
 
-        return CompanyResource::collection($result);
+        if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+
+            $result = QueryBuilder::for(Company::class)
+                ->allowedFilters(['name'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+            return CompanyResource::collection($result);
+
+        } else {
+
+            $result = QueryBuilder::for(CompanyUser::where('user_id', $user->id))
+                ->allowedFilters(['name'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+            return CompanyResource::collection($result);
+        }
     }
 
     /**
@@ -43,6 +60,12 @@ class CompanyController extends Controller
 
             $company = new Company;
             $company->createNewCompany($request);
+
+            if ($request->has('users')) {
+
+                $company->addUserUnderCompany($request->input('users'))
+                    ->cacheSumTotalStaff();
+            }
 
             return $company;
         });

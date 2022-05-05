@@ -27,8 +27,9 @@ class CreateCompaniesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('user_id');
-            $table->boolean('disabled')->default(false);
 
+            $table->string('type')->nullable();
+            $table->boolean('disabled')->default(false);
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

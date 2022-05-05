@@ -20,6 +20,9 @@ class CreateCompanyRequest extends FormRequest
             'name'              => ['required', 'string', 'unique:companies', 'max:255'],
             'logo'              => ['sometimes', new Media],
             'disabled'          => 'sometimes|required|boolean',
+
+            /** Information */
+            'users.*.user_id'   => ['required', 'numeric', 'max:10', Rule::exists('users', 'id')],
         ];
     }
 }
