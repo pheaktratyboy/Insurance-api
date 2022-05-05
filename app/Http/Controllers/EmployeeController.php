@@ -102,6 +102,7 @@ class EmployeeController extends Controller
 
             $employee->user()->first()
                 ->isUpdateIfHasName($request->only('name_en'))
+                ->isUpdateIfHasEmail($request->only('email'))
                 ->updateIsNotActivate($request->only('activated'))
                 ->isUpdateEnableOrDisabled($request->only('disabled'));
 

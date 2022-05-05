@@ -89,6 +89,19 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * @param $array
+     * @return $this
+     */
+    public function isUpdateIfHasEmail($array) {
+
+        if (count($array)) {
+            $this->update(['email' => $array['email']]);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $disabled
      * @return $this
      */

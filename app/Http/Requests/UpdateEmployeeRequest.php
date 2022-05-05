@@ -19,6 +19,7 @@ class UpdateEmployeeRequest extends FormRequest
     {
         return [
             /** Account */
+            'email'                 => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users')->ignore(request()->route('user')->id)],
             'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
             'disabled'              => 'sometimes|required|boolean',
             'activated'             => 'sometimes|required|boolean',

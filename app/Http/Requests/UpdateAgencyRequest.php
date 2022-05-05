@@ -19,6 +19,7 @@ class UpdateAgencyRequest extends FormRequest
     {
         return [
             /** Account */
+            'email'                 => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users')->ignore(request()->route('user')->id)],
             'disabled'              => 'sometimes|required|boolean',
 
             /** Information */

@@ -90,6 +90,7 @@ class AgencyController extends Controller
 
             $agency->user()->first()
                 ->isUpdateIfHasName($request->only('name_en'))
+                ->isUpdateIfHasEmail($request->only('email'))
                 ->isUpdateEnableOrDisabled($request->only('disabled'));
 
             $agency->update($request->input());
