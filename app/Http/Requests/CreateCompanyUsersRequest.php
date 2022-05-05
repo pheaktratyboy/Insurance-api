@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BaseRole;
+use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,6 +19,7 @@ class CreateCompanyUsersRequest extends FormRequest
     {
         return [
             /** Information */
+            'type'              => ['required', ['required', Rule::in(BaseRole::getValues())],],
             'users.*.user_id'   => ['required', 'numeric', 'max:10', Rule::exists('users', 'id')],
         ];
     }

@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->integer('staff_count')->default(0);
+            $table->integer('subscriber_count')->default(0);
             $table->json('logo')->nullable();
             $table->boolean('disabled')->default(false);
 

@@ -23,13 +23,28 @@ class UserController extends Controller
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
 
-            $user = auth()->user();
+            $users = User::where('disabled', false)->with('profile')->role([BaseRole::Admin, BaseRole::Agency, BaseRole::Staff])->get();
+            return UserAllResource::collection($users);
+
+        } else {
+
+            $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role([BaseRole::Agency, BaseRole::Staff])->get();
+            return UserAllResource::collection($users);
+        }
+    }
+
+
+    public function getAllSubscriber() {
+        
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+
             $users = User::where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
             return UserAllResource::collection($users);
 
         } else {
 
-            $user = auth()->user();
             $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
             return UserAllResource::collection($users);
         }

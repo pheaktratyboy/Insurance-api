@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use App\Enums\BaseRole;
 
 class Company extends Model
 {
@@ -13,14 +14,16 @@ class Company extends Model
     protected $fillable = [
         'name',
         'staff_count',
+        'subscriber_count',
         'logo',
         'disabled',
     ];
 
     protected $casts = [
-        'staff_count'   => 'integer',
-        'logo'          => 'array',
-        'disabled'      => 'boolean',
+        'staff_count'       => 'integer',
+        'subscriber_count'  => 'integer',
+        'logo'              => 'array',
+        'disabled'          => 'boolean',
     ];
 
     protected $dates = [
@@ -50,6 +53,7 @@ class Company extends Model
 
     public function addUserUnderCompany() {
 
+        return $this;
     }
 
     /**
@@ -67,6 +71,8 @@ class Company extends Model
 
             /** update field customer id in subscriber */
             $this->updateCompanyIdWithSubscriber($item['user_id'], $this->id);
+
+            $item['type'] = BaseRole::Subscriber;
 
             return new CompanyUser($item);
         });
@@ -98,6 +104,14 @@ class Company extends Model
      */
     public function cacheSumTotalStaff() {
         $this->staff_count = $this->employees()->count();
+        $this->save();
+        $this->refresh();
+
+        return $this;
+    }
+
+    public function cacheSumTotalSubscriber() {
+        $this->subscriber_count = $this->employees()->count();
         $this->save();
         $this->refresh();
 

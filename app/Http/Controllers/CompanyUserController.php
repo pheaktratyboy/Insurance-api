@@ -35,24 +35,47 @@ class CompanyUserController extends Controller
      */
     public function store(CreateCompanyUsersRequest $request, Company $company) {
 
+        $type = $request->input('type');
+
         $users = $request->input('users');
         $userQuery = User::whereIn('id', $users)->get();
 
-        foreach ($userQuery as $param) {
-            if (!$param->hasRole(BaseRole::Subscriber)) {
-                abort('422', 'the user with is not exists');
-                break;
+        if ($type === BaseRole::Subscriber) { // For Subscriber
+
+            foreach ($userQuery as $param) {
+                if (!$param->hasRole(BaseRole::Subscriber)) {
+                    abort('422', 'the user with is not exists');
+                    break;
+                }
             }
+
+            $result = DB::transaction(function () use ($users, $company) {
+
+                return $company->setSubscriberUnderCompany($users)
+                    ->cacheSumTotalSubscriber()
+                    ->load('employees');
+            });
+
+            return new CompanyResource($result);
+
+        } else { // For Admin, Staff, Agency
+
+            foreach ($userQuery as $param) {
+                if ($param->hasRole(BaseRole::Subscriber)) {
+                    abort('422', 'the user with is not exists');
+                    break;
+                }
+            }
+
+            $result = DB::transaction(function () use ($users, $company) {
+
+                return $company->addUserUnderCompany($users)
+                    ->cacheSumTotalStaff()
+                    ->load('employees');
+            });
+
+            return new CompanyResource($result);
         }
-
-        $result = DB::transaction(function () use ($users, $company) {
-
-            return $company->setSubscriberUnderCompany($users)
-                ->cacheSumTotalStaff()
-                ->load('employees');
-        });
-
-        return new CompanyResource($result);
     }
 
 
@@ -80,14 +103,25 @@ class CompanyUserController extends Controller
      */
     public function destroy(CompanyUser $companyUser) {
 
-        $userByCompany = $companyUser;
+        if ($companyUser->type === BaseRole::Subscriber) {
 
-        /** update customer id in subscriber */
-        $userByCompany->company->updateCompanyIdWithSubscriber($userByCompany->user_id, null);
+            $userByCompany = $companyUser;
 
-        /** delete user by company */
-        $companyUser->delete();
-        $userByCompany->company->cacheSumTotalStaff();
+            /** update customer id in subscriber */
+            $userByCompany->company->updateCompanyIdWithSubscriber($userByCompany->user_id, null);
+
+            /** delete user by company */
+            $companyUser->delete();
+            $userByCompany->company->cacheSumTotalSubscriber();
+
+        } else {
+
+            $userByCompany = $companyUser;
+
+            /** delete user by company */
+            $companyUser->delete();
+            $userByCompany->company->cacheSumTotalStaff();
+        }
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
