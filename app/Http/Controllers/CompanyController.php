@@ -7,7 +7,6 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyUnderUserResource;
-use App\Http\Resources\CompanyUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
 use Illuminate\Http\Response;
@@ -47,11 +46,25 @@ class CompanyController extends Controller
 
     /**
      * @param Company $company
-     * @return CompanyResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Company $company)
     {
-        return new CompanyResource($company);
+        $query = collect($company->with('employees')->first());
+        $employees = collect($query->get('employees'));
+        $newCompany = $query->except('employees');
+
+        list($staff, $subscriber) = $employees->partition(function ($item) {
+            return ($item['type'] === BaseRole::Staff);
+        });
+
+        return response()->json([
+            'data' => [
+                'company' => $newCompany,
+                'staff' => $staff,
+                'subscriber' => $subscriber,
+            ],
+        ]);
     }
 
     /**
