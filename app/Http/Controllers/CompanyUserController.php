@@ -40,7 +40,9 @@ class CompanyUserController extends Controller
         $users = $request->input('users');
         $userQuery = User::whereIn('id', $users)->get();
 
-        if ($type === BaseRole::Subscriber) { // For Subscriber
+        if ($type === BaseRole::Subscriber) {
+
+            // For Store Type Subscriber
 
             foreach ($userQuery as $param) {
                 if (!$param->hasRole(BaseRole::Subscriber)) {
@@ -58,7 +60,9 @@ class CompanyUserController extends Controller
 
             return new CompanyResource($result);
 
-        } else { // For Admin, Staff, Agency
+        } else {
+
+            // For Store Type Staff
 
             foreach ($userQuery as $param) {
                 if ($param->hasRole(BaseRole::Subscriber)) {

@@ -51,7 +51,21 @@ class Company extends Model
         return $this;
     }
 
-    public function addUserUnderCompany() {
+    public function addUserUnderCompany($items) {
+
+        $newItems = collect($items)->map(function ($item)  {
+
+            $user = CompanyUser::where('user_id', $item['user_id'])->first();
+            if ($user) {
+                abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');
+            }
+
+            $item['type'] = BaseRole::Staff;
+
+            return new CompanyUser($item);
+        });
+
+        $this->employees()->saveMany($newItems);
 
         return $this;
     }
@@ -103,7 +117,7 @@ class Company extends Model
      * @return $this
      */
     public function cacheSumTotalStaff() {
-        $this->staff_count = $this->employees()->count();
+        $this->staff_count = $this->employees()->where('type', BaseRole::Staff)->count();
         $this->save();
         $this->refresh();
 
@@ -111,7 +125,7 @@ class Company extends Model
     }
 
     public function cacheSumTotalSubscriber() {
-        $this->subscriber_count = $this->employees()->count();
+        $this->subscriber_count = $this->employees()->where('type', BaseRole::Subscriber)->count();
         $this->save();
         $this->refresh();
 
