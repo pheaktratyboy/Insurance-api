@@ -55,7 +55,7 @@ class Company extends Model
 
         $newItems = collect($items)->map(function ($item)  {
 
-            $user = CompanyUser::where('user_id', $item['user_id'])->first();
+            $user = CompanyUser::where('company_id', $this->id)->where('user_id', $item['user_id'])->first();
             if ($user) {
                 abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');
             }

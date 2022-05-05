@@ -6,6 +6,8 @@ use App\Enums\BaseRole;
 use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\CompanyUnderUserResource;
+use App\Http\Resources\CompanyUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
 use Illuminate\Http\Response;
@@ -31,13 +33,15 @@ class CompanyController extends Controller
 
         } else {
 
-            $result = QueryBuilder::for(CompanyUser::where('user_id', $user->id))
+            $result = QueryBuilder::for(CompanyUser::class)
+                ->with('company')
+                ->where('user_id', $user->id)
                 ->allowedFilters(['name'])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
 
-            return CompanyResource::collection($result);
+            return CompanyUnderUserResource::collection($result);
         }
     }
 

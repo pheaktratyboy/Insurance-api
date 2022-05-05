@@ -36,8 +36,8 @@ class CompanyUserController extends Controller
     public function store(CreateCompanyUsersRequest $request, Company $company) {
 
         $type = $request->input('type');
-
         $users = $request->input('users');
+
         $userQuery = User::whereIn('id', $users)->get();
 
         if ($type === BaseRole::Subscriber) {
