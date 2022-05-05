@@ -16,9 +16,25 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyUserController extends Controller
 {
-    public function index(Company $company)
+    public function indexSubscriber(Company $company)
     {
-        $query = QueryBuilder::for(CompanyUser::where('company_id', $company->id))
+        $query = QueryBuilder::for(CompanyUser::class)
+            ->where('company_id', $company->id)
+            ->where('type', BaseRole::Subscriber)
+            ->allowedFilters(['name'])
+            ->defaultSort('-created_at')
+            ->with(['user', 'company'])
+            ->paginate()
+            ->appends(request()->query());
+
+        return CompanyUserResource::collection($query);
+    }
+
+    public function indexUsers(Company $company)
+    {
+        $query = QueryBuilder::for(CompanyUser::class)
+            ->where('company_id', $company->id)
+            ->where('type', BaseRole::Staff)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
             ->with(['user', 'company'])

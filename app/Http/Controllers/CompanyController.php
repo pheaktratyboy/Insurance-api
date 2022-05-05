@@ -46,32 +46,34 @@ class CompanyController extends Controller
 
     /**
      * @param Company $company
-     * @return \Illuminate\Http\JsonResponse
+     * @return CompanyResource
      */
     public function show(Company $company)
     {
-        $query = collect($company->with('employees')->first());
-        $employees = collect($query->get('employees'));
-        $newCompany = $query->except('employees');
+        return new CompanyResource($company);
 
-        $staff = [];
-        $subscriber = [];
-        foreach ($employees as $param) {
-
-            if ($param['type'] === BaseRole::Staff) {
-                $staff[] = $param;
-            } else {
-                $subscriber[] = $param;
-            }
-        }
-
-        return response()->json([
-            'data' => [
-                'company' => $newCompany,
-                'staff' => $staff,
-                'subscriber' => $subscriber,
-            ],
-        ]);
+//        $query = collect($company->with('employees')->first());
+//        $employees = collect($query->get('employees'));
+//        $newCompany = $query->except('employees');
+//
+//        $staff = [];
+//        $subscriber = [];
+//        foreach ($employees as $param) {
+//
+//            if ($param['type'] === BaseRole::Staff) {
+//                $staff[] = $param;
+//            } else {
+//                $subscriber[] = $param;
+//            }
+//        }
+//
+//        return response()->json([
+//            'data' => [
+//                'company' => $newCompany,
+//                'staff' => $staff,
+//                'subscriber' => $subscriber,
+//            ],
+//        ]);
     }
 
     /**
@@ -85,11 +87,20 @@ class CompanyController extends Controller
             $company = new Company;
             $company->createNewCompany($request);
 
-            if ($request->has('users')) {
+            $user = auth()->user();
+            $users = [];
 
-                $company->addUserUnderCompany($request->input('users'))
-                    ->cacheSumTotalStaff();
+            if ($user->hasRole(BaseRole::Staff)) {
+                $users[] = ['user_id' => $user->id];
+
+            }else if ($user->hasRole(BaseRole::Agency)) {
+
+                $users[] = ['user_id' => $user->id];
+                $users[] = ['user_id' => $user->created_by];
             }
+
+            $company->addUserUnderCompany($users)
+                ->cacheSumTotalStaff();
 
             return $company;
         });
