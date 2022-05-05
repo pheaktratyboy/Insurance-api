@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\BaseRole;
-use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

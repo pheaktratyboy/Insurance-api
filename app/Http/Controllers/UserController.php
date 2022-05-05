@@ -35,7 +35,7 @@ class UserController extends Controller
 
 
     public function getAllSubscriber() {
-        
+
         $user = auth()->user();
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {

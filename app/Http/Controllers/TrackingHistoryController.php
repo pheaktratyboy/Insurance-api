@@ -21,6 +21,7 @@ class TrackingHistoryController extends Controller
         ]);
 
         $history = TrackingHistory::with('user')
+            ->with('user')
             ->where('reference_id', $request->input('reference_id'))
             ->orderBy('created_at', 'DESC')
             ->limit(5)
