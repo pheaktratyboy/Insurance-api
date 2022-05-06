@@ -18,6 +18,9 @@ class CompanyUserController extends Controller
 {
     public function indexSubscriber(Company $company)
     {
+        // check user under company ====
+        $company->checkPermissionViewData();
+
         $query = QueryBuilder::for(CompanyUser::class)
             ->where('company_id', $company->id)
             ->where('type', BaseRole::Subscriber)
@@ -32,6 +35,9 @@ class CompanyUserController extends Controller
 
     public function indexUsers(Company $company)
     {
+        // check user under company ====
+        $company->checkPermissionViewData();
+
         $query = QueryBuilder::for(CompanyUser::class)
             ->where('company_id', $company->id)
             ->where('type', BaseRole::Staff)

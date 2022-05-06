@@ -140,4 +140,19 @@ class Company extends Model
         }
         return $this;
     }
+
+    public function checkPermissionViewData()
+    {
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Subscriber, BaseRole::Staff, BaseRole::Agency])) {
+
+            $userCompany = CompanyUser::where('company_id', $this->id)->where('user_id', $user->id)->first();
+            if (!$userCompany) {
+                abort('422', 'Sorry, you can not view this data.');
+            }
+        }
+
+        return $this;
+    }
 }

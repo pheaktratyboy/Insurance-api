@@ -18,6 +18,7 @@ class CompanyUserResource extends JsonResource
             'id'               => $this->id,
             'company_id'       => $this->company_id,
             'user_id'          => $this->user_id,
+            'disabled'         => $this->disabled,
 
             /** relationship */
             'user'             => new UserAllResource($this->whenLoaded('user')),

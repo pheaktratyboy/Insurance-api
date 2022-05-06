@@ -50,30 +50,10 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return new CompanyResource($company);
+        // check this user under company or not
+        $company->checkPermissionViewData();
 
-//        $query = collect($company->with('employees')->first());
-//        $employees = collect($query->get('employees'));
-//        $newCompany = $query->except('employees');
-//
-//        $staff = [];
-//        $subscriber = [];
-//        foreach ($employees as $param) {
-//
-//            if ($param['type'] === BaseRole::Staff) {
-//                $staff[] = $param;
-//            } else {
-//                $subscriber[] = $param;
-//            }
-//        }
-//
-//        return response()->json([
-//            'data' => [
-//                'company' => $newCompany,
-//                'staff' => $staff,
-//                'subscriber' => $subscriber,
-//            ],
-//        ]);
+        return new CompanyResource($company);
     }
 
     /**
