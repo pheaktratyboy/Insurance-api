@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\StatusType;
-use App\Exceptions\HttpException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -115,20 +114,47 @@ class Subscriber extends Model
      */
     public function addSubscriberPolicy(Request $request)
     {
-        $sub_policy = new SubscriberPolicy($request->input());
-
         if ($request->has('policy_id')) {
 
-            $policy = Policy::firstWhere('id', $request->policy_id);
+            $oldPolicies = SubscriberPolicy::where('subscriber_id', $this->id)->orderBy('id', 'DESC')->get();
 
-            if ($policy) {
-                $duration = $policy->duration;
-                $newDateTime = Carbon::now()->addMonths($duration);
-                $sub_policy->expired_at = $newDateTime;
+            foreach ($oldPolicies as $param) {
+
+                if ($param['expired_at'] <= Carbon::now()->toDateTimeString() && (string)$param['policy_id'] == (string)$request->input('policy_id')) {
+
+                    // Renew after Expired
+                    $this->updateNewPolicy($request->input(), Carbon::now());
+                    break;
+                } else {
+
+                    // Renew before Expired
+                    $newDate = Carbon::parse($param['expired_at'])->addDays(1);
+                    $this->updateNewPolicy($request->input(), $newDate);
+                    break;
+                }
             }
         }
 
-        $this->subscriber_policies()->save($sub_policy);
+        return $this;
+    }
+
+    /**
+     * @param $request
+     * @param $dateTime
+     * @return $this
+     */
+    public function updateNewPolicy($request, $dateTime) {
+
+        $policy = Policy::firstWhere('id', $request['policy_id']);
+
+        if ($policy) {
+
+            $subPolicy = new SubscriberPolicy($request);
+
+            $newDateTime = $dateTime->addMonths($policy->duration);
+            $subPolicy->expired_at = $newDateTime;
+            $this->subscriber_policies()->save($subPolicy);
+        }
 
         return $this;
     }
