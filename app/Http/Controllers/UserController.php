@@ -69,10 +69,6 @@ class UserController extends Controller
             'confirm_password' => 'required|same:password',
         ]);
 
-        if ($user->hasRole(BaseRole::Admin) || $user->hasRole(BaseRole::Master)) {
-            abort('422', 'this user can not update.');
-        }
-
         return DB::transaction(function () use ($request, $user) {
 
             $user->password = bcrypt($request->password);
