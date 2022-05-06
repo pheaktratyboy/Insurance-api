@@ -15,7 +15,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
-use function Sodium\add;
 
 class SubscriberController extends Controller
 {
@@ -143,9 +142,11 @@ class SubscriberController extends Controller
      */
     public function show(Subscriber $subscriber)
     {
-        $subscriber->load(['company','subscriber_policies.policy']);
+        $query = $subscriber->load(['company','subscriber_policies' => function ($query) {
+             return $query->with('policy')->orderBy('id','DESC');
+        }]);
 
-        return new SubscriberResource($subscriber);
+        return new SubscriberResource($query);
     }
 
     /**
