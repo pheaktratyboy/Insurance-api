@@ -118,20 +118,24 @@ class Subscriber extends Model
 
             $oldPolicies = SubscriberPolicy::where('subscriber_id', $this->id)->orderBy('id', 'DESC')->get();
 
-            foreach ($oldPolicies as $param) {
+            if ($oldPolicies) {
+                foreach ($oldPolicies as $param) {
 
-                if ($param['expired_at'] <= Carbon::now()->toDateTimeString() && (string)$param['policy_id'] == (string)$request->input('policy_id')) {
+                    if ($param['expired_at'] <= Carbon::now()->toDateTimeString() && (string)$param['policy_id'] == (string)$request->input('policy_id')) {
 
-                    // Renew after Expired
-                    $this->updateNewPolicy($request->input(), Carbon::now());
-                    break;
-                } else {
+                        // Renew after Expired
+                        $this->updateNewPolicy($request->input(), Carbon::now());
+                        break;
+                    } else {
 
-                    // Renew before Expired
-                    $newDate = Carbon::parse($param['expired_at'])->addDays(1);
-                    $this->updateNewPolicy($request->input(), $newDate);
-                    break;
+                        // Renew before Expired
+                        $newDate = Carbon::parse($param['expired_at'])->addDays(1);
+                        $this->updateNewPolicy($request->input(), $newDate);
+                        break;
+                    }
                 }
+            } else {
+                $this->updateNewPolicy($request->input(), Carbon::now());
             }
         }
 
