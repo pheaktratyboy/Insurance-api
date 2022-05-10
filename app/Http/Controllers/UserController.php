@@ -16,42 +16,35 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
-
-    public function getAllUser() {
-
+    public function getAllUser()
+    {
         $user = auth()->user();
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
-
             $users = User::where('disabled', false)->with('profile')->role([BaseRole::Admin, BaseRole::Agency, BaseRole::Staff])->get();
             return UserAllResource::collection($users);
-
         } else {
-
             $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role([BaseRole::Agency, BaseRole::Staff])->get();
             return UserAllResource::collection($users);
         }
     }
 
 
-    public function getAllSubscriber() {
-
+    public function getAllSubscriber()
+    {
         $user = auth()->user();
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
-
             $users = User::where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
             return UserAllResource::collection($users);
-
         } else {
-
             $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
             return UserAllResource::collection($users);
         }
     }
 
-    public function index() {
-
+    public function index()
+    {
         $users = QueryBuilder::for(User::role(BaseRole::Admin))
             ->allowedFilters(['username'])
             ->where('disabled', 0)
@@ -70,7 +63,6 @@ class UserController extends Controller
         ]);
 
         return DB::transaction(function () use ($request, $user) {
-
             $user->password = bcrypt($request->password);
             $user->save();
 
@@ -95,8 +87,8 @@ class UserController extends Controller
     /**
      * @return EmployeeResource
      */
-    public function showMyProfile() {
-
+    public function showMyProfile()
+    {
         $user = Auth::user();
         return new EmployeeResource($user->profile->load(['user', 'municipality', 'district']));
     }
@@ -104,8 +96,8 @@ class UserController extends Controller
     /**
      * @return EmployeeResource
      */
-    public function showProfile() {
-
+    public function showProfile()
+    {
         $user = Auth::user();
         return new EmployeeResource($user->profile->load(['user.roles']));
     }
@@ -115,10 +107,9 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdateUserRequest $request, User $user) {
-
+    public function update(UpdateUserRequest $request, User $user)
+    {
         DB::transaction(function () use ($request, $user) {
-
             if ($request->has('email')) {
                 $user->username = $request->input('email');
             }
