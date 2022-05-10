@@ -55,7 +55,7 @@ class Subscriber extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function user_profile()
+    public function user_profile(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         return $this->morphOne(User::class, 'profileable');
     }
@@ -63,7 +63,7 @@ class Subscriber extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function subscriber_policies()
+    public function subscriber_policies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SubscriberPolicy::class, 'subscriber_id');
     }
@@ -71,7 +71,7 @@ class Subscriber extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function company()
+    public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
@@ -79,12 +79,12 @@ class Subscriber extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function validateForStatusClaimed()
+    public function validateForStatusClaimed(): Subscriber
     {
         if (StatusType::fromValue(StatusType::Claimed)->is($this->status)) {
             abort('422', 'Sorry, we can not allow for this status because already been claimed.');
@@ -93,10 +93,10 @@ class Subscriber extends Model
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return $this
      */
-    public function createNewSubscriber(Request $request)
+    public function createNewSubscriber(Request $request): Subscriber
     {
         $user = auth()->user();
         $request['status'] = StatusType::Approved;
@@ -109,10 +109,10 @@ class Subscriber extends Model
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return $this
      */
-    public function addSubscriberPolicy(Request $request)
+    public function addSubscriberPolicy(Request $request): Subscriber
     {
         if ($request->has('policy_id')) {
             $oldPolicies = SubscriberPolicy::where('subscriber_id', $this->id)->orderBy('id', 'DESC')->get();
@@ -144,7 +144,7 @@ class Subscriber extends Model
      * @param $dateTime
      * @return $this
      */
-    public function updateNewPolicy($request, $dateTime)
+    public function updateNewPolicy($request, $dateTime): Subscriber
     {
         $policy = Policy::firstWhere('id', $request['policy_id']);
 
@@ -162,7 +162,7 @@ class Subscriber extends Model
     /**
      * @return $this
      */
-    public function cacheCalculationTotalPrice()
+    public function cacheCalculationTotalPrice(): Subscriber
     {
         $query = $this->subscriber_policies()->with('policy')->get();
         if ($query) {

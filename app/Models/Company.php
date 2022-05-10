@@ -51,10 +51,9 @@ class Company extends Model
         return $this;
     }
 
-    public function addUserUnderCompany($items) {
-
-        $newItems = collect($items)->map(function ($item)  {
-
+    public function addUserUnderCompany($items): Company
+    {
+        $newItems = collect($items)->map(function ($item) {
             $user = CompanyUser::where('company_id', $this->id)->where('user_id', $item['user_id'])->first();
             if ($user) {
                 abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');
@@ -74,10 +73,9 @@ class Company extends Model
      * @param $items
      * @return $this
      */
-    public function setSubscriberUnderCompany($items) {
-
-        $newItems = collect($items)->map(function ($item)  {
-
+    public function setSubscriberUnderCompany($items): Company
+    {
+        $newItems = collect($items)->map(function ($item) {
             $user = CompanyUser::where('user_id', $item['user_id'])->first();
             if ($user) {
                 abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');
@@ -96,8 +94,8 @@ class Company extends Model
         return $this;
     }
 
-    public function updateCompanyIdWithSubscriber($userId, $companyId) {
-
+    public function updateCompanyIdWithSubscriber($userId, $companyId): Company
+    {
         $user = User::find($userId);
 
         /** update customer id in subscriber */
@@ -116,7 +114,8 @@ class Company extends Model
     /**
      * @return $this
      */
-    public function cacheSumTotalStaff() {
+    public function cacheSumTotalStaff(): Company
+    {
         $this->staff_count = $this->employees()->where('type', BaseRole::Staff)->count();
         $this->save();
         $this->refresh();
@@ -124,7 +123,8 @@ class Company extends Model
         return $this;
     }
 
-    public function cacheSumTotalSubscriber() {
+    public function cacheSumTotalSubscriber(): Company
+    {
         $this->subscriber_count = $this->employees()->where('type', BaseRole::Subscriber)->count();
         $this->save();
         $this->refresh();
@@ -132,7 +132,7 @@ class Company extends Model
         return $this;
     }
 
-    public function notAllowIfItemAlreadyUsed()
+    public function notAllowIfItemAlreadyUsed(): Company
     {
         $exist = Subscriber::firstWhere('company_id', $this->id);
         if ($exist) {
@@ -141,12 +141,11 @@ class Company extends Model
         return $this;
     }
 
-    public function checkPermissionViewData()
+    public function checkPermissionViewData(): Company
     {
         $user = auth()->user();
 
         if ($user->hasRole([BaseRole::Subscriber, BaseRole::Staff, BaseRole::Agency])) {
-
             $userCompany = CompanyUser::where('company_id', $this->id)->where('user_id', $user->id)->first();
             if (!$userCompany) {
                 abort('422', 'Sorry, you can not view this data.');

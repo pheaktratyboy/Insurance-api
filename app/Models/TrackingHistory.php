@@ -35,8 +35,8 @@ class TrackingHistory extends Model
      * @param $data
      * @param $type
      */
-    public function createSubscriberTracking($data, $type) {
-
+    public function createSubscriberTracking($data, $type)
+    {
         $user = auth()->user();
         $tracking = new TrackingHistory;
         $tracking->type             = $type;
@@ -51,8 +51,8 @@ class TrackingHistory extends Model
      * @param $data
      * @param $type
      */
-    public function updateSubscriberPolicyTracking($data, $type) {
-
+    public function updateSubscriberPolicyTracking($data, $type)
+    {
         $user = auth()->user();
         $tracking = new TrackingHistory;
         $tracking->type             = $type;

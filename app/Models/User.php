@@ -59,7 +59,7 @@ class User extends Authenticatable implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function profile()
+    public function profile(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
         return $this->morphTo(null, 'profileable_type', 'profileable_id');
     }
@@ -68,7 +68,8 @@ class User extends Authenticatable implements HasMedia
      * @param $role_id
      * @return $this
      */
-    public function updateHasRule($role_id) {
+    public function updateHasRule($role_id): User
+    {
         $role = Role::firstWhere('id', $role_id);
         $this->assignRole($role->name);
 
@@ -79,8 +80,8 @@ class User extends Authenticatable implements HasMedia
      * @param $array
      * @return $this
      */
-    public function isUpdateIfHasName($array) {
-
+    public function isUpdateIfHasName($array): User
+    {
         if (count($array)) {
             $this->update(['full_name' => $array['name_en']]);
         }
@@ -92,8 +93,8 @@ class User extends Authenticatable implements HasMedia
      * @param $array
      * @return $this
      */
-    public function isUpdateIfHasEmail($array) {
-
+    public function isUpdateIfHasEmail($array): User
+    {
         if (count($array)) {
             $this->update(['email' => $array['email']]);
         }
@@ -105,8 +106,8 @@ class User extends Authenticatable implements HasMedia
      * @param $disabled
      * @return $this
      */
-    public function isUpdateEnableOrDisabled($disabled) {
-
+    public function isUpdateEnableOrDisabled($disabled): User
+    {
         if (count($disabled)) {
             $this->update($disabled);
         }
@@ -118,10 +119,9 @@ class User extends Authenticatable implements HasMedia
      * @param $array
      * @return $this
      */
-    public function updateIsNotActivate($array) {
-
+    public function updateIsNotActivate($array): User
+    {
         if (!$this->activated && count($array)) {
-
             $this->update([
                 'activated'     => $array['activated'],
                 'activated_at'  => now(),
