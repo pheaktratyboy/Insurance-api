@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
-    public function reportDashboard() {
-
+    public function reportDashboard()
+    {
         $user = auth()->user();
         $getReminder = Setting::Reminder()->option;
 
@@ -24,7 +24,6 @@ class ReportController extends Controller
         $totalSubscriber = 0;
 
         if ($user->hasRole(BaseRole::Staff)) {
-
             $query = User::where('disabled', 0)->with('profile')->where('created_by', $user->id);
             $countAgency = $query->count();
             $userId = collect($query->get())->pluck('id');
@@ -53,16 +52,12 @@ class ReportController extends Controller
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
                     'total_agency'                  => $countAgency,
-                    'total expired'                 => $countExpired,
+                    'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
-
-        } else if ($user->hasRole(BaseRole::Agency)) {
-
-
+        } elseif ($user->hasRole(BaseRole::Agency)) {
             if (!empty($user->id)) {
-
                 $report       = new ReportService();
                 $subscribers  = $report->querySubscriberPoliciesByUserId([$user->id]);
                 $collection   = collect($subscribers);
@@ -84,13 +79,11 @@ class ReportController extends Controller
                 'data' => [
                     'total_subscriber'              => $totalSubscriber,
                     'total_sell'                    => $totalSell,
-                    'total expired'                 => $countExpired,
+                    'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
-
         } else {
-
             $employee = User::where('disabled', 0)->with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
             $countStaff = User::where('disabled', 0)->with('profile')->role(BaseRole::Staff)->count();
             $countAgency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->count();
@@ -98,7 +91,6 @@ class ReportController extends Controller
             $userId = collect($employee)->pluck('id');
 
             if (!empty($userId)) {
-
                 $report       = new ReportService();
                 $subscribers  = $report->querySubscriberPoliciesByUserId($userId);
                 $collection   = collect($subscribers);
@@ -122,7 +114,7 @@ class ReportController extends Controller
                     'total_sell'                    => $totalSell,
                     'total_staff'                   => $countStaff,
                     'total_agency'                  => $countAgency,
-                    'total expired'                 => $countExpired,
+                    'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
                 ],
             ]);
@@ -137,7 +129,6 @@ class ReportController extends Controller
 
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
             $subscribers = $collection->where('user_id', $user->id)->all();
-
         } else {
             $subscribers = $collection->all();
         }
@@ -150,7 +141,8 @@ class ReportController extends Controller
     }
 
 
-    public function countExpired() {
+    public function countExpired()
+    {
 
         //$user = auth()->user();
         //$subsciber = Subscriber::where('user_id', $user->id)->load;
@@ -173,5 +165,4 @@ class ReportController extends Controller
         //$totalSell = floatval($subscriber->sum('total'));
         //$sub = $subscriber->with('subscriber_policies')->where('subscriber_policies.expired_at', '2024-04-04 07:03:22');
     }
-
 }
