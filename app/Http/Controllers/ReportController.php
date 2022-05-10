@@ -24,9 +24,12 @@ class ReportController extends Controller
         $totalSubscriber = 0;
 
         if ($user->hasRole(BaseRole::Staff)) {
-            $query = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
-            $countAgency = $query->count();
-            $userId = collect($query->get())->pluck('id');
+
+            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
+
+            $countAgency = $agency->count();
+            $userId = collect($agency->get())->pluck('id');
+            $userId[] = $user->id;
 
 
             if (!empty($userId)) {
