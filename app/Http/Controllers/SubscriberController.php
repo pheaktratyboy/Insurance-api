@@ -18,12 +18,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SubscriberController extends Controller
 {
-    public function index() {
-
+    public function index()
+    {
         $user = auth()->user();
 
         if ($user->hasRole(BaseRole::Staff)) {
-
             $agencyId = User::where('created_by', $user->id)->get();
             $all = collect($agencyId)->pluck('id')->push($user->id);
 
@@ -33,24 +32,19 @@ class SubscriberController extends Controller
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
-
-        } else if ($user->hasRole(BaseRole::Agency)) {
-
+        } elseif ($user->hasRole(BaseRole::Agency)) {
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->where('user_id', $user->id)
                 ->allowedFilters(['name_kh', 'name_en'])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
-
         } else {
-
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->allowedFilters(['name_kh', 'name_en'])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
-
         }
 
         return SubscriberResource::collection($subscriber);
@@ -60,8 +54,8 @@ class SubscriberController extends Controller
      * @param CreateSubscriberRequest $request
      * @return SubscriberResource
      */
-    public function store(CreateSubscriberRequest $request) {
-
+    public function store(CreateSubscriberRequest $request)
+    {
         $result = DB::transaction(function () use ($request) {
             $subscriber = new Subscriber;
             $subscriber->createNewSubscriber($request)
@@ -94,7 +88,6 @@ class SubscriberController extends Controller
              * Company User
              */
             if ($request->has('company_id')) {
-
                 $company = Company::find($request->company_id);
 
                 if ($company) {
@@ -119,8 +112,8 @@ class SubscriberController extends Controller
      * @param Subscriber $subscriber
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdateSubscriberRequest $request, Subscriber $subscriber) {
-
+    public function update(UpdateSubscriberRequest $request, Subscriber $subscriber)
+    {
         $subscriber->validateForStatusClaimed();
 
         DB::transaction(function () use ($request, $subscriber) {
@@ -143,7 +136,7 @@ class SubscriberController extends Controller
     public function show(Subscriber $subscriber)
     {
         $query = $subscriber->load(['company','subscriber_policies' => function ($query) {
-             return $query->with('policy')->orderBy('id','DESC');
+            return $query->with('policy')->orderBy('id', 'DESC');
         }]);
 
         return new SubscriberResource($query);

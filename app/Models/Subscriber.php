@@ -115,24 +115,21 @@ class Subscriber extends Model
     public function addSubscriberPolicy(Request $request)
     {
         if ($request->has('policy_id')) {
-
             $oldPolicies = SubscriberPolicy::where('subscriber_id', $this->id)->orderBy('id', 'DESC')->get();
 
-            if ($oldPolicies) {
+            if ($oldPolicies->count() > 0) {
                 foreach ($oldPolicies as $param) {
-
                     if ($param['expired_at'] <= Carbon::now()->toDateTimeString() && (string)$param['policy_id'] == (string)$request->input('policy_id')) {
 
                         // Renew after Expired
                         $this->updateNewPolicy($request->input(), Carbon::now());
-                        break;
                     } else {
 
                         // Renew before Expired
                         $newDate = Carbon::parse($param['expired_at'])->addDays(1);
                         $this->updateNewPolicy($request->input(), $newDate);
-                        break;
                     }
+                    break;
                 }
             } else {
                 $this->updateNewPolicy($request->input(), Carbon::now());
@@ -147,12 +144,11 @@ class Subscriber extends Model
      * @param $dateTime
      * @return $this
      */
-    public function updateNewPolicy($request, $dateTime) {
-
+    public function updateNewPolicy($request, $dateTime)
+    {
         $policy = Policy::firstWhere('id', $request['policy_id']);
 
         if ($policy) {
-
             $subPolicy = new SubscriberPolicy($request);
 
             $newDateTime = $dateTime->addMonths($policy->duration);
@@ -170,7 +166,6 @@ class Subscriber extends Model
     {
         $query = $this->subscriber_policies()->with('policy')->get();
         if ($query) {
-
             $this->total = $query->sum('policy.price');
             $this->save();
             $this->refresh();
