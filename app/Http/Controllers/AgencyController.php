@@ -21,9 +21,9 @@ class AgencyController extends Controller
 
         $user = auth()->user();
 
+        $agency = User::role(BaseRole::Agency);
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
 
-            $agency = User::role(BaseRole::Agency);
             $queryBuilder = QueryBuilder::for($agency)
                 ->where('created_by', $user->id)
                 ->allowedFilters(['full_name'])
@@ -33,7 +33,6 @@ class AgencyController extends Controller
 
         } else {
 
-            $agency = User::role(BaseRole::Agency);
             $queryBuilder = QueryBuilder::for($agency)
                 ->allowedFilters(['full_name'])
                 ->defaultSort('-created_at')

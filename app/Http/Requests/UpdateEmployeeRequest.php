@@ -17,9 +17,11 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function rules()
     {
+        $user = $this->route('user');
+
         return [
             /** Account */
-            'email'                 => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users')->ignore(request()->route('user')->id)],
+            'email'                 => ['sometimes', 'required', 'email', 'max:255'],
             'role_id'               => ['sometimes', 'required', Rule::exists('roles', 'id')],
             'disabled'              => 'sometimes|required|boolean',
             'activated'             => 'sometimes|required|boolean',
@@ -27,7 +29,7 @@ class UpdateEmployeeRequest extends FormRequest
             /** Information */
             'name_kh'               => ['sometimes', 'required', 'string', 'max:255'],
             'name_en'               => ['sometimes', 'required', 'string', 'max:255'],
-            'identity_number'       => ['sometimes', 'required', 'string', 'min:9', 'max:10', Rule::unique('employees')->ignore(request()->route('employee')->id)],
+            'identity_number'       => ['sometimes', 'required', 'string', 'min:9', 'max:10', Rule::unique('employees')->ignore($user->id)],
             'date_of_birth'         => ['sometimes', 'required', 'date'],
             'phone_number'          => ['sometimes', 'required', 'string', 'max:255'],
             'address'               => ['sometimes', 'required', 'string', 'max:255'],

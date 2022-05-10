@@ -87,26 +87,26 @@ class EmployeeController extends Controller
 
     /**
      * @param UpdateEmployeeRequest $request
-     * @param Employee $employee
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(UpdateEmployeeRequest $request, Employee $employee) {
+    public function update(UpdateEmployeeRequest $request, User $user) {
 
-        DB::transaction(function () use ($request, $employee) {
+        DB::transaction(function () use ($request, $user) {
 
             if ($request->has('role_id')) {
 
                 $role = Role::firstWhere('id', $request->role_id);
-                $employee->user()->assignRole($role->name);
+                $user->assignRole($role->name);
             }
 
-            $employee->user()->first()
-                ->isUpdateIfHasName($request->only('name_en'))
+
+            $user->isUpdateIfHasName($request->only('name_en'))
                 ->isUpdateIfHasEmail($request->only('email'))
                 ->updateIsNotActivate($request->only('activated'))
                 ->isUpdateEnableOrDisabled($request->only('disabled'));
 
-            $employee->update($request->input());
+            $user->profile->update($request->input());
         });
 
         return response(null, Response::HTTP_NO_CONTENT);
