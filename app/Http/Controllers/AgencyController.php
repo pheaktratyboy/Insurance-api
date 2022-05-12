@@ -74,18 +74,18 @@ class AgencyController extends Controller
 
     /**
      * @param UpdateAgencyRequest $request
-     * @param Employee $agency
+     * @param User $user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdateAgencyRequest $request, Employee $agency)
+    public function update(UpdateAgencyRequest $request, User $user)
     {
-        DB::transaction(function () use ($request, $agency) {
-            $agency->user()->first()
-                ->isUpdateIfHasName($request->only('name_en'))
+        DB::transaction(function () use ($request, $user) {
+
+            $user->isUpdateIfHasName($request->only('name_en'))
                 ->isUpdateIfHasEmail($request->only('email'))
                 ->isUpdateEnableOrDisabled($request->only('disabled'));
 
-            $agency->update($request->input());
+            $user->profile->update($request->input());
         });
 
         return response(null, Response::HTTP_NO_CONTENT);

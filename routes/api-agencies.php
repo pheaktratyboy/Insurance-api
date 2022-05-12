@@ -7,4 +7,4 @@ Route::get('agencies', [AgencyController::class,'index'])->name('agencies.index'
 Route::get('agencies/{user}', [AgencyController::class,'show'])->name('agencies.show');
 
 Route::post('agencies', [AgencyController::class,'store'])->name('agencies.store');
-Route::put('agencies/{agency}', [AgencyController::class,'update'])->name('agencies.update');
+Route::put('agencies/{user}', [AgencyController::class,'update'])->name('agencies.update');
