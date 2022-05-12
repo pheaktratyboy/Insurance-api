@@ -15,12 +15,15 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Http\Request;
 
 class SubscriberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+
+        $limit = $request->has('per_page') ? $request->get('per_page') : 15;
 
         if ($user->hasRole(BaseRole::Staff)) {
             $agencyId = User::where('created_by', $user->id)->get();
@@ -30,20 +33,20 @@ class SubscriberController extends Controller
                 ->whereIn('user_id', $all)
                 ->allowedFilters(['name_kh', 'name_en'])
                 ->defaultSort('-created_at')
-                ->paginate()
+                ->paginate($limit)
                 ->appends(request()->query());
         } elseif ($user->hasRole(BaseRole::Agency)) {
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->where('user_id', $user->id)
                 ->allowedFilters(['name_kh', 'name_en'])
                 ->defaultSort('-created_at')
-                ->paginate()
+                ->paginate($limit)
                 ->appends(request()->query());
         } else {
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->allowedFilters(['name_kh', 'name_en'])
                 ->defaultSort('-created_at')
-                ->paginate()
+                ->paginate($limit)
                 ->appends(request()->query());
         }
 
