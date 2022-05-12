@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
-
 class EmployeeController extends Controller
 {
     public function getAllStaff()
@@ -39,10 +38,9 @@ class EmployeeController extends Controller
      * @param CreateEmployeeRequest $request
      * @return UserResource
      */
-    public function store(CreateEmployeeRequest $request) {
-
+    public function store(CreateEmployeeRequest $request)
+    {
         $employee = DB::transaction(function () use ($request) {
-
             $employee = new Employee($request->input());
             $currentUser = auth()->user();
             if (!$currentUser) {
@@ -73,7 +71,6 @@ class EmployeeController extends Controller
             if ($request->has('role_id')) {
                 $role = Role::firstWhere('id', $request->role_id);
                 $user->assignRole($role->name);
-
             } else {
                 /** Assign Staff Role */
                 $user->assignRole(BaseRole::Staff);
@@ -90,12 +87,10 @@ class EmployeeController extends Controller
      * @param User $user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(UpdateEmployeeRequest $request, User $user) {
-
+    public function update(UpdateEmployeeRequest $request, User $user)
+    {
         DB::transaction(function () use ($request, $user) {
-
             if ($request->has('role_id')) {
-
                 $role = Role::firstWhere('id', $request->role_id);
                 $user->assignRole($role->name);
             }
@@ -116,8 +111,8 @@ class EmployeeController extends Controller
      * @param User $user
      * @return EmployeeResource
      */
-    public function show(User $user) {
-
+    public function show(User $user)
+    {
         if ($user->hasRole([BaseRole::Master, BaseRole::Admin, BaseRole::Subscriber])) {
             abort('422', 'Sorry, you can not view this data.');
         }

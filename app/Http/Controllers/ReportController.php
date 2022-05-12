@@ -37,7 +37,7 @@ class ReportController extends Controller
         $report       = new ReportService();
         $subscribers  = $report->querySubscriberPolicies();
 
-        $collection   = collect($subscribers)->groupBy('created_at')->map(function ($item, $key) {
+        $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
 
             $totalSell = floatval($item->sum('policy_price'));
             $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();

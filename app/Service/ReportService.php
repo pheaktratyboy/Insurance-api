@@ -20,6 +20,7 @@ class ReportService
             ->select(
                 'subscribers.user_id',
                 'subscribers.created_at',
+                DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
                 'subscriber_policies.expired_at',
                 'subscriber_policies.subscriber_id',
                 'policies.price as policy_price',
