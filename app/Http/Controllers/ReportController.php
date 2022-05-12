@@ -13,6 +13,50 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    public function reportSubscriber()
+    {
+        $report         = new ReportService();
+        $collection     = collect($report->getSubscribers());
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
+            $subscribers = $collection->where('user_id', $user->id)->all();
+        } else {
+            $subscribers = $collection->all();
+        }
+
+        return response()->json([
+            'data' => [
+                'subscribers' => $subscribers,
+            ],
+        ]);
+    }
+
+    public function reportYearly()
+    {
+        $report       = new ReportService();
+        $subscribers  = $report->querySubscriberPolicies();
+
+        $collection   = collect($subscribers)->groupBy('created_at')->map(function ($item, $key) {
+
+            $totalSell = floatval($item->sum('policy_price'));
+            $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
+            $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+
+            $newData["total_subscriber"] = $totalSubscriber;
+            $newData["total_expired"] = $countExpired;
+            $newData["total_amount"] = $totalSell;
+
+            return $newData;
+        });
+
+        return response()->json([
+            'data' => [
+                $collection
+            ],
+        ]);
+    }
+
     public function reportDashboard()
     {
         $user = auth()->user();
@@ -24,7 +68,6 @@ class ReportController extends Controller
         $totalSubscriber = 0;
 
         if ($user->hasRole(BaseRole::Staff)) {
-
             $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
 
             $countAgency = $agency->count();
@@ -122,50 +165,5 @@ class ReportController extends Controller
                 ],
             ]);
         }
-    }
-
-    public function reportSubscriber()
-    {
-        $report         = new ReportService();
-        $collection     = collect($report->getSubscribers());
-        $user = auth()->user();
-
-        if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
-            $subscribers = $collection->where('user_id', $user->id)->all();
-        } else {
-            $subscribers = $collection->all();
-        }
-
-        return response()->json([
-            'data' => [
-                'subscribers' => $subscribers,
-            ],
-        ]);
-    }
-
-
-    public function countExpired()
-    {
-
-        //$user = auth()->user();
-        //$subsciber = Subscriber::where('user_id', $user->id)->load;
-
-
-//                $subscriber = Subscriber::whereIn('user_id', $userId)->with(['subscriber_policies' => function($q) {
-//                    $q->where('expired_at', '>=' , Carbon::now()->toDateTimeString());
-//                }]);
-
-//                $subPolicies = SubscriberPolicy::with(['subscriber' => function($q) use ($userId) {
-//                    $q->whereIn('user_id', [3]);
-//                }])->get();
-//
-//                echo  json_encode($subPolicies);
-//                echo  json_encode($subscriber);
-//                echo json_encode(collect($subscriber->get()));
-
-
-//        $sub = $subscriber->join('subscriber_policies', 'subscriber_policies.id', 'subscriber_policies.subscriber_id');
-        //$totalSell = floatval($subscriber->sum('total'));
-        //$sub = $subscriber->with('subscriber_policies')->where('subscriber_policies.expired_at', '2024-04-04 07:03:22');
     }
 }

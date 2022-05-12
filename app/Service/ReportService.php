@@ -10,9 +10,25 @@ use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
+    public function querySubscriberPolicies(): \Illuminate\Support\Collection
+    {
+        return DB::table('subscriber_policies')
+            ->join('subscribers', function ($join) {
+                $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
+            })
+            ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+            ->select(
+                'subscribers.user_id',
+                'subscribers.created_at',
+                'subscriber_policies.expired_at',
+                'subscriber_policies.subscriber_id',
+                'policies.price as policy_price',
+            )
+            ->get();
+    }
 
-    public function querySubscriberPoliciesByUserId($userId) {
-
+    public function querySubscriberPoliciesByUserId($userId): \Illuminate\Support\Collection
+    {
         return DB::table('subscriber_policies')
             ->join('subscribers', function ($join) use ($userId) {
                 $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id')
@@ -21,10 +37,8 @@ class ReportService
             ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
             ->select(
                 'subscribers.user_id',
-
                 'subscriber_policies.expired_at',
                 'subscriber_policies.subscriber_id',
-
                 'policies.price as policy_price',
             )
             ->get();
@@ -33,8 +47,8 @@ class ReportService
     public function getSubscribers()
     {
         return SubscriberPolicy::join('subscribers', function ($join) {
-                $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
-            })
+            $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
+        })
             ->JoinPolicy()
             ->JoinCompany()
             ->select(
@@ -50,13 +64,10 @@ class ReportService
                 'subscribers.created_at as subscriber_date',
                 'subscribers.status',
                 'subscribers.user_id',
-
                 'companies.name as company_name',
-
                 'subscriber_policies.policy_id',
                 'subscriber_policies.payment_method',
                 'subscriber_policies.expired_at',
-
                 'policies.name as policy_name',
             )
             ->allowFilterReport([
@@ -77,7 +88,6 @@ class ReportService
 
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
             return $result->where('user_id', $user->id)->all();
-
         } else {
             return $result->all();
         }
@@ -88,4 +98,3 @@ class ReportService
         return;
     }
 }
-
