@@ -15,7 +15,7 @@ class CreateSubscriberPolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'policy_id'             => ['required', 'max:10', Rule::exists('policies', 'id')],
+            'policy_id'             => ['required', Rule::exists('policies', 'id')],
             'payment_method'        => ['required', 'string', 'max:255'],
         ];
     }

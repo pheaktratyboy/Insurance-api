@@ -40,8 +40,8 @@ class UpdateAgencyRequest extends FormRequest
             'kpi'                   => ['sometimes', 'required', 'numeric'],
             'commission'            => ['sometimes', 'sometimes', 'required', 'numeric'],
 
-            'municipality_id'       => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('municipalities', 'id')],
-            'district_id'           => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('districts', 'id')],
+            'municipality_id'       => ['sometimes', 'required', 'numeric', Rule::exists('municipalities', 'id')],
+            'district_id'           => ['sometimes', 'required', 'numeric', Rule::exists('districts', 'id')],
         ];
     }
 }

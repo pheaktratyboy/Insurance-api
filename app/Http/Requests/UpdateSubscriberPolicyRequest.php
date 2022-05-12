@@ -15,7 +15,7 @@ class UpdateSubscriberPolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'policy_id'             => ['sometimes', 'required', 'max:10', Rule::exists('policies', 'id')],
+            'policy_id'             => ['sometimes', 'required', Rule::exists('policies', 'id')],
             'payment_method'        => ['sometimes', 'required', 'string', 'max:255'],
         ];
     }

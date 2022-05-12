@@ -51,9 +51,7 @@ class ReportController extends Controller
         });
 
         return response()->json([
-            'data' => [
-                $collection
-            ],
+            'data' => $collection
         ]);
     }
 

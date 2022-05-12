@@ -41,8 +41,8 @@ class CreateAgencyRequest extends FormRequest
             'kpi'                   => ['required', 'numeric'],
             'commission'            => ['sometimes', 'required', 'numeric'],
 
-            'municipality_id'       => ['required', 'numeric', 'max:10', Rule::exists('municipalities', 'id')],
-            'district_id'           => ['required', 'numeric', 'max:10', Rule::exists('districts', 'id')],
+            'municipality_id'       => ['required', 'numeric', Rule::exists('municipalities', 'id')],
+            'district_id'           => ['required', 'numeric', Rule::exists('districts', 'id')],
         ];
     }
 }

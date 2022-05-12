@@ -35,7 +35,7 @@ class CreateSubscriberRequest extends FormRequest
 
             'note'                  => ['sometimes', 'required'],
 
-            'policy_id'             => ['required', 'max:10', Rule::exists('policies', 'id')],
+            'policy_id'             => ['required', Rule::exists('policies', 'id')],
             'payment_method'        => ['required', 'string', 'max:255'],
 
             'company_id'            => ['max:10', Rule::exists('companies', 'id')],

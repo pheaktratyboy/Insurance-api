@@ -38,10 +38,10 @@ class UpdateSubscriberRequest extends FormRequest
 
             'note'                  => ['sometimes', 'required'],
 
-            'policy_id'             => ['sometimes', 'required', 'max:10', Rule::exists('policies', 'id')],
+            'policy_id'             => ['sometimes', 'required', Rule::exists('policies', 'id')],
             'payment_method'        => ['sometimes', 'required', 'string', 'max:255'],
 
-            'company_id'            => ['max:10', Rule::exists('companies', 'id')],
+            'company_id'            => [Rule::exists('companies', 'id')],
         ];
     }
 }

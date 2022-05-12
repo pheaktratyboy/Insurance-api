@@ -16,29 +16,24 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class AgencyController extends Controller
 {
-
-    public function index() {
-
+    public function index()
+    {
         $user = auth()->user();
 
         $agency = User::role(BaseRole::Agency);
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
-
             $queryBuilder = QueryBuilder::for($agency)
                 ->where('created_by', $user->id)
                 ->allowedFilters(['full_name'])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
-
         } else {
-
             $queryBuilder = QueryBuilder::for($agency)
                 ->allowedFilters(['full_name'])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
-
         }
 
         return UserResource::collection($queryBuilder);
@@ -48,10 +43,9 @@ class AgencyController extends Controller
      * @param CreateAgencyRequest $request
      * @return UserResource
      */
-    public function store(CreateAgencyRequest $request) {
-
+    public function store(CreateAgencyRequest $request)
+    {
         $agency = DB::transaction(function () use ($request) {
-
             $employee = new Employee($request->input());
             $employee->save();
 
@@ -83,10 +77,9 @@ class AgencyController extends Controller
      * @param Employee $agency
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdateAgencyRequest $request, Employee $agency) {
-
+    public function update(UpdateAgencyRequest $request, Employee $agency)
+    {
         DB::transaction(function () use ($request, $agency) {
-
             $agency->user()->first()
                 ->isUpdateIfHasName($request->only('name_en'))
                 ->isUpdateIfHasEmail($request->only('email'))
@@ -102,8 +95,8 @@ class AgencyController extends Controller
      * @param User $user
      * @return EmployeeResource
      */
-    public function show(User $user) {
-
+    public function show(User $user)
+    {
         if ($user->hasRole([BaseRole::Master, BaseRole::Admin, BaseRole::Subscriber, BaseRole::Staff])) {
             abort('422', 'Sorry, you can not view this data.');
         }

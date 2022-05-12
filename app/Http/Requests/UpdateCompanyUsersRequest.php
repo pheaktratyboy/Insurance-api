@@ -15,8 +15,8 @@ class UpdateCompanyUsersRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id'       => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('users', 'id')],
-            'company_id'    => ['sometimes', 'required', 'numeric', 'max:10', Rule::exists('companies', 'id')]
+            'user_id'       => ['sometimes', 'required', 'numeric', Rule::exists('users', 'id')],
+            'company_id'    => ['sometimes', 'required', 'numeric', Rule::exists('companies', 'id')]
         ];
     }
 }
