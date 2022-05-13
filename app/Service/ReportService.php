@@ -4,12 +4,91 @@
 namespace App\Service;
 
 use App\Enums\BaseRole;
+use App\Exceptions\HttpException;
 use App\Models\SubscriberPolicy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
+    public function querySubscriberByAudience($userId, $request): \Illuminate\Support\Collection
+    {
+        /** if request doesn't has filter then automatically filter only three months */
+        if (!$request->has('from_date') && !$request->has('to_date')) {
+            $defaultToDate     = Carbon::now();
+
+            $convertedToDate   = $defaultToDate->format('Y-m-d');
+            $defaultFromDate   = $defaultToDate->subMonths(3);
+            $convertedFromDate = $defaultFromDate->format('Y-m-d');
+        }
+
+        /** filter From Date and To Date*/
+        if ($request->has('from_date') && $request->has('to_date')) {
+            $fromDate = Carbon::parse($request->get('from_date'));
+            $toDate   = Carbon::parse($request->get('to_date'));
+
+            $convertedFromDate = $fromDate->format('Y-m-d');
+            $convertedToDate   = $toDate->format('Y-m-d');
+        }
+
+        /** filter from date only when to date is not provided */
+        if ($request->has('from_date') && !$request->has('to_date')) {
+            $fromDate          = Carbon::parse($request->get('from_date'));
+            $toDate            = $fromDate->addMonths(3);
+
+            $convertedFromDate = $fromDate->format('Y-m-d');
+            $convertedToDate   = $toDate->format('Y-m-d');
+        }
+
+        /** filter only to date */
+        if (!$request->has('from_date') && $request->has('to_date')) {
+            $toDate            = Carbon::parse($request->get('to_date'));
+            $fromDate          = $toDate->subMonths(3);
+
+            $convertedFromDate = $fromDate->format('Y-m-d');
+            $convertedToDate   = $toDate->format('Y-m-d');
+        }
+
+        $filter = "%Y-%m-%d";
+        if ($request->has('year')) {
+            $filter = "%Y-%m";
+        }
+
+        if ($userId) {
+            return DB::table('subscriber_policies')
+                ->join('subscribers', function ($join) use ($userId) {
+                    $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id')->whereIn('user_id', $userId);
+                })
+                ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+                ->select(
+                    'subscribers.user_id',
+                    'subscribers.created_at',
+                    DB::raw("DATE_FORMAT(subscribers.created_at, '$filter') as created_date"),
+                    'subscriber_policies.expired_at',
+                    'subscriber_policies.subscriber_id',
+                    'policies.price as policy_price',
+                )
+                ->whereBetween('subscribers.created_at', [$convertedFromDate,$convertedToDate])
+                ->get();
+        } else {
+            return DB::table('subscriber_policies')
+                ->join('subscribers', function ($join) {
+                    $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
+                })
+                ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+                ->select(
+                    'subscribers.user_id',
+                    'subscribers.created_at',
+                    DB::raw("DATE_FORMAT(subscribers.created_at, '$filter') as created_date"),
+                    'subscriber_policies.expired_at',
+                    'subscriber_policies.subscriber_id',
+                    'policies.price as policy_price',
+                )
+                ->whereBetween('subscribers.created_at', [$convertedFromDate,$convertedToDate])
+                ->get();
+        }
+    }
+
     public function querySubscriberByYearly($userId): \Illuminate\Support\Collection
     {
         if ($userId) {
@@ -26,9 +105,9 @@ class ReportService
                     'subscriber_policies.subscriber_id',
                     'policies.price as policy_price',
                 )
+
                 ->get();
         } else {
-
             return DB::table('subscriber_policies')
                 ->join('subscribers', function ($join) {
                     $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');

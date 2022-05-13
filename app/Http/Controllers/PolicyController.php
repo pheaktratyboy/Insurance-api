@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\CreatePolicyRequest;
 use App\Http\Requests\UpdatePolicyRequest;
 use App\Http\Resources\PolicyResource;
@@ -27,7 +26,8 @@ class PolicyController extends Controller
      * @param CreatePolicyRequest $request
      * @return PolicyResource
      */
-    public function store(CreatePolicyRequest $request) {
+    public function store(CreatePolicyRequest $request)
+    {
         $policies = Policy::create($request->input());
         return new PolicyResource($policies);
     }
@@ -37,8 +37,8 @@ class PolicyController extends Controller
      * @param Policy $policy
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdatePolicyRequest $request, Policy $policy) {
-
+    public function update(UpdatePolicyRequest $request, Policy $policy)
+    {
         $policy->notAllowIfItemAlreadyUsed();
 
         $policy->update($request->input());
@@ -49,7 +49,8 @@ class PolicyController extends Controller
      * @param Policy $policy
      * @return PolicyResource
      */
-    public function show(Policy $policy) {
+    public function show(Policy $policy)
+    {
         return new PolicyResource($policy);
     }
 

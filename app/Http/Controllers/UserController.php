@@ -22,11 +22,10 @@ class UserController extends Controller
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
             $users = User::where('disabled', false)->with('profile')->role([BaseRole::Admin, BaseRole::Agency, BaseRole::Staff])->get();
-            return UserAllResource::collection($users);
         } else {
             $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role([BaseRole::Agency, BaseRole::Staff])->get();
-            return UserAllResource::collection($users);
         }
+        return UserAllResource::collection($users);
     }
 
 
@@ -36,11 +35,10 @@ class UserController extends Controller
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
             $users = User::where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
-            return UserAllResource::collection($users);
         } else {
             $users = User::where('created_by', $user->id)->where('disabled', false)->with('profile')->role(BaseRole::Subscriber)->get();
-            return UserAllResource::collection($users);
         }
+        return UserAllResource::collection($users);
     }
 
     public function index()
