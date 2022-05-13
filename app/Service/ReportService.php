@@ -10,22 +10,40 @@ use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
-    public function querySubscriberPolicies(): \Illuminate\Support\Collection
+    public function querySubscriberByYearly($userId): \Illuminate\Support\Collection
     {
-        return DB::table('subscriber_policies')
-            ->join('subscribers', function ($join) {
-                $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
-            })
-            ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
-            ->select(
-                'subscribers.user_id',
-                'subscribers.created_at',
-                DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
-                'subscriber_policies.expired_at',
-                'subscriber_policies.subscriber_id',
-                'policies.price as policy_price',
-            )
-            ->get();
+        if ($userId) {
+            return DB::table('subscriber_policies')
+                ->join('subscribers', function ($join) use ($userId) {
+                    $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id')->whereIn('user_id', $userId);
+                })
+                ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+                ->select(
+                    'subscribers.user_id',
+                    'subscribers.created_at',
+                    DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
+                    'subscriber_policies.expired_at',
+                    'subscriber_policies.subscriber_id',
+                    'policies.price as policy_price',
+                )
+                ->get();
+        } else {
+
+            return DB::table('subscriber_policies')
+                ->join('subscribers', function ($join) {
+                    $join->on('subscribers.id', '=', 'subscriber_policies.subscriber_id');
+                })
+                ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
+                ->select(
+                    'subscribers.user_id',
+                    'subscribers.created_at',
+                    DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
+                    'subscriber_policies.expired_at',
+                    'subscriber_policies.subscriber_id',
+                    'policies.price as policy_price',
+                )
+                ->get();
+        }
     }
 
     public function querySubscriberPoliciesByUserId($userId): \Illuminate\Support\Collection
