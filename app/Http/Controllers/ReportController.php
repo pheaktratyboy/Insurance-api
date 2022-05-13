@@ -39,7 +39,11 @@ class ReportController extends Controller
 
         if ($user->hasRole(BaseRole::Staff)) {
 
-            $subscribers  = $report->querySubscriberByYearly([$user->id]);
+            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
+            $userId = collect($agency->get())->pluck('id');
+            $userId[] = $user->id;
+
+            $subscribers  = $report->querySubscriberByYearly($userId);
 
             $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
                 $totalSell = floatval($item->sum('policy_price'));
@@ -57,12 +61,8 @@ class ReportController extends Controller
                 'data' => $collection
             ]);
         } elseif ($user->hasRole(BaseRole::Agency)) {
-
-            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
-            $userId = collect($agency->get())->pluck('id');
-            $userId[] = $user->id;
-
-            $subscribers  = $report->querySubscriberByYearly($userId);
+            
+            $subscribers  = $report->querySubscriberByYearly([$user->id]);
 
             $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
                 $totalSell = floatval($item->sum('policy_price'));
