@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BaseRole;
+use App\Enums\StatusType;
 use App\Models\Setting;
 use App\Models\User;
 use App\Service\ReportService;
@@ -85,11 +86,14 @@ class ReportController extends Controller
         $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
             $totalSell = floatval($item->sum('policy_price'));
             $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
+            $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
+
             $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
 
             $newData["total_subscriber"] = $totalSubscriber;
             $newData["total_expired"] = $countExpired;
             $newData["total_amount"] = $totalSell;
+            $newData["total_claim"] = $totalClaim;
 
             return $newData;
         });

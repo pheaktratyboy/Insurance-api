@@ -4,7 +4,6 @@
 namespace App\Service;
 
 use App\Enums\BaseRole;
-use App\Exceptions\HttpException;
 use App\Models\SubscriberPolicy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,11 +14,10 @@ class ReportService
     {
         /** if request doesn't has filter then automatically filter only three months */
         if (!$request->has('from_date') && !$request->has('to_date')) {
-            $defaultToDate     = Carbon::now();
+            $defaultToDate     = Carbon::now()->startOfDay();
 
-            $convertedToDate   = $defaultToDate->format('Y-m-d');
-            $defaultFromDate   = $defaultToDate->subMonths(3);
-            $convertedFromDate = $defaultFromDate->format('Y-m-d');
+            $convertedToDate   = $defaultToDate->addDay()->format('Y-m-d');
+            $convertedFromDate = $defaultToDate->subMonths(3)->format('Y-m-d');
         }
 
         /** filter From Date and To Date*/
@@ -91,6 +89,10 @@ class ReportService
 
     public function querySubscriberByYearly($userId): \Illuminate\Support\Collection
     {
+
+        $startOfYear = Carbon::now()->startOfYear()->format('Y-m-d');
+        $endOfYear = Carbon::now()->endOfYear()->format('Y-m-d');
+
         if ($userId) {
             return DB::table('subscriber_policies')
                 ->join('subscribers', function ($join) use ($userId) {
@@ -99,13 +101,14 @@ class ReportService
                 ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
                 ->select(
                     'subscribers.user_id',
+                    'subscribers.status',
                     'subscribers.created_at',
                     DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
                     'subscriber_policies.expired_at',
                     'subscriber_policies.subscriber_id',
                     'policies.price as policy_price',
                 )
-
+                ->whereBetween('subscribers.created_at', [$startOfYear,$endOfYear])
                 ->get();
         } else {
             return DB::table('subscriber_policies')
@@ -115,12 +118,14 @@ class ReportService
                 ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
                 ->select(
                     'subscribers.user_id',
+                    'subscribers.status',
                     'subscribers.created_at',
                     DB::raw("DATE_FORMAT(subscribers.created_at, '%Y-%m') as created_date"),
                     'subscriber_policies.expired_at',
                     'subscriber_policies.subscriber_id',
                     'policies.price as policy_price',
                 )
+                ->whereBetween('subscribers.created_at', [$startOfYear,$endOfYear])
                 ->get();
         }
     }
