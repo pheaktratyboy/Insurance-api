@@ -9,6 +9,7 @@ Route::get('subscribers', [SubscriberController::class,'index'])->name('subscrib
 Route::get('subscribers/{subscriber}', [SubscriberController::class,'show'])->name('subscribers.show');
 Route::get('users/subscribers/{user}', [SubscriberController::class,'showSubscribeByUser'])->name('show_subscribers_by_user');
 
+Route::get('subscribers-count/{user}', [SubscriberController::class,'getSubscriberCountByUser'])->name('get_subscriber_count');
 
 Route::post('subscribers', [SubscriberController::class,'store'])->name('subscribers.store');
 Route::put('subscribers/{subscriber}', [SubscriberController::class,'update'])->name('subscribers.update');

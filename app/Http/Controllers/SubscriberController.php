@@ -53,6 +53,28 @@ class SubscriberController extends Controller
         return SubscriberResource::collection($subscriber);
     }
 
+    public function getSubscriberCountByUser(User $user)
+    {
+        if ($user->hasRole(BaseRole::Staff)) {
+            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
+            $userId = collect($agency->get())->pluck('id');
+            $userId[] = $user->id;
+
+            $subscriber = Subscriber::whereIn('user_id', $userId)->count();
+
+        } elseif ($user->hasRole(BaseRole::Agency)) {
+            $subscriber = Subscriber::where('user_id', $user->id)->count();
+
+        } else {
+            $subscriber = Subscriber::count();
+
+        }
+
+        return response()->json([
+            'total_subscriber' => $subscriber
+        ]);
+    }
+
     /**
      * @param CreateSubscriberRequest $request
      * @return SubscriberResource
