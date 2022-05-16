@@ -29,7 +29,6 @@ class UpdateSubscriberRequest extends FormRequest
 
             'gender'                => ['sometimes', 'required', Rule::in(Gender::getValues())],
             'religion'              => ['sometimes', 'required', Rule::in(Religion::getValues())],
-            'status'                => ['sometimes', 'required', Rule::in(StatusType::getValues())],
 
             'avatar'                => ['sometimes', new Media],
             'id_or_passport_front'  => ['sometimes', new Media],
