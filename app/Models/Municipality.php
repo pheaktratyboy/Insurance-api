@@ -17,7 +17,7 @@ class Municipality extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function district()
+    public function district(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(District::class);
     }

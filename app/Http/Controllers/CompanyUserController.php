@@ -55,8 +55,8 @@ class CompanyUserController extends Controller
      * @param Company $company
      * @return CompanyResource
      */
-    public function store(CreateCompanyUsersRequest $request, Company $company) {
-
+    public function store(CreateCompanyUsersRequest $request, Company $company)
+    {
         $type = $request->input('type');
         $users = $request->input('users');
 
@@ -74,14 +74,12 @@ class CompanyUserController extends Controller
             }
 
             $result = DB::transaction(function () use ($users, $company) {
-
                 return $company->setSubscriberUnderCompany($users)
                     ->cacheSumTotalSubscriber()
                     ->load('employees');
             });
 
             return new CompanyResource($result);
-
         } else {
 
             // For Store Type Staff
@@ -94,7 +92,6 @@ class CompanyUserController extends Controller
             }
 
             $result = DB::transaction(function () use ($users, $company) {
-
                 return $company->addUserUnderCompany($users)
                     ->cacheSumTotalStaff()
                     ->load('employees');
@@ -105,8 +102,8 @@ class CompanyUserController extends Controller
     }
 
 
-    public function update(UpdateCompanyUsersRequest $request, CompanyUser $user) {
-
+    public function update(UpdateCompanyUsersRequest $request, CompanyUser $user)
+    {
         DB::transaction(function () use ($request, $user) {
             $user->update($request->validated());
         });
@@ -118,8 +115,8 @@ class CompanyUserController extends Controller
      * @param CompanyUser $companyUsers
      * @return CompanyUserResource
      */
-    public function show(CompanyUser $companyUsers) {
-
+    public function show(CompanyUser $companyUsers)
+    {
         return new CompanyUserResource($companyUsers->load(['user', 'company']));
     }
 
@@ -127,10 +124,9 @@ class CompanyUserController extends Controller
      * @param CompanyUser $companyUser
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function destroy(CompanyUser $companyUser) {
-
+    public function destroy(CompanyUser $companyUser)
+    {
         if ($companyUser->type === BaseRole::Subscriber) {
-
             $userByCompany = $companyUser;
 
             /** update customer id in subscriber */
@@ -139,9 +135,7 @@ class CompanyUserController extends Controller
             /** delete user by company */
             $companyUser->delete();
             $userByCompany->company->cacheSumTotalSubscriber();
-
         } else {
-
             $userByCompany = $companyUser;
 
             /** delete user by company */

@@ -15,13 +15,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
-
     public function index()
     {
         $user = auth()->user();
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
-
             $result = QueryBuilder::for(Company::class)
                 ->allowedFilters(['name'])
                 ->defaultSort('-created_at')
@@ -29,9 +27,7 @@ class CompanyController extends Controller
                 ->appends(request()->query());
 
             return CompanyResource::collection($result);
-
         } else {
-
             $result = QueryBuilder::for(CompanyUser::class)
                 ->with('company')
                 ->where('user_id', $user->id)
@@ -63,7 +59,6 @@ class CompanyController extends Controller
     public function store(CreateCompanyRequest $request)
     {
         $result = DB::transaction(function () use ($request) {
-
             $company = new Company;
             $company->createNewCompany($request);
 
@@ -72,9 +67,7 @@ class CompanyController extends Controller
 
             if ($user->hasRole(BaseRole::Staff)) {
                 $users[] = ['user_id' => $user->id];
-
-            }else if ($user->hasRole(BaseRole::Agency)) {
-
+            } elseif ($user->hasRole(BaseRole::Agency)) {
                 $users[] = ['user_id' => $user->id];
                 $users[] = ['user_id' => $user->created_by];
             }

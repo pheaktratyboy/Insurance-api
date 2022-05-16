@@ -19,7 +19,7 @@ class District extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function municipality()
+    public function municipality(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Municipality::class);
     }

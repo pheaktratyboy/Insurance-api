@@ -29,7 +29,7 @@ class Policy extends Model
         'updated_at',
     ];
 
-    public function notAllowIfItemAlreadyUsed()
+    public function notAllowIfItemAlreadyUsed(): Policy
     {
         $exist = SubscriberPolicy::firstWhere('policy_id', $this->id);
         if ($exist) {

@@ -10,12 +10,10 @@ use App\Models\District;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 
-
 class DistrictController extends Controller
 {
-
-    public function index() {
-
+    public function index()
+    {
         $districts = QueryBuilder::for(District::class)
             ->allowedFilters(['name'])
             ->where('disabled', 0)
@@ -30,7 +28,8 @@ class DistrictController extends Controller
      * @param CreateDistrictRequest $request
      * @return DistrictResource
      */
-    public function store(CreateDistrictRequest $request) {
+    public function store(CreateDistrictRequest $request)
+    {
         $district = District::create($request->validated());
         return new DistrictResource($district->load('municipality'));
     }
@@ -41,8 +40,8 @@ class DistrictController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      * @throws DistrictException
      */
-    public function update(UpdateDistrictRequest $request, District $district) {
-
+    public function update(UpdateDistrictRequest $request, District $district)
+    {
         if ($request->has('municipality_id')) {
             $oldDistrict = District::where('name', $district->name)
                 ->where('municipality_id', $request->municipality_id)

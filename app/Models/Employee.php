@@ -57,7 +57,7 @@ class Employee extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         return $this->morphOne(User::class, 'profileable');
     }
@@ -65,7 +65,7 @@ class Employee extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function municipality()
+    public function municipality(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Municipality::class, 'municipality_id');
     }
@@ -73,7 +73,7 @@ class Employee extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function district()
+    public function district(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(District::class, 'district_id');
     }
