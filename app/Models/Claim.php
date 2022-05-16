@@ -53,7 +53,7 @@ class Claim extends Model
 
     public function allowOnlyStatusPending(): Claim
     {
-        if ($this->status == StatusType::Pending) {
+        if ($this->status != StatusType::Pending) {
             abort('422', 'Sorry, this claim allow only status pending.');
         }
         return $this;
