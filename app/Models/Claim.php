@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\BaseRole;
 use App\Enums\StatusType;
 use App\Traits\Blamable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,10 +15,12 @@ class Claim extends Model
 
     protected $fillable = [
         'user_id',
+        'subject',
         'subscriber_id',
         'note',
         'status',
         'attachments',
+        'claimed_at',
     ];
 
     protected $casts = [
@@ -28,6 +32,7 @@ class Claim extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+        'claimed_at',
     ];
 
     /**
@@ -38,6 +43,14 @@ class Claim extends Model
         return $this->belongsTo(Subscriber::class);
     }
 
+    public function confirmSubscriberHasClaimed()
+    {
+        $subscriber = $this->subscriber;
+        $subscriber->status = StatusType::Claimed;
+        $subscriber->claimed_at = Carbon::now();
+        $subscriber->update();
+    }
+
     public function allowOnlyStatusPending(): Claim
     {
         if ($this->status == StatusType::Pending) {
@@ -46,10 +59,26 @@ class Claim extends Model
         return $this;
     }
 
-    public function notAllowIfStatusApproved(): Claim
+    public function allowOnlyAdmin()
+    {
+        $user = auth()->user();
+        if (!$user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+            abort('422', 'Sorry, You don`t have permission.');
+        }
+    }
+
+    public function notAllowIfStatusHasApproved(): Claim
     {
         if ($this->status == StatusType::Approved) {
             abort('422', 'Sorry, this claim has been approved.');
+        }
+        return $this;
+    }
+
+    public function notAllowIfStatusRejected(): Claim
+    {
+        if ($this->status == StatusType::Rejected) {
+            abort('422', 'Sorry, we not allow if claim has been rejected.');
         }
         return $this;
     }

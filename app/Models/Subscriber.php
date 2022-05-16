@@ -87,7 +87,7 @@ class Subscriber extends Model
     public function validateForStatusClaimed(): Subscriber
     {
         if (StatusType::fromValue(StatusType::Claimed)->is($this->status)) {
-            abort('422', 'Sorry, we can not allow for this status because already been claimed.');
+            abort('422', 'Sorry, we can not allow to update this subscriber because already been claimed.');
         }
         return $this;
     }

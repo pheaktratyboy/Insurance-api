@@ -24,6 +24,7 @@ class CreateClaimsTable extends Migration
             $table->enum('status', StatusType::getValues())->nullable();
 
             $table->json('attachments')->nullable();
+            $table->dateTime('claimed_at')->nullable();
 
             $table->blamable();
             $table->timestamps();

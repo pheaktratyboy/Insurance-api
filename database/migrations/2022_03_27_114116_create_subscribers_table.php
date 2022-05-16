@@ -35,6 +35,8 @@ class CreateSubscribersTable extends Migration
             $table->string('status');
             $table->boolean('disabled')->default(false);
 
+            $table->dateTime('claimed_at')->nullable();
+
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id')->nullable();
 

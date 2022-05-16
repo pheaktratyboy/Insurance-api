@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\Media;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateClaimRequest extends FormRequest
 {
@@ -18,8 +19,7 @@ class CreateClaimRequest extends FormRequest
         return [
             'subject'        => ['required', 'string', 'max:255'],
             'attachments'    => ['sometimes', new Media],
-            'note'           => 'sometimes|required',
-            'subscriber_id'  => 'required',
+            'subscriber_id'  => ['sometimes', 'required', Rule::exists('subscribers', 'id')],
         ];
     }
 }

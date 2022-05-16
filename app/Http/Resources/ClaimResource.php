@@ -14,6 +14,18 @@ class ClaimResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'                    => $this->id,
+            'subject'               => $this->subject,
+            'note'                  => $this->note,
+            'status'                => $this->status,
+            'attachments'           => $this->attachments,
+            'subscriber_id'         => $this->subscriber_id,
+            'claimed_at'            => $this->claimed_at,
+            'created_at'            => $this->created_at,
+
+            /** relationship */
+            'subscriber'            => new SubscriberResource($this->whenLoaded('subscriber')),
+        ];
     }
 }
