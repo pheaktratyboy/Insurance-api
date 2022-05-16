@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BaseRoleSeeder::class);
         $this->call(MasterUserSeeder::class);
         $this->call(SettingSeeder::class);
-        //$this->call(AddressSeeder::class);
+        $this->call(AddressSeeder::class);
 
         if (!app()->environment('production')) {
             $this->call(UserSeeder::class);
