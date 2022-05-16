@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Enums\TrackingType;
 use App\Http\Requests\CreateSubscriberPolicyRequest;
 use App\Http\Requests\UpdateSubscriberPolicyRequest;
@@ -22,8 +21,8 @@ class SubscriberPolicyController extends Controller
      * @param Subscriber $subscriber
      * @return SubscriberResource
      */
-    public function store(CreateSubscriberPolicyRequest $request, Subscriber $subscriber) {
-
+    public function store(CreateSubscriberPolicyRequest $request, Subscriber $subscriber)
+    {
         $subscriber->validateForStatusClaimed();
 
         $result = DB::transaction(function () use ($request, $subscriber) {
@@ -45,8 +44,8 @@ class SubscriberPolicyController extends Controller
      * @param SubscriberPolicy $subscriber_policy
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function update(UpdateSubscriberPolicyRequest $request, SubscriberPolicy $subscriber_policy) {
-
+    public function update(UpdateSubscriberPolicyRequest $request, SubscriberPolicy $subscriber_policy)
+    {
         DB::transaction(function () use ($request, $subscriber_policy) {
             $subscriber_policy->updatePolicy($request->validated());
             $subscriber_policy->load(['subscriber.company', 'policy']);
