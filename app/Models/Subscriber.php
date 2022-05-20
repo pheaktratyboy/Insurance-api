@@ -150,8 +150,8 @@ class Subscriber extends Model
 
         if ($policy) {
             $subPolicy = new SubscriberPolicy($request);
+            $newDateTime = $dateTime->addMonths($policy->duration)->subDay();
 
-            $newDateTime = $dateTime->addMonths($policy->duration);
             $subPolicy->expired_at = $newDateTime;
             $this->subscriber_policies()->save($subPolicy);
         }
