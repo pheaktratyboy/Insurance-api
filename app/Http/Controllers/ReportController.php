@@ -175,7 +175,7 @@ class ReportController extends Controller
                 ],
             ]);
         } else {
-            $employee = User::where('disabled', 0)->with('profile')->role([BaseRole::Agency, BaseRole::Staff, BaseRole::Admin])->get();
+            $employee = User::where('disabled', 0)->with('profile')->get();
             $countStaff = User::where('disabled', 0)->with('profile')->role(BaseRole::Staff)->count();
             $countAgency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->count();
 
