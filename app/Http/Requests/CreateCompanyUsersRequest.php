@@ -19,7 +19,7 @@ class CreateCompanyUsersRequest extends FormRequest
         return [
             /** Information */
             'type'              => ['required', ['required', Rule::in(BaseRole::getValues())],],
-            'users.*.user_id'   => ['required', 'numeric', 'max:10', Rule::exists('users', 'id')],
+            'users.*.user_id'   => ['required', 'numeric', Rule::exists('users', 'id')],
         ];
     }
 }
