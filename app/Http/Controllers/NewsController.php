@@ -30,8 +30,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'message'   => 'required'
+            'name'      => 'required|string|max:255'
         ]);
 
         $notification = News::create($request->input());
@@ -47,8 +46,7 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $request->validate([
-            'name'      => 'sometimes|required|string|max:255',
-            'message'   => 'sometimes|required',
+            'name'      => 'sometimes|required|string|max:255'
         ]);
 
         $news->update($request->input());
