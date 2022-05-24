@@ -24,6 +24,7 @@ class ClaimController extends Controller
             $result = QueryBuilder::for(Claim::class)
                 ->allowedFilters(['subject'])
                 ->defaultSort('-created_at')
+                ->with('subscriber')
                 ->paginate()
                 ->appends(request()->query());
 
@@ -32,6 +33,7 @@ class ClaimController extends Controller
                 ->where('created_by', $user->id)
                 ->allowedFilters(['subject'])
                 ->defaultSort('-created_at')
+                ->with('subscriber')
                 ->paginate()
                 ->appends(request()->query());
         }
