@@ -21,6 +21,7 @@ class Claim extends Model
         'status',
         'attachments',
         'claimed_at',
+        'accident_type',
     ];
 
     protected $casts = [
