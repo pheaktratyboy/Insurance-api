@@ -31,20 +31,20 @@ class SubscriberController extends Controller
 
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->whereIn('user_id', $all)
-                ->allowedFilters(['name_kh', 'name_en'])
+                ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
                 ->paginate($limit)
                 ->appends(request()->query());
         } elseif ($user->hasRole(BaseRole::Agency)) {
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->where('user_id', $user->id)
-                ->allowedFilters(['name_kh', 'name_en'])
+                ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
                 ->paginate($limit)
                 ->appends(request()->query());
         } else {
             $subscriber = QueryBuilder::for(Subscriber::class)
-                ->allowedFilters(['name_kh', 'name_en'])
+                ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
                 ->paginate($limit)
                 ->appends(request()->query());

@@ -22,7 +22,7 @@ class ClaimController extends Controller
 
         if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
             $result = QueryBuilder::for(Claim::class)
-                ->allowedFilters(['subject'])
+                ->allowedFilters(['subject', 'subscriber_id'])
                 ->defaultSort('-created_at')
                 ->with('subscriber')
                 ->paginate()
@@ -31,7 +31,7 @@ class ClaimController extends Controller
         } else {
             $result = QueryBuilder::for(Claim::class)
                 ->where('created_by', $user->id)
-                ->allowedFilters(['subject'])
+                ->allowedFilters(['subject', 'subscriber_id'])
                 ->defaultSort('-created_at')
                 ->with('subscriber')
                 ->paginate()

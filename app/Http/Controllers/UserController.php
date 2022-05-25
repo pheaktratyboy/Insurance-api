@@ -44,7 +44,7 @@ class UserController extends Controller
     public function index()
     {
         $users = QueryBuilder::for(User::role(BaseRole::Admin))
-            ->allowedFilters(['username'])
+            ->allowedFilters(['full_name', 'activated', 'disabled', 'email'])
             ->where('disabled', 0)
             ->defaultSort('-created_at')
             ->paginate()

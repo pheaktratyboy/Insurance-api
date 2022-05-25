@@ -26,7 +26,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $queryBuilder = QueryBuilder::for(User::role(BaseRole::Staff))
-            ->allowedFilters(['full_name'])
+            ->allowedFilters(['full_name', 'activated', 'disabled', 'email'])
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());

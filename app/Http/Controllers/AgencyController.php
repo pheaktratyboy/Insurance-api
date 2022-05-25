@@ -24,13 +24,13 @@ class AgencyController extends Controller
         if ($user->hasRole([BaseRole::Staff, BaseRole::Agency])) {
             $queryBuilder = QueryBuilder::for($agency)
                 ->where('created_by', $user->id)
-                ->allowedFilters(['full_name'])
+                ->allowedFilters([['full_name', 'activated', 'disabled', 'email']])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
         } else {
             $queryBuilder = QueryBuilder::for($agency)
-                ->allowedFilters(['full_name'])
+                ->allowedFilters([['full_name', 'activated', 'disabled', 'email']])
                 ->defaultSort('-created_at')
                 ->paginate()
                 ->appends(request()->query());
