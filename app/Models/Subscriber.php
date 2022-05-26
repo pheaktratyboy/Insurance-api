@@ -173,4 +173,14 @@ class Subscriber extends Model
 
         return $this;
     }
+
+    public function notAllowUserSubmitIfStatusHasBeenClaimed(): Subscriber
+    {
+        if ($this->status == StatusType::Claimed) {
+
+            abort('422', 'Sorry, You can not submit a claim again because this subscriber id has been claimed.');
+        }
+
+        return $this;
+    }
 }

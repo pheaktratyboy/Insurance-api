@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AccidentType;
 use App\Enums\BaseRole;
 use App\Enums\StatusType;
 use App\Http\Requests\CreateClaimRequest;
@@ -27,7 +28,6 @@ class ClaimController extends Controller
                 ->with('subscriber')
                 ->paginate()
                 ->appends(request()->query());
-
         } else {
             $result = QueryBuilder::for(Claim::class)
                 ->where('created_by', $user->id)
@@ -43,9 +43,17 @@ class ClaimController extends Controller
 
     public function store(CreateClaimRequest $request)
     {
+        $claim = Claim::where('status', StatusType::Pending)->firstWhere('subscriber_id', $request->input('subscriber_id'));
+        if ($claim) {
+            $claim->notAllowUserSubmitIfStatusStillPending();
+        }
+
         $result = DB::transaction(function () use ($request) {
 
             $subscriber = Subscriber::firstWhere('id', $request->input('subscriber_id'));
+
+            $subscriber->notAllowUserSubmitIfStatusHasBeenClaimed();
+
             $user_id = $subscriber->user->id;
 
             $claim = new Claim($request->input());
@@ -65,7 +73,6 @@ class ClaimController extends Controller
         $claim->allowOnlyStatusPending();
 
         DB::transaction(function () use ($request, $claim) {
-
             $claim->update($request->input());
         });
 
@@ -89,7 +96,10 @@ class ClaimController extends Controller
         $claim->status = StatusType::Approved;
         $claim->claimed_at = Carbon::now();
         $claim->update();
-        $claim->confirmSubscriberHasClaimed();
+
+        if ($claim->accident_type == AccidentType::Die) {
+            $claim->confirmSubscriberHasClaimed();
+        }
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

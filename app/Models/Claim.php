@@ -52,6 +52,16 @@ class Claim extends Model
         $subscriber->update();
     }
 
+    public function notAllowUserSubmitIfStatusStillPending(): Claim
+    {
+        if ($this->status == StatusType::Pending) {
+
+            abort('422', 'Sorry, you already submitted please wait for the admin to review your request.');
+        }
+
+        return $this;
+    }
+
     public function allowOnlyStatusPending(): Claim
     {
         if ($this->status != StatusType::Pending) {
