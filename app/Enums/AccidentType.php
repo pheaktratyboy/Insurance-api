@@ -10,6 +10,6 @@ use BenSampo\Enum\Enum;
  */
 final class AccidentType extends Enum
 {
-    const Die  = 'die';
+    const Dead  = 'dead';
     const Accident  = 'accident';
 }

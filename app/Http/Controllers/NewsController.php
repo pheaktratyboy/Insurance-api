@@ -16,7 +16,7 @@ class NewsController extends Controller
     public function index()
     {
         $municipalities = QueryBuilder::for(News::class)
-            ->allowedFilters(['name'])
+            ->allowedFilters(['name', 'created_at'])
             ->defaultSort('-created_at')
             ->paginate()
             ->appends(request()->query());
