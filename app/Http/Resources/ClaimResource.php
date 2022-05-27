@@ -23,6 +23,7 @@ class ClaimResource extends JsonResource
             'subscriber_id'         => $this->subscriber_id,
             'claimed_at'            => $this->claimed_at,
             'created_at'            => $this->created_at,
+            'accident_type'         => $this->accident_type,
 
             /** relationship */
             'subscriber'            => new SubscriberResource($this->whenLoaded('subscriber')),
