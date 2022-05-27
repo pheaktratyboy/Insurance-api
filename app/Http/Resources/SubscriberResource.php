@@ -39,6 +39,7 @@ class SubscriberResource extends JsonResource
             'status'                => $this->status,
             'total'                 => $this->total,
             'created_at'            => $this->created_at,
+            'claimed_at'            => $this->claimed_at,
 
             /** relationship */
             'company'               => new CompanyResource($this->whenLoaded('company')),
