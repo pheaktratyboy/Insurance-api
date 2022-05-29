@@ -19,7 +19,7 @@ class CreateClaimsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('subscriber_id');
 
-            $table->string('subject');
+            $table->string('subject')->nullable();
             $table->text('note')->nullable();
             $table->enum('status', StatusType::getValues())->nullable();
             $table->string('accident_type')->nullable();
