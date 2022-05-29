@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\NewsResource;
 use App\Models\News;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -13,15 +14,28 @@ class NewsController extends Controller
     /**
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $municipalities = QueryBuilder::for(News::class)
-            ->allowedFilters(['name', 'created_at'])
-            ->defaultSort('-created_at')
-            ->paginate()
-            ->appends(request()->query());
 
-        return NewsResource::collection($municipalities);
+        if ($request->has('filter_date')) {
+
+            $news = QueryBuilder::for(News::class)
+                ->whereDate('created_at', Carbon::parse($request->input('filter_date'))->toDateString())
+                ->allowedFilters(['name', 'created_at'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+        } else {
+            $news = QueryBuilder::for(News::class)
+                ->allowedFilters(['name'])
+                ->defaultSort('-created_at')
+                ->paginate()
+                ->appends(request()->query());
+
+        }
+
+        return NewsResource::collection($news);
     }
     /**
      * @param Request $request
