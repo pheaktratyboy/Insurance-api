@@ -16,7 +16,6 @@ class UpdateClaimRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject'        => ['sometimes', 'required', 'string', 'max:255'],
             'attachments.*'  => ['sometimes', 'array', new Media],
             'accident_type'  => ['sometimes', 'required', 'string'],
             'subscriber_id'  => ['sometimes', 'required', Rule::exists('subscribers', 'id')],

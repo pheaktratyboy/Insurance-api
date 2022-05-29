@@ -17,7 +17,6 @@ class CreateClaimRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject'        => ['required', 'string', 'max:255'],
             'accident_type'  => ['required', 'string'],
             'attachments.*'  => ['sometimes', 'array', new Media],
             'subscriber_id'  => ['sometimes', 'required', Rule::exists('subscribers', 'id')],
