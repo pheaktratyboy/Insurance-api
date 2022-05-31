@@ -15,13 +15,13 @@ class Claim extends Model
 
     protected $fillable = [
         'user_id',
-        'subject',
         'subscriber_id',
         'note',
         'status',
         'attachments',
         'claimed_at',
         'accident_type',
+        'accident_note',
     ];
 
     protected $casts = [

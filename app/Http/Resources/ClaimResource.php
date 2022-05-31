@@ -16,14 +16,14 @@ class ClaimResource extends JsonResource
     {
         return [
             'id'                    => $this->id,
-            'subject'               => $this->subject,
-            'note'                  => $this->note,
             'status'                => $this->status,
             'attachments'           => $this->attachments,
             'subscriber_id'         => $this->subscriber_id,
             'claimed_at'            => $this->claimed_at,
             'created_at'            => $this->created_at,
             'accident_type'         => $this->accident_type,
+            'accident_note'         => $this->accident_note,
+            'note'                  => $this->note,
 
             /** relationship */
             'subscriber'            => new SubscriberResource($this->whenLoaded('subscriber')),
