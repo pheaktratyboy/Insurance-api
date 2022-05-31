@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\BaseRole;
 use App\Enums\StatusType;
+use App\Models\Claim;
 use App\Models\Setting;
 use App\Models\User;
 use App\Service\ReportService;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
+
     public function reportSubscriber()
     {
         $report         = new ReportService();
@@ -113,6 +115,12 @@ class ReportController extends Controller
         $totalSell = 0;
         $totalSubscriber = 0;
         $countBeforeExpired = 0;
+        $countTotalClaimed = 0;
+
+        $claimed = Claim::where('status', StatusType::Approved)->count();
+        if ($claimed) {
+            $countTotalClaimed = $claimed;
+        }
 
         if ($user->hasRole(BaseRole::Staff)) {
             $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
@@ -146,6 +154,7 @@ class ReportController extends Controller
                     'total_agency'                  => $countAgency,
                     'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
+                    'total_claimed'                 => $countTotalClaimed,
                 ],
             ]);
         } elseif ($user->hasRole(BaseRole::Agency)) {
@@ -172,6 +181,7 @@ class ReportController extends Controller
                     'total_sell'                    => $totalSell,
                     'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
+                    'total_claimed'                 => $countTotalClaimed,
                 ],
             ]);
         } else {
@@ -206,6 +216,7 @@ class ReportController extends Controller
                     'total_agency'                  => $countAgency,
                     'total_expired'                 => $countExpired,
                     'total_before_expiring'         => $countBeforeExpired,
+                    'total_claimed'                 => $countTotalClaimed,
                 ],
             ]);
         }
