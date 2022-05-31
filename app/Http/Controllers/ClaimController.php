@@ -97,7 +97,7 @@ class ClaimController extends Controller
         $claim->claimed_at = Carbon::now();
         $claim->update();
 
-        if ($claim->accident_type == AccidentType::Dead) {
+        if ($claim->accident_type == AccidentType::DiedByAccident || $claim->accident_type == AccidentType::DiedByDisease) {
             $claim->confirmSubscriberHasClaimed();
         }
 
