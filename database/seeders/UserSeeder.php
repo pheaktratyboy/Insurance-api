@@ -30,11 +30,11 @@ class UserSeeder extends Seeder
 
         /**@var User $user*/
         $user = $staff->user()->create([
-            'username'          => 'admin@admin.com',
+            'username'          => 'admin@cmdf.com',
             'full_name'         => 'admin',
-            'email'             => 'admin@admin.com',
+            'email'             => 'admin@cmdf.com',
             'email_verified_at' => now(),
-            'password'          => bcrypt('123456'),
+            'password'          => bcrypt('admin@cmdf'),
             'disabled'          => false,
             'activated'         => true,
             'activated_at'      => now(),

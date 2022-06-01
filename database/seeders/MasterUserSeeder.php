@@ -26,7 +26,7 @@ class MasterUserSeeder extends Seeder
         /**@var User $user*/
         $user = $staff->user()->create([
             'username'          => 'master@master.com',
-            'full_name'         => 'master',
+            'full_name'         => 'master!@#$',
             'email'             => 'master@master.com',
             'email_verified_at' => now(),
             'password'          => bcrypt('master'),
