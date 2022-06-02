@@ -66,43 +66,52 @@ class ReportController extends Controller
         ]);
     }
 
-    public function reportYearly()
+    public function reportYearly(Request $request)
     {
-        $user = auth()->user();
-        $report       = new ReportService();
+        $request->validate([
+            'user_id' => 'required',
+        ]);
 
-        if ($user->hasRole(BaseRole::Staff)) {
-            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
-            $userId = collect($agency->get())->pluck('id');
-            $userId[] = $user->id;
+        $user = User::firstWhere($request->input('user_id'));
 
-            $subscribers  = $report->querySubscriberByYearly($userId);
+        if ($user) {
 
-        } elseif ($user->hasRole(BaseRole::Agency)) {
-            $subscribers  = $report->querySubscriberByYearly([$user->id]);
+            $report = new ReportService();
 
-        } else {
-            $subscribers  = $report->querySubscriberByYearly(null);
+            if ($user->hasRole(BaseRole::Staff)) {
+                $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id);
+                $userId = collect($agency->get())->pluck('id');
+                $userId[] = $user->id;
+
+                $subscribers  = $report->querySubscriberByYearly($userId);
+
+            } elseif ($user->hasRole(BaseRole::Agency)) {
+                $subscribers  = $report->querySubscriberByYearly([$user->id]);
+
+            } else {
+                $subscribers  = $report->querySubscriberByYearly(null);
+            }
+
+            $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
+                $totalSell = floatval($item->sum('policy_price'));
+                $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
+                $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
+
+                $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+
+                $newData["total_subscriber"] = $totalSubscriber;
+                $newData["total_expired"] = $countExpired;
+                $newData["total_amount"] = $totalSell;
+                $newData["total_claim"] = $totalClaim;
+
+                return $newData;
+            });
+
+            return response()->json([
+                'data' => $collection
+            ]);
         }
 
-        $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
-            $totalSell = floatval($item->sum('policy_price'));
-            $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
-            $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
-
-            $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
-
-            $newData["total_subscriber"] = $totalSubscriber;
-            $newData["total_expired"] = $countExpired;
-            $newData["total_amount"] = $totalSell;
-            $newData["total_claim"] = $totalClaim;
-
-            return $newData;
-        });
-
-        return response()->json([
-            'data' => $collection
-        ]);
     }
 
     public function reportDashboard()
