@@ -72,7 +72,7 @@ class ReportController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user = User::firstWhere($request->input('user_id'));
+        $user = User::firstWhere('id', $request->input('user_id'));
 
         if ($user) {
 
