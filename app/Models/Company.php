@@ -73,7 +73,7 @@ class Company extends Model
      * @param $items
      * @return $this
      */
-    public function setSubscriberUnderCompany($items): Company
+    public function addSubscriberUnderCompany($items): Company
     {
         $newItems = collect($items)->map(function ($item) {
             $user = CompanyUser::where('user_id', $item['user_id'])->first();

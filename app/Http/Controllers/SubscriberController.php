@@ -116,7 +116,7 @@ class SubscriberController extends Controller
                 $company = Company::find($request->company_id);
 
                 if ($company) {
-                    $company->addUserUnderCompany([['user_id' => $user->id]])
+                    $company->addSubscriberUnderCompany([['user_id' => $user->id]])
                         ->cacheSumTotalStaff();
                 }
             }
