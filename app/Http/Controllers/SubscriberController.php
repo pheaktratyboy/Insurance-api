@@ -33,6 +33,7 @@ class SubscriberController extends Controller
                 ->whereIn('user_id', $all)
                 ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
+                ->with(['user', 'company'])
                 ->paginate($limit)
                 ->appends(request()->query());
         } elseif ($user->hasRole(BaseRole::Agency)) {
@@ -40,12 +41,14 @@ class SubscriberController extends Controller
                 ->where('user_id', $user->id)
                 ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
+                ->with(['user', 'company'])
                 ->paginate($limit)
                 ->appends(request()->query());
         } else {
             $subscriber = QueryBuilder::for(Subscriber::class)
                 ->allowedFilters(['id', 'name_kh', 'name_en', 'status', 'gender', 'identity_number', 'phone_number'])
                 ->defaultSort('-created_at')
+                ->with(['user', 'company'])
                 ->paginate($limit)
                 ->appends(request()->query());
         }
