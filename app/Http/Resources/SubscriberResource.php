@@ -43,7 +43,7 @@ class SubscriberResource extends JsonResource
 
             /** relationship */
             'company'               => new CompanyResource($this->whenLoaded('company')),
-            'user'                  => new CompanyResource($this->whenLoaded('user')),
+            'user'                  => new UserResource($this->whenLoaded('user')),
             'subscriber_policies'   => SubscriberPolicyResource::collection($this->whenLoaded('subscriber_policies')),
         ];
     }
