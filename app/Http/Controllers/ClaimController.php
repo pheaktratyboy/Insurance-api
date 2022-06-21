@@ -43,6 +43,10 @@ class ClaimController extends Controller
 
     public function store(CreateClaimRequest $request)
     {
+        $request->validate([
+            'subscriber_id' => 'required',
+        ]);
+
         $claim = Claim::where('status', StatusType::Pending)->firstWhere('subscriber_id', $request->input('subscriber_id'));
         if ($claim) {
             $claim->notAllowUserSubmitIfStatusStillPending();
