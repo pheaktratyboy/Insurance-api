@@ -44,7 +44,7 @@ class CompanyUserController extends Controller
             ->where('type', BaseRole::Staff)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
-            ->with(['user', 'company'])
+            ->with(['user.profile', 'company'])
             ->paginate()
             ->appends(request()->query());
 
