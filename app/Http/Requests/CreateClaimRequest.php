@@ -19,7 +19,7 @@ class CreateClaimRequest extends FormRequest
         return [
             'accident_type'  => ['required', 'string'],
             'attachments.*'  => ['sometimes', 'array', new Media],
-            'subscriber_id'  => ['sometimes', 'required', Rule::exists('subscribers', 'id')],
+            'subscriber_id'  => ['required', Rule::exists('subscribers', 'id')],
         ];
     }
 }

@@ -14,6 +14,8 @@ Route::post('companies', [CompanyController::class,'store'])->name('companies.st
 Route::put('companies/{company}', [CompanyController::class,'update'])->name('companies.update');
 Route::delete('companies/{company}', [CompanyController::class,'destroy'])->name('companies.destroy');
 
+Route::post('companies/assignSubscriberToCompany', [CompanyController::class,'assignSubscriberToCompany'])->name('companies.assign_subscriber_to_company');
+
 
 /** Company Users **/
 Route::get('company-users/{company}', [CompanyUserController::class,'indexUsers'])->name('company_users.index_user');

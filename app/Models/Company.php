@@ -75,7 +75,9 @@ class Company extends Model
      */
     public function addSubscriberUnderCompany($items): Company
     {
+
         $newItems = collect($items)->map(function ($item) {
+
             $user = CompanyUser::where('user_id', $item['user_id'])->first();
             if ($user) {
                 abort('422', 'the user exists with id (' . $user->user_id . '), please try with other user id.');

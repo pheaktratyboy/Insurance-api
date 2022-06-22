@@ -9,6 +9,9 @@ use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyUnderUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
+use App\Models\Subscriber;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -50,6 +53,30 @@ class CompanyController extends Controller
         $company->checkPermissionViewData();
 
         return new CompanyResource($company);
+    }
+
+    public function assignSubscriberToCompany(Request $request)
+    {
+        $request->validate([
+            'subscriber_id' => 'required',
+            'company_id'    => 'required',
+        ]);
+
+        $subscriber = Subscriber::firstWhere('id', $request->input('subscriber_id'));
+        $user = $subscriber->user;
+
+        if ($user) {
+            $result = DB::transaction(function () use ($user, $request) {
+                $company = Company::firstWhere('id', $request->input('company_id'));
+
+                $param = [['user_id' => $user->id]];
+                $company->addSubscriberUnderCompany($param)->cacheSumTotalSubscriber()->load('employees');
+
+                return $company;
+            });
+
+            return new CompanyResource($result);
+        }
     }
 
     /**

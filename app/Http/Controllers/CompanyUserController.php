@@ -10,6 +10,7 @@ use App\Http\Resources\CompanyUserResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -49,7 +50,7 @@ class CompanyUserController extends Controller
 
         return CompanyUserResource::collection($query);
     }
-
+    
     /**
      * @param CreateCompanyUsersRequest $request
      * @param Company $company
