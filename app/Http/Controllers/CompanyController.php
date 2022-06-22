@@ -63,7 +63,7 @@ class CompanyController extends Controller
         ]);
 
         $subscriber = Subscriber::firstWhere('id', $request->input('subscriber_id'));
-        $user = $subscriber->user;
+        $user = $subscriber->user_profile;
 
         if ($user) {
             $result = DB::transaction(function () use ($user, $request) {
