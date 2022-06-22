@@ -27,7 +27,7 @@ class CompanyUserController extends Controller
             ->where('type', BaseRole::Subscriber)
             ->allowedFilters(['name'])
             ->defaultSort('-created_at')
-            ->with(['user', 'company'])
+            ->with(['user.profile.user', 'company'])
             ->paginate()
             ->appends(request()->query());
 
@@ -50,7 +50,7 @@ class CompanyUserController extends Controller
 
         return CompanyUserResource::collection($query);
     }
-    
+
     /**
      * @param CreateCompanyUsersRequest $request
      * @param Company $company

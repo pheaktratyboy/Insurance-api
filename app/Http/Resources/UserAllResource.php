@@ -17,6 +17,7 @@ class UserAllResource extends JsonResource
         return [
             'id'   => $this->id,
             'name' => $this->full_name,
+            'profile' => new EmployeeResource($this->whenLoaded('profile')),
         ];
     }
 }
