@@ -21,6 +21,7 @@ class CompanyResource extends JsonResource
             'subscriber_count'      => $this->subscriber_count,
             'logo'                  => $this->logo,
             'disabled'              => $this->disabled,
+            'created_at'            => $this->created_at,
 
             /** relationship */
             'employees'             => CompanyUserResource::collection($this->whenLoaded('employees')),

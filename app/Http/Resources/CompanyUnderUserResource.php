@@ -21,6 +21,7 @@ class CompanyUnderUserResource extends JsonResource
             'subscriber_count'      => $this->company->subscriber_count,
             'logo'                  => $this->company->logo,
             'disabled'              => $this->company->disabled,
+            'created_at'            => $this->company->created_at,
         ];
     }
 }
