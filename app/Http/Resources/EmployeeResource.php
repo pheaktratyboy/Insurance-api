@@ -36,7 +36,7 @@ class EmployeeResource extends JsonResource
 
             'municipality_id'       => $this->municipality_id,
             'district_id'           => $this->district_id,
-            
+
             'created_at'            => $this->created_at,
 
             /** relationship */
