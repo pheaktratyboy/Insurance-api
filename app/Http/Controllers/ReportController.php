@@ -116,7 +116,6 @@ class ReportController extends Controller
 
     public function reportMonthlyTransaction(Request $request)
     {
-
         if (!$request->has('from_date') && !$request->has('to_date')) {
             $convertedFromDate = Carbon::now()->startOfYear()->format('Y-m-d');
             $convertedToDate   = Carbon::now()->format('Y-m-d-H:m:s');
@@ -131,7 +130,22 @@ class ReportController extends Controller
             $convertedToDate   = $toDate->format('Y-m-d');
         }
 
-        $subscribers = Subscriber::whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+        $user = auth()->user();
+
+        if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+
+            $subscribers = Subscriber::whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+
+        } elseif ($user->hasRole(BaseRole::Staff)) {
+
+            $agencyId = User::where('created_by', $user->id)->get();
+            $all = collect($agencyId)->pluck('id')->push($user->id);
+
+            $subscribers = Subscriber::whereIn('user_id', $all)->whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+
+        } elseif ($user->hasRole(BaseRole::Agency)) {
+            $subscribers = Subscriber::where('user_id', $user->id)->whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+        }
 
         if ($subscribers) {
             $collection = collect($subscribers);
