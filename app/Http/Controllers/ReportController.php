@@ -114,6 +114,37 @@ class ReportController extends Controller
         }
     }
 
+    public function reportMonthlyTransaction(Request $request)
+    {
+
+        if (!$request->has('from_date') && !$request->has('to_date')) {
+            $convertedFromDate = Carbon::now()->startOfYear()->format('Y-m-d');
+            $convertedToDate   = Carbon::now()->format('Y-m-d-H:m:s');
+        }
+
+        if ($request->has('from_date') && $request->has('to_date')) {
+
+            $fromDate = Carbon::parse($request->get('from_date'));
+            $toDate   = Carbon::parse($request->get('to_date'));
+
+            $convertedFromDate = $fromDate->format('Y-m-d');
+            $convertedToDate   = $toDate->format('Y-m-d');
+        }
+
+        $subscribers = Subscriber::whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+
+        if ($subscribers) {
+            $collection = collect($subscribers);
+            $resultGroupBy = $collection->groupBy(function ($item, $key) {
+                return Carbon::parse($item['created_at'])->format('M-Y');
+            });
+
+            return response()->json([
+                'data' => $resultGroupBy
+            ]);
+        }
+    }
+
     public function reportTopAgency(Request $request)
     {
         $user = auth()->user();
@@ -183,7 +214,7 @@ class ReportController extends Controller
         }
     }
 
-    public function reportDashboard()
+    public function reportDashboard(): \Illuminate\Http\JsonResponse
     {
         $user = auth()->user();
         $getReminder = Setting::Reminder()->option;
