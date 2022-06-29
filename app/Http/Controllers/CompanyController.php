@@ -29,7 +29,6 @@ class CompanyController extends Controller
                 ->paginate()
                 ->appends(request()->query());
 
-            return CompanyResource::collection($result);
         } else {
             $company = Company::with(['employees' => function ($q) use ($user) {
                 $q->where('user_id', '=', $user->id);
@@ -41,8 +40,8 @@ class CompanyController extends Controller
                 ->paginate()
                 ->appends(request()->query());
 
-            return CompanyResource::collection($result);
         }
+        return CompanyResource::collection($result);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Enums\BaseRole;
 use App\Enums\StatusType;
 use App\Models\Claim;
 use App\Models\Setting;
+use App\Models\Subscriber;
 use App\Models\User;
 use App\Service\ReportService;
 use Carbon\Carbon;
@@ -50,7 +51,7 @@ class ReportController extends Controller
             $subscribers  = $report->querySubscriberByAudience(null, $request);
         }
 
-        $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
+        $collection = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
             $totalSell = floatval($item->sum('policy_price'));
             $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
             $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
@@ -92,7 +93,7 @@ class ReportController extends Controller
                 $subscribers  = $report->querySubscriberByYearly(null);
             }
 
-            $collection   = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
+            $collection = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
                 $totalSell = floatval($item->sum('policy_price'));
                 $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
                 $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
@@ -111,7 +112,75 @@ class ReportController extends Controller
                 'data' => $collection
             ]);
         }
+    }
 
+    public function reportTopAgency(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$request->has('from_date') && !$request->has('to_date')) {
+            $convertedFromDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $convertedToDate   = Carbon::now()->addDay()->format('Y-m-d');
+        }
+
+        if ($request->has('from_date') && $request->has('to_date')) {
+
+            $fromDate = Carbon::parse($request->get('from_date'));
+            $toDate   = Carbon::parse($request->get('to_date'));
+
+            $convertedFromDate = $fromDate->format('Y-m-d');
+            $convertedToDate   = $toDate->format('Y-m-d');
+        }
+
+        if ($user->hasRole(BaseRole::Staff)) {
+
+            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->where('created_by', $user->id)->get();
+            $agencyId = collect($agency)->pluck('id');
+
+            if ($agencyId) {
+
+                $collection = collect($agency)->map(function ($item, $key) use ($convertedFromDate, $convertedToDate) {
+
+                    $subscribers = Subscriber::where('user_id', $item->id)->whereBetween('created_at', [$convertedFromDate,$convertedToDate])->get();
+                    $collection = collect($subscribers);
+                    $resultCount = $collection->groupBy("id")->count();
+
+                    $member["member"] = $resultCount;
+                    $member["user_name"] = $item->full_name;
+
+                    return $member;
+                });
+
+                return response()->json([
+                    'data' => $collection
+                ]);
+            }
+        }
+
+        if ($user->hasRole([BaseRole::Admin, BaseRole::Master])) {
+
+            $agency = User::where('disabled', 0)->with('profile')->role(BaseRole::Agency)->get();
+            $agencyId = collect($agency)->pluck('id');
+
+            if ($agencyId) {
+
+                $collection = collect($agency)->map(function ($item, $key) {
+
+                    $subscribers = Subscriber::where('user_id', $item->id)->get();
+                    $collection = collect($subscribers);
+                    $resultCount = $collection->groupBy("id")->count();
+
+                    $member["member"] = $resultCount;
+                    $member["user_name"] = $item->full_name;
+
+                    return $member;
+                });
+
+                return response()->json([
+                    'data' => $collection
+                ]);
+            }
+        }
     }
 
     public function reportDashboard()

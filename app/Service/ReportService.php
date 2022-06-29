@@ -14,10 +14,8 @@ class ReportService
     {
         /** if request doesn't has filter then automatically filter only three months */
         if (!$request->has('from_date') && !$request->has('to_date')) {
-            $defaultToDate     = Carbon::now()->startOfDay();
-
-            $convertedToDate   = $defaultToDate->addDay()->format('Y-m-d');
-            $convertedFromDate = $defaultToDate->subMonths(3)->format('Y-m-d');
+            $convertedToDate   = Carbon::now()->startOfDay()->addDay()->format('Y-m-d');
+            $convertedFromDate = Carbon::now()->startOfDay()->subMonths(3)->format('Y-m-d');
         }
 
         /** filter From Date and To Date*/
