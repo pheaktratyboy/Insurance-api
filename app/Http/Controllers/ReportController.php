@@ -52,9 +52,17 @@ class ReportController extends Controller
         }
 
         $collection = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
+
+            //Count Total Sell
             $totalSell = floatval($item->sum('policy_price'));
+
+            //Count Total Sub
             $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
+
+            //Count Total Expired
             $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+
+            //Count Total Claim
             $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
 
             $newData["total_subscriber"] = $totalSubscriber;
@@ -96,10 +104,17 @@ class ReportController extends Controller
             }
 
             $collection = collect($subscribers)->groupBy('created_date')->map(function ($item, $key) {
+
+                //Count Total Sell
                 $totalSell = floatval($item->sum('policy_price'));
+
+                //Count Total Sub
                 $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
+
+                //Count Total Claim
                 $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
 
+                //Count Total Expired
                 $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
 
                 $newData["total_subscriber"] = $totalSubscriber;

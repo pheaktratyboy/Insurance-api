@@ -14,8 +14,8 @@ class ReportService
     {
         /** if request doesn't has filter then automatically filter only three months */
         if (!$request->has('from_date') && !$request->has('to_date')) {
-            $convertedToDate   = Carbon::now()->startOfDay()->addDay()->format('Y-m-d');
             $convertedFromDate = Carbon::now()->startOfDay()->subMonths(3)->format('Y-m-d');
+            $convertedToDate   = Carbon::now()->format('Y-m-d-H:m:s');
         }
 
         /** filter From Date and To Date*/
@@ -55,6 +55,7 @@ class ReportService
                 ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
                 ->select(
                     'subscribers.user_id',
+                    'subscribers.status',
                     'subscribers.created_at',
                     DB::raw("DATE_FORMAT(subscribers.created_at, '$filter') as created_date"),
                     'subscriber_policies.expired_at',
@@ -71,6 +72,7 @@ class ReportService
                 ->leftJoin('policies', 'policies.id', '=', 'subscriber_policies.policy_id')
                 ->select(
                     'subscribers.user_id',
+                    'subscribers.status',
                     'subscribers.created_at',
                     DB::raw("DATE_FORMAT(subscribers.created_at, '$filter') as created_date"),
                     'subscriber_policies.expired_at',
