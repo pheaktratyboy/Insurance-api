@@ -55,9 +55,11 @@ class ReportController extends Controller
             $totalSell = floatval($item->sum('policy_price'));
             $totalSubscriber = collect($item)->groupBy('subscriber_id')->count();
             $countExpired = collect($item)->where('expired_at', '<=', Carbon::now()->toDateTimeString())->groupBy('subscriber_id')->count();
+            $totalClaim = collect($item)->where('status', StatusType::Claimed)->groupBy('subscriber_id')->count();
 
             $newData["total_subscriber"] = $totalSubscriber;
             $newData["total_expired"] = $countExpired;
+            $newData["total_claim"] = $totalClaim;
             $newData["total_amount"] = $totalSell;
 
             return $newData;

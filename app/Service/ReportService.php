@@ -29,20 +29,17 @@ class ReportService
 
         /** filter from date only when to date is not provided */
         if ($request->has('from_date') && !$request->has('to_date')) {
-            $fromDate          = Carbon::parse($request->get('from_date'));
-            $toDate            = $fromDate->addMonths(3);
-
-            $convertedFromDate = $fromDate->format('Y-m-d');
-            $convertedToDate   = $toDate->format('Y-m-d');
+            $convertedFromDate   = Carbon::parse($request->get('from_date'))->format('Y-m-d');
+            $convertedToDate     = Carbon::parse($request->get('from_date'))->addMonths(3)->format('Y-m-d');
         }
 
         /** filter only to date */
         if (!$request->has('from_date') && $request->has('to_date')) {
-            $toDate            = Carbon::parse($request->get('to_date'));
-            $fromDate          = $toDate->subMonths(3);
+
+            $fromDate          = Carbon::parse($request->get('to_date'))->subMonths(3);
 
             $convertedFromDate = $fromDate->format('Y-m-d');
-            $convertedToDate   = $toDate->format('Y-m-d');
+            $convertedToDate   = Carbon::parse($request->get('to_date'))->format('Y-m-d');
         }
 
         $filter = "%Y-%m-%d";
