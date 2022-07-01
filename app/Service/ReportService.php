@@ -42,9 +42,9 @@ class ReportService
             $convertedToDate   = Carbon::parse($request->get('to_date'))->format('Y-m-d');
         }
 
-        $filter = "%Y-%m-%d";
-        if ($request->has('year')) {
-            $filter = "%Y-%m";
+        $filter = "%d-%M-%Y";
+        if ($request->has('filter-year')) {
+            $filter = "%M-%Y";
         }
 
         if ($userId) {
